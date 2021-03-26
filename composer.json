@@ -1,0 +1,34 @@
+{
+    "name": "php-soap/wsdl-reader",
+    "description": "A WSDL reader in PHP",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Soap\\WsdlReader\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Soap\\WsdlReader\\Test\\": "tests/"
+        }
+    },
+    "require": {
+        "veewee/xml": "dev-master",
+        "azjezz/psl": "^1.5 ",
+        "league/uri": "^6.4",
+        "league/uri-components": "^2.3"
+    },
+    "require-dev": {
+        "veewee/composer-run-parallel": "^1.0",
+        "vimeo/psalm": "^4.6",
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^5.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Toon Verwerft",
+            "email": "toonverwerft@gmail.com"
+        }
+    ]
+}

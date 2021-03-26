@@ -1,0 +1,11 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://soapinterop.org/emailtype">
+    <simpleTypeDoesNotExist name="EmailTypeEnumExtended">
+        <restriction base="string">
+            <enumeration value="Home"/>
+            <enumeration value="Office"/>
+            <enumeration value="Gsm"/>
+            <enumeration value="Vacation"/>
+            <enumeration value="Customer"/>
+        </restriction>
+    </simpleTypeDoesNotExist>
+</schema>

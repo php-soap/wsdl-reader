@@ -1,0 +1,6 @@
+<?php
+
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
+define('PROJECT_DIR', dirname(__DIR__));
+define('FIXTURE_DIR', __DIR__.'/fixtures');

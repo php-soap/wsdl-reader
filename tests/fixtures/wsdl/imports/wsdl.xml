@@ -1,0 +1,8 @@
+<wsdl:definitions
+    targetNamespace="http://soapinterop.org/"
+    xmlns:tns="http://soapinterop.org/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+>
+    <wsdl:import location="base.xml" />
+</wsdl:definitions>
