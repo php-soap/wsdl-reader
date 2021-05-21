@@ -26,7 +26,7 @@ class SchemaSyntaxValidator // implements Validator
         $xpath = XpathProvider::provide(Document::fromUnsafeDocument($document));
 
         return reduce(
-            $xpath->query('//xsd:schema'),
+            $xpath->query('//schema:schema'),
             fn (IssueCollection $issues, DOMElement $schema) => new IssueCollection(
                 ...$issues,
                 ...Document::fromXmlNode($schema)->validate(xsd_validator($this->xsd))

@@ -24,7 +24,7 @@ class TypeProvider
         }
 
         foreach ($schema->getElements() as $element) {
-            yield dump($this->parseFromElement($element));
+            yield $this->parseFromElement($element);
         }
 
         foreach ($schema->getSchemas() as $internalSchema) {

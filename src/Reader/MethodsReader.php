@@ -72,6 +72,12 @@ class MethodsReader
                     XsdType::guess($elementName)
                         ->withXmlNamespaceName($elementNamespaceAlias)
                         ->withXmlNamespace($lookupNsUri($elementNamespaceAlias))
+                        ->withMeta(
+                            [
+                                'min' => 1,
+                                'max' => 1,
+                            ]
+                        )
                 );
             },
             $message['parts']
