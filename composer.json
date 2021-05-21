@@ -13,8 +13,8 @@
         }
     },
     "require": {
-        "veewee/xml": "dev-master",
-        "azjezz/psl": "^1.5 ",
+        "veewee/xml": "0.6.0",
+        "azjezz/psl": "^1.7 ",
         "league/uri": "^6.4",
         "league/uri-components": "^2.3"
     },
