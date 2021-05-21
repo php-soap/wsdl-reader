@@ -2,6 +2,7 @@
 <?php
 
 use Soap\WsdlReader\Loader\LocalFileLoader;
+use Soap\WsdlReader\WsdlReader;
 use Soap\WsdlReader\Xml\Parser;
 use Soap\WsdlReader\Xml\Validator;
 
@@ -25,5 +26,14 @@ $validators = dirname(__DIR__).'/validators';
 
     echo "Validating Schemas".PHP_EOL;
     echo ($wsdl->validate(new Validator\SchemaSyntaxValidator())->toString() ?: '🟢 ALL GOOD').PHP_EOL.PHP_EOL;
+
+    echo "Reading WSDL".PHP_EOL;
+    $metadata = WsdlReader::fromParser($parser)->read($file);
+
+    echo "Methods:".PHP_EOL;
+    dump($metadata->getMethods());
+
+    echo "Types:".PHP_EOL;
+    dump($metadata->getTypes());
 
 })($argv);

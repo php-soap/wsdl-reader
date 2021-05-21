@@ -1,7 +1,7 @@
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://soapinterop.org/emailtype">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://soapinterop.org/emailtype" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <include schemaLocation="email-extended.xsd" />
     <simpleType name="EmailTypeEnum">
-        <restriction base="string">
+        <restriction base="xsd:string">
             <enumeration value="Home"/>
             <enumeration value="Office"/>
             <enumeration value="Gsm"/>

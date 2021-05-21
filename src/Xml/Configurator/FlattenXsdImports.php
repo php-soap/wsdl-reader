@@ -17,6 +17,7 @@ use VeeWee\Xml\Dom\Document;
 use function VeeWee\Xml\Dom\Builder\namespaced_element;
 use function VeeWee\Xml\Dom\Locator\Node\children;
 use function VeeWee\Xml\Dom\Manipulator\Node\append_external_node;
+use function VeeWee\Xml\Dom\Manipulator\Node\remove;
 
 final class FlattenXsdImports implements Configurator
 {
@@ -83,6 +84,7 @@ final class FlattenXsdImports implements Configurator
 
         // xsd:import tags don't require a location!
         if (!$location) {
+            remove($import);
             return [];
         }
 

@@ -15,13 +15,12 @@
     "require": {
         "veewee/xml": "0.6.0",
         "azjezz/psl": "^1.7 ",
+        "goetas-webservices/xsd-reader": "dev-devdeps",
         "league/uri": "^6.4",
         "league/uri-components": "^2.3"
     },
     "require-dev": {
         "veewee/composer-run-parallel": "^1.0",
-        "vimeo/psalm": "^4.6",
-        "phpunit/phpunit": "^9.5",
         "symfony/var-dumper": "^5.2"
     },
     "license": "MIT",
@@ -29,6 +28,12 @@
         {
             "name": "Toon Verwerft",
             "email": "toonverwerft@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/veewee/xsd-reader.git"
         }
     ]
 }

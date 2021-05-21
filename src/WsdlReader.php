@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Soap\WsdlReader;
 
 use Soap\WsdlReader\Loader\Loader;
+use Soap\WsdlReader\Metadata\MetadataInterface;
+use Soap\WsdlReader\Metadata\Provider\WsdlReadingMetadataProvider;
 use Soap\WsdlReader\Xml\Parser;
 
 final class WsdlReader
@@ -21,8 +23,15 @@ final class WsdlReader
         );
     }
 
-    public function read(string $wsdlLocation)
+    public static function fromParser(Parser $parser): self
     {
+        return new self($parser);
+    }
 
+    public function read(string $wsdlLocation): MetadataInterface
+    {
+        $wsdl = $this->parser->parse($wsdlLocation);
+
+        return (new WsdlReadingMetadataProvider($wsdl))->getMetadata();
     }
 }

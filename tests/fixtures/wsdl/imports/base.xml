@@ -35,14 +35,14 @@
         <part name="output" type="xsd:string" />
     </message>
 
-    <portType name="InteropTestPortType">
+    <portType name="InteropTestPort">
         <operation name="validate">
             <input message="tns:validateRequest"/>
             <output message="tns:validateResponse"/>
         </operation>
     </portType>
 
-    <binding name="InteropTestBinding" type="tns:InteropTestPortType">
+    <binding name="InteropTestBinding" type="tns:InteropTestPort">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="validate">
             <soap:operation soapAction="http://soapinterop.org/validate" style="rpc"/>
