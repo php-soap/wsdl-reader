@@ -1,21 +1,28 @@
 #!/usr/bin/env php
 <?php
 
-use Soap\WsdlReader\Loader\LocalFileLoader;
+use Soap\Wsdl\Loader\FlatteningLoader;
+use Soap\Wsdl\Loader\StreamWrapperLoader;
+use Soap\Wsdl\Xml\Validator;
+use Soap\WsdlReader\Loader\DebuggingLoader;
 use Soap\WsdlReader\WsdlReader;
-use Soap\WsdlReader\Xml\Parser;
-use Soap\WsdlReader\Xml\Validator;
+use VeeWee\Xml\Dom\Document;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
-$validators = dirname(__DIR__).'/validators';
 
-(static function (array $argv) use ($validators) {
+(static function (array $argv) {
     if (!$file = $argv[1] ?? null) {
         throw new InvalidArgumentException('Expected wsdl file as first argument');
     }
 
-    $parser = new Parser(new LocalFileLoader());
-    $wsdl = $parser->parse($file);
+    $loader = FlatteningLoader::createForLoader(
+        new DebuggingLoader(
+            new StreamWrapperLoader()
+        )
+    );
+    $wsdl = Document::fromXmlString($loader($file));
+
+    // file_put_contents('bigass.wsdl', $wsdl->toXmlString());
 
     echo "Full WSDL:".PHP_EOL;
     echo $wsdl->toXmlString().PHP_EOL.PHP_EOL;
@@ -28,7 +35,7 @@ $validators = dirname(__DIR__).'/validators';
     echo ($wsdl->validate(new Validator\SchemaSyntaxValidator())->toString() ?: '🟢 ALL GOOD').PHP_EOL.PHP_EOL;
 
     echo "Reading WSDL".PHP_EOL;
-    $metadata = WsdlReader::fromParser($parser)->read($file);
+    $metadata = WsdlReader::fromLoader($loader)->read($file);
 
     echo "Methods:".PHP_EOL;
     dump($metadata->getMethods());

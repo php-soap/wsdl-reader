@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Reader\Iterator;
 
-use Soap\WsdlReader\Xml\Xpath\XpathProvider;
+use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use Psl\Type;
+use VeeWee\Xml\Dom\Xpath;
 
 class ServiceIterator implements \IteratorAggregate
 {
@@ -19,7 +20,7 @@ class ServiceIterator implements \IteratorAggregate
 
     public function getIterator(): \Generator
     {
-        $xpath = XpathProvider::provide($this->wsdl);
+        $xpath = Xpath::fromDocument($this->wsdl, new WsdlPreset($this->wsdl));
 
         yield from array_reduce(
             [...$this->wsdl->xpath()->query('/wsdl:definitions/wsdl:service')],

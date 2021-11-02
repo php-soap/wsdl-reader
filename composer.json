@@ -13,11 +13,9 @@
         }
     },
     "require": {
-        "veewee/xml": "0.6.0",
-        "azjezz/psl": "^1.7 ",
-        "goetas-webservices/xsd-reader": "dev-devdeps",
-        "league/uri": "^6.4",
-        "league/uri-components": "^2.3"
+        "goetas-webservices/xsd-reader": "^0.3.9",
+        "php-soap/wsdl": "dev-wsdl-flattener",
+        "veewee/xml": "^1.0"
     },
     "require-dev": {
         "veewee/composer-run-parallel": "^1.0",
@@ -32,8 +30,8 @@
     ],
     "repositories": [
         {
-            "type": "git",
-            "url": "https://github.com/veewee/xsd-reader.git"
+            "type": "path",
+            "url": "../wsdl"
         }
     ]
 }

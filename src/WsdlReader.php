@@ -4,34 +4,28 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader;
 
-use Soap\WsdlReader\Loader\Loader;
+use Soap\Wsdl\Loader\WsdlLoader;
 use Soap\WsdlReader\Metadata\MetadataInterface;
 use Soap\WsdlReader\Metadata\Provider\WsdlReadingMetadataProvider;
-use Soap\WsdlReader\Xml\Parser;
+use VeeWee\Xml\Dom\Document;
 
 final class WsdlReader
 {
     private function __construct(
-        private Parser $parser
+        private WsdlLoader $loader
     ) {
     }
 
-    public function fromLoader(Loader $loader): self
+    public static function fromLoader(WsdlLoader $loader): self
     {
-        return new self(
-            new Parser($loader)
-        );
-    }
-
-    public static function fromParser(Parser $parser): self
-    {
-        return new self($parser);
+        return new self($loader);
     }
 
     public function read(string $wsdlLocation): MetadataInterface
     {
-        $wsdl = $this->parser->parse($wsdlLocation);
+        $wsdl = ($this->loader)($wsdlLocation);
+        $doc = Document::fromXmlString($wsdl);
 
-        return (new WsdlReadingMetadataProvider($wsdl))->getMetadata();
+        return (new WsdlReadingMetadataProvider($doc))->getMetadata();
     }
 }
