@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "azjezz/psl",
-            "version": "1.9.0",
+            "version": "1.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "08a67302236053c0eea7cba5e7e83ae1ae02cd36"
+                "reference": "5c20649db277565d6a40a66edfc2bbf8dc7f19e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/08a67302236053c0eea7cba5e7e83ae1ae02cd36",
-                "reference": "08a67302236053c0eea7cba5e7e83ae1ae02cd36",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/5c20649db277565d6a40a66edfc2bbf8dc7f19e0",
+                "reference": "5c20649db277565d6a40a66edfc2bbf8dc7f19e0",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-sodium": "*",
-                "php": "^8.0"
+                "php": "~8.0.0 || ~8.1.0"
             },
             "suggest": {
                 "php-standard-library/psalm-plugin": "Psalm integration"
@@ -43,7 +43,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Psl\\Integration\\": "integration"
+                    "Psl\\Integration\\": "integration",
+                    "Psl\\": "src/Psl"
                 },
                 "files": [
                     "src/bootstrap.php"
@@ -62,7 +63,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/azjezz/psl/issues",
-                "source": "https://github.com/azjezz/psl/tree/1.9.0"
+                "source": "https://github.com/azjezz/psl/tree/1.9.3"
             },
             "funding": [
                 {
@@ -70,7 +71,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-10-18T19:30:34+00:00"
+            "time": "2021-12-10T10:34:36+00:00"
         },
         {
             "name": "goetas-webservices/xsd-reader",
@@ -408,15 +409,15 @@
             "dist": {
                 "type": "path",
                 "url": "../wsdl",
-                "reference": "37c8e7eb155a2968eeb502248a2b12d9021ca7bc"
+                "reference": "ed500e1b41792aaa4f474359395ba9ff264939c0"
             },
             "require": {
                 "azjezz/psl": "^1.8",
                 "league/uri": "^6.5",
                 "league/uri-components": "^2.4",
                 "php": "^8.0",
-                "php-soap/xml": "^1.1.1",
-                "veewee/xml": "^1.0"
+                "php-soap/xml": "^1.2",
+                "veewee/xml": "~1.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -448,16 +449,16 @@
         },
         {
             "name": "php-soap/xml",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-soap/xml.git",
-                "reference": "5e51deb38294a62ce76016b6a5b0a0b31c04b079"
+                "reference": "e376d75299854256a323d195467e8f3198163706"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-soap/xml/zipball/5e51deb38294a62ce76016b6a5b0a0b31c04b079",
-                "reference": "5e51deb38294a62ce76016b6a5b0a0b31c04b079",
+                "url": "https://api.github.com/repos/php-soap/xml/zipball/e376d75299854256a323d195467e8f3198163706",
+                "reference": "e376d75299854256a323d195467e8f3198163706",
                 "shasum": ""
             },
             "require": {
@@ -487,7 +488,7 @@
             "description": "XML wrappers for SOAP",
             "support": {
                 "issues": "https://github.com/php-soap/xml/issues",
-                "source": "https://github.com/php-soap/xml/tree/v1.1.1"
+                "source": "https://github.com/php-soap/xml/tree/v1.2.0"
             },
             "funding": [
                 {
@@ -495,7 +496,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-29T05:59:30+00:00"
+            "time": "2021-11-26T10:04:41+00:00"
         },
         {
             "name": "psr/http-message",
@@ -631,28 +632,28 @@
         },
         {
             "name": "veewee/xml",
-            "version": "v1.0.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/veewee/xml.git",
-                "reference": "185a0187278673d162e577847fcfe97b18b6cc9d"
+                "reference": "5f4b53c6a6418a77891996a6302bde7779c1d46e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/veewee/xml/zipball/185a0187278673d162e577847fcfe97b18b6cc9d",
-                "reference": "185a0187278673d162e577847fcfe97b18b6cc9d",
+                "url": "https://api.github.com/repos/veewee/xml/zipball/5f4b53c6a6418a77891996a6302bde7779c1d46e",
+                "reference": "5f4b53c6a6418a77891996a6302bde7779c1d46e",
                 "shasum": ""
             },
             "require": {
-                "azjezz/psl": "^1.6",
+                "azjezz/psl": "^1.9 || ^2.0",
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "ext-xml": "*",
                 "ext-xmlreader": "*",
                 "ext-xmlwriter": "*",
                 "ext-xsl": "*",
-                "php": "^8.0",
-                "webmozart/assert": "^1.9"
+                "php": "~8.0.0 || ~8.1.0",
+                "webmozart/assert": "^1.10"
             },
             "require-dev": {
                 "symfony/finder": "^5.2",
@@ -694,7 +695,7 @@
             ],
             "support": {
                 "issues": "https://github.com/veewee/xml/issues",
-                "source": "https://github.com/veewee/xml/tree/v1.0.1"
+                "source": "https://github.com/veewee/xml/tree/v1.2.0"
             },
             "funding": [
                 {
@@ -702,7 +703,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-29T10:41:19+00:00"
+            "time": "2021-12-17T13:32:47+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -929,16 +930,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.3.10",
+            "version": "v5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "875432adb5f5570fff21036fd22aee244636b7d1"
+                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/875432adb5f5570fff21036fd22aee244636b7d1",
-                "reference": "875432adb5f5570fff21036fd22aee244636b7d1",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
+                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
                 "shasum": ""
             },
             "require": {
@@ -952,8 +953,9 @@
             },
             "require-dev": {
                 "ext-iconv": "*",
-                "symfony/console": "^4.4|^5.0",
-                "symfony/process": "^4.4|^5.0",
+                "symfony/console": "^4.4|^5.0|^6.0",
+                "symfony/process": "^4.4|^5.0|^6.0",
+                "symfony/uid": "^5.1|^6.0",
                 "twig/twig": "^2.13|^3.0.4"
             },
             "suggest": {
@@ -997,7 +999,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.3.10"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.4.1"
             },
             "funding": [
                 {
@@ -1013,25 +1015,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-26T09:30:15+00:00"
+            "time": "2021-12-01T15:04:08+00:00"
         },
         {
             "name": "veewee/composer-run-parallel",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/veewee/composer-run-parallel.git",
-                "reference": "e776154c2910cdc0b3b4400196fd2aa0b3da7251"
+                "reference": "06b552a6fb73e03ffec019a8d2dc20594be4ca07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/veewee/composer-run-parallel/zipball/e776154c2910cdc0b3b4400196fd2aa0b3da7251",
-                "reference": "e776154c2910cdc0b3b4400196fd2aa0b3da7251",
+                "url": "https://api.github.com/repos/veewee/composer-run-parallel/zipball/06b552a6fb73e03ffec019a8d2dc20594be4ca07",
+                "reference": "06b552a6fb73e03ffec019a8d2dc20594be4ca07",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "~2.0",
-                "php": "^7.4 || ^8.0"
+                "php": "^7.4 || ^8.0.0 || ^8.1.0"
             },
             "require-dev": {
                 "composer/composer": "^2.0",
@@ -1067,9 +1069,15 @@
             ],
             "support": {
                 "issues": "https://github.com/veewee/composer-run-parallel/issues",
-                "source": "https://github.com/veewee/composer-run-parallel/tree/v1.0.0"
+                "source": "https://github.com/veewee/composer-run-parallel/tree/v1.1.0"
             },
-            "time": "2020-12-02T08:56:04+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/veewee",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-11-15T19:42:58+00:00"
         }
     ],
     "aliases": [],

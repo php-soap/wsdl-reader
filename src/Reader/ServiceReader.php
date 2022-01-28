@@ -29,17 +29,20 @@ class ServiceReader
         $parseQname = new QnameParser();
 
         foreach ($services as $service) {
-            $requiredPort = $service['port']['name'];
+            var_dump($service);
             [$bindingNamespace, $requiredBinding] = $parseQname($service['port']['binding']);
+            $binding = $bindings[$requiredBinding] ?? null;
+            [$portNamespace, $requiredPort] = $parseQname($binding['type']);
+            $port = $ports[$requiredPort] ?? null;
 
-            if (!array_key_exists($requiredPort, $ports) || !array_key_exists($requiredBinding, $bindings)) {
+            if (!$binding || !$port) {
                 continue;
             }
 
             return [
                 'service' => $service,
-                'port' => $ports[$requiredPort],
-                'binding' => $bindings[$requiredBinding],
+                'port' => $port,
+                'binding' => $binding,
                 'messages' => $messages,
                 'namespaceMap' => $namespaces->reduce(
                     static fn (array $map, \DOMNameSpaceNode $node): array

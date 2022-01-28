@@ -6,6 +6,7 @@ namespace Soap\WsdlReader\Schema;
 
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
+use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Element;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
@@ -47,7 +48,7 @@ class TypeProvider
                 ->withMeta([
                     'abstract' => $type->isAbstract(),
                     'restrictions' => $restrictions ? $restrictions->getChecks() : [],
-                    'parent' => $parent ? $parent->getChecks() : [],
+                    'parent' => $parent && method_exists($parent, 'getChecks') ? $parent->getChecks() : [],
                     'extension' => $extension ? $extension->getBase()->getName() : '',
                 ])
                 ->withXmlNamespace($type->getSchema()->getTargetNamespace()),
@@ -62,9 +63,12 @@ class TypeProvider
         if ($elements) {
             /** @var Element $element */
             foreach ($elements as $element) {
+
+                $name = $element->getType()->getName() ?: $element->getName();
+
                 yield new Property(
                     $element->getName(),
-                    (new XsdType($element->getType()->getName()))
+                    (new XsdType($name))
                         ->withXmlNamespace($element->getSchema()->getTargetNamespace())
                         ->withMeta([
                             'min' => $element->getMin(),
@@ -85,12 +89,19 @@ class TypeProvider
             // The content of the type:
             yield new Property('_', new XsdType('todo'));
 
-            /** @var Attribute $attribute */
+            /** @var Attribute|Group $attribute */
             foreach ($attributes as $attribute) {
+                if ($attribute instanceof Group) {
+                    continue;
+                }
+
+
                 $attributeType = $attribute->getType();
+                $name = $attributeType->getName() ?: $attribute->getName();
+
                 yield new Property(
                     $attribute->getName(),
-                    (new XsdType($attributeType->getName()))
+                    (new XsdType($name))
                         ->withXmlNamespace($attribute->getSchema()->getTargetNamespace())
                         ->withMeta([
                             'use' => $attribute->getUse(),
