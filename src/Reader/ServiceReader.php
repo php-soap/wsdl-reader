@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Reader;
 
+use DOMNameSpaceNode;
+use RuntimeException;
 use Soap\WsdlReader\Parser\QnameParser;
 use Soap\WsdlReader\Reader\Iterator\BindingIterator;
 use Soap\WsdlReader\Reader\Iterator\MessageIterator;
@@ -17,7 +19,7 @@ use function VeeWee\Xml\Dom\Locator\Xmlns\recursive_linked_namespaces;
 /**
  * TODO : Currently doesn't consider namespaced binding lookup...
  */
-class ServiceReader
+final class ServiceReader
 {
     public function read(Document $wsdl): array
     {
@@ -45,13 +47,13 @@ class ServiceReader
                 'binding' => $binding,
                 'messages' => $messages,
                 'namespaceMap' => $namespaces->reduce(
-                    static fn (array $map, \DOMNameSpaceNode $node): array
+                    static fn (array $map, DOMNameSpaceNode $node): array
                         => merge($map, [$node->localName => $node->namespaceURI]),
                     []
                 ),
             ];
         }
 
-        throw new \RuntimeException('Parsing WSDL: Couldn\'t bind to any service');
+        throw new RuntimeException('Parsing WSDL: Couldn\'t bind to any service');
     }
 }

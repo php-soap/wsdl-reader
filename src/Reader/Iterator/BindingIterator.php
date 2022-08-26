@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Reader\Iterator;
 
+use DOMElement;
+use Generator;
+use IteratorAggregate;
+use Psl\Type;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use Psl\Type;
 use VeeWee\Xml\Dom\Xpath;
 
-class BindingIterator implements \IteratorAggregate
+final class BindingIterator implements IteratorAggregate
 {
     private Document $wsdl;
 
@@ -18,13 +21,13 @@ class BindingIterator implements \IteratorAggregate
         $this->wsdl = $wsdl;
     }
 
-    public function getIterator(): \Generator
+    public function getIterator(): Generator
     {
         $xpath = Xpath::fromDocument($this->wsdl, new WsdlPreset($this->wsdl));
 
         yield from array_reduce(
             [...$xpath->query('/wsdl:definitions/wsdl:binding')],
-            fn (array $bindings, \DOMElement $binding): array => array_merge(
+            static fn (array $bindings, DOMElement $binding): array => array_merge(
                 $bindings,
                 [
                     $binding->getAttribute('name') => [
@@ -33,7 +36,7 @@ class BindingIterator implements \IteratorAggregate
                         'transport' => $xpath->evaluate('string(./soap:binding/@transport)', Type\string(), $binding),
                         'operations' => array_reduce(
                             [...$xpath->query('./wsdl:operation', $binding)],
-                            fn (array $operations, \DOMElement $operation): array => array_merge(
+                            static fn (array $operations, DOMElement $operation): array => array_merge(
                                 $operations,
                                 [
                                     $operation->getAttribute('name') => [
@@ -41,12 +44,12 @@ class BindingIterator implements \IteratorAggregate
                                         'soapAction' => $xpath->evaluate('string(./soap:operation/@soapAction)', Type\string(), $operation),
                                         'style' => $xpath->evaluate('string(./soap:operation/@style)', Type\string(), $operation),
                                         'input' => [
-                                            'name' => $xpath->evaluate('string(./wsdl:input/@name)',Type\string(), $operation),
-                                            'bodyUse' => $xpath->evaluate('string(./wsdl:input/soap:body/@use)',Type\string(), $operation),
+                                            'name' => $xpath->evaluate('string(./wsdl:input/@name)', Type\string(), $operation),
+                                            'bodyUse' => $xpath->evaluate('string(./wsdl:input/soap:body/@use)', Type\string(), $operation),
                                         ],
                                         'output' => [
-                                            'name' => $xpath->evaluate('string(./wsdl:output/@name)',Type\string(), $operation),
-                                            'bodyUse' => $xpath->evaluate('string(./wsdl:output/soap:body/@use)',Type\string(), $operation),
+                                            'name' => $xpath->evaluate('string(./wsdl:output/@name)', Type\string(), $operation),
+                                            'bodyUse' => $xpath->evaluate('string(./wsdl:output/soap:body/@use)', Type\string(), $operation),
                                         ]
                                     ],
                                 ]

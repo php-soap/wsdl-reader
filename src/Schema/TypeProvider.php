@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Schema;
 
+use Generator;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
@@ -12,13 +13,14 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
 use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
-use Soap\WsdlReader\Metadata\Model\Property;
-use Soap\WsdlReader\Metadata\Model\Type as SoapType;
-use Soap\WsdlReader\Metadata\Model\XsdType;
+use Soap\Engine\Metadata\Collection\PropertyCollection;
+use Soap\Engine\Metadata\Model\Property;
+use Soap\Engine\Metadata\Model\Type as SoapType;
+use Soap\Engine\Metadata\Model\XsdType;
 
-class TypeProvider
+final class TypeProvider
 {
-    public function forSchema(Schema $schema): \Generator
+    public function forSchema(Schema $schema): Generator
     {
         foreach ($schema->getTypes() as $type) {
             yield $this->parseFromType($type);
@@ -52,18 +54,17 @@ class TypeProvider
                     'extension' => $extension ? $extension->getBase()->getName() : '',
                 ])
                 ->withXmlNamespace($type->getSchema()->getTargetNamespace()),
-            [...$this->parseProperties($type)]
+            new PropertyCollection(...$this->parseProperties($type))
         );
     }
 
 
-    private function parseProperties(Type $type): \Generator
+    private function parseProperties(Type $type): Generator
     {
         $elements = $type instanceof ElementContainer ? $type->getElements() : [];
         if ($elements) {
             /** @var Element $element */
             foreach ($elements as $element) {
-
                 $name = $element->getType()->getName() ?: $element->getName();
 
                 yield new Property(
@@ -129,7 +130,7 @@ class TypeProvider
                     // $element->getType()->getRestriction() && $element->getType()->getRestriction()->getChecks();
                 ])
                 ->withXmlNamespace($element->getSchema()->getTargetNamespace()),
-            [...$this->parseProperties($element->getType())]
+            new PropertyCollection(...$this->parseProperties($element->getType()))
         );
     }
 }

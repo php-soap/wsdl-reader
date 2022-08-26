@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Reader;
 
-use Soap\WsdlReader\Metadata\Collection\MethodCollection;
-use Soap\WsdlReader\Metadata\Collection\ParameterCollection;
-use Soap\WsdlReader\Metadata\Model\Method;
-use Soap\WsdlReader\Metadata\Model\Parameter;
-use Soap\WsdlReader\Metadata\Model\XsdType;
+use Soap\Engine\Metadata\Collection\MethodCollection;
+use Soap\Engine\Metadata\Collection\ParameterCollection;
+use Soap\Engine\Metadata\Model\Method;
+use Soap\Engine\Metadata\Model\Parameter;
+use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Parser\QnameParser;
 use VeeWee\Xml\Dom\Document;
 
 /**
  * TODO: in current implementation we assume everything exists; Remove naivity by adding error handling.
  */
-class MethodsReader
+final class MethodsReader
 {
     private ServiceReader $serviceReader;
 
@@ -40,7 +40,7 @@ class MethodsReader
         $inputInfo = $portInfo['input'];
         $outputInfo = $portInfo['output'];
 
-        $filterMessageName = fn (string $namespaced): string => (new QnameParser())($namespaced)[1];
+        $filterMessageName = static fn (string $namespaced): string => (new QnameParser())($namespaced)[1];
         $inputMessage = $filterMessageName($inputInfo['message']);
         $outputMessage = $filterMessageName($outputInfo['message']);
 
@@ -61,7 +61,7 @@ class MethodsReader
      */
     private function parseXsdTypesFromMessage(array $service, array $message): array
     {
-        $lookupNsUri = fn (string $prefix): string => $service['namespaceMap'][$prefix] ?? '';
+        $lookupNsUri = static fn (string $prefix): string => $service['namespaceMap'][$prefix] ?? '';
 
         return array_values(array_map(
             static function (array $param) use ($lookupNsUri): Parameter {

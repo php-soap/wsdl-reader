@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser;
 
-class QnameParser
+final class QnameParser
 {
     /**
      * @return array{0: string, 1: string}

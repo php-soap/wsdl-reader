@@ -9,7 +9,7 @@ use GoetasWebservices\XML\XSDReader\SchemaReader as XsdReader;
 use Soap\WsdlReader\Reader\Iterator\SchemaIterator;
 use VeeWee\Xml\Dom\Document;
 
-class SchemaReader
+final class SchemaReader
 {
     public function read(Document $wsdl): Schema
     {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Reader;
 
-use Soap\WsdlReader\Metadata\Collection\TypeCollection;
+use Soap\Engine\Metadata\Collection\TypeCollection;
 use Soap\WsdlReader\Schema\TypeProvider;
 use VeeWee\Xml\Dom\Document;
 
-class TypesReader
+final class TypesReader
 {
     private SchemaReader $schemaReader;
     private TypeProvider $typeProvider;

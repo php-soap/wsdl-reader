@@ -14,7 +14,8 @@
     },
     "require": {
         "goetas-webservices/xsd-reader": "^0.3.9",
-        "php-soap/wsdl": "dev-wsdl-flattener",
+        "php-soap/engine": "^1.2",
+        "php-soap/wsdl": "^1.2",
         "veewee/xml": "^1.0"
     },
     "require-dev": {
@@ -28,10 +29,9 @@
             "email": "toonverwerft@gmail.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../wsdl"
+    "config": {
+        "allow-plugins": {
+            "veewee/composer-run-parallel": true
         }
-    ]
+    }
 }
