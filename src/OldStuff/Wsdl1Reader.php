@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader;
+namespace Soap\WsdlReader\OldStuff;
 
 use Soap\Engine\Metadata\LazyInMemoryMetadata;
 use Soap\Engine\Metadata\Metadata;
 use Soap\Wsdl\Loader\WsdlLoader;
-use Soap\WsdlReader\Metadata\Wsdl1Metadata;
+use Soap\WsdlReader\OldStuff\Metadata\Wsdl1Metadata;
 use VeeWee\Xml\Dom\Document;
 
 final class Wsdl1Reader

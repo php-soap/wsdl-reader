@@ -3,7 +3,7 @@
 
 use Soap\Wsdl\Loader\StreamWrapperLoader;
 use Soap\WsdlReader\Metadata\Provider\WsdlReadingMetadataProvider;
-use Soap\WsdlReader\Wsdl1Reader;
+use Soap\WsdlReader\OldStuff\Wsdl1Reader;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 

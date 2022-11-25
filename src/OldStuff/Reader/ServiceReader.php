@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Reader;
+namespace Soap\WsdlReader\OldStuff\Reader;
 
 use DOMNameSpaceNode;
 use RuntimeException;
-use Soap\WsdlReader\Parser\QnameParser;
-use Soap\WsdlReader\Reader\Iterator\BindingIterator;
-use Soap\WsdlReader\Reader\Iterator\MessageIterator;
-use Soap\WsdlReader\Reader\Iterator\PortIterator;
-use Soap\WsdlReader\Reader\Iterator\ServiceIterator;
+use Soap\WsdlReader\OldStuff\Parser\QnameParser;
+use Soap\WsdlReader\OldStuff\Reader\Iterator\BindingIterator;
+use Soap\WsdlReader\OldStuff\Reader\Iterator\MessageIterator;
+use Soap\WsdlReader\OldStuff\Reader\Iterator\PortIterator;
+use Soap\WsdlReader\OldStuff\Reader\Iterator\ServiceIterator;
 use VeeWee\Xml\Dom\Document;
 use function Psl\Dict\merge;
 use function VeeWee\Xml\Dom\Locator\document_element;

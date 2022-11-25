@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Reader;
+namespace Soap\WsdlReader\OldStuff\Reader;
 
 use Soap\Engine\Metadata\Collection\TypeCollection;
-use Soap\WsdlReader\Schema\TypeProvider;
+use Soap\WsdlReader\OldStuff\Schema\TypeProvider;
 use VeeWee\Xml\Dom\Document;
 
 final class TypesReader

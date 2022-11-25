@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Schema;
+namespace Soap\WsdlReader\OldStuff\Schema;
 
 use Generator;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;

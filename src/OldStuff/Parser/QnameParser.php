@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Parser;
+namespace Soap\WsdlReader\OldStuff\Parser;
 
 final class QnameParser
 {

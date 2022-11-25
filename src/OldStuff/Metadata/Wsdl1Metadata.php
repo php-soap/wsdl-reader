@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Metadata;
+namespace Soap\WsdlReader\OldStuff\Metadata;
 
 use Soap\Engine\Metadata\Collection\MethodCollection;
 use Soap\Engine\Metadata\Collection\TypeCollection;
 use Soap\Engine\Metadata\Metadata;
-use Soap\WsdlReader\Reader\MethodsReader;
-use Soap\WsdlReader\Reader\SchemaReader;
-use Soap\WsdlReader\Reader\ServiceReader;
-use Soap\WsdlReader\Reader\TypesReader;
-use Soap\WsdlReader\Schema\TypeProvider;
+use Soap\WsdlReader\OldStuff\Reader\MethodsReader;
+use Soap\WsdlReader\OldStuff\Reader\SchemaReader;
+use Soap\WsdlReader\OldStuff\Reader\ServiceReader;
+use Soap\WsdlReader\OldStuff\Reader\TypesReader;
+use Soap\WsdlReader\OldStuff\Schema\TypeProvider;
 use VeeWee\Xml\Dom\Document;
 
 final class Wsdl1Metadata implements Metadata

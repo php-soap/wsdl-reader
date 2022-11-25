@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Exception;
+namespace Soap\WsdlReader\OldStuff\Exception;
 
 final class MetadataException extends RuntimeException
 {

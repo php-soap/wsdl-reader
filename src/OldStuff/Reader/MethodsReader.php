@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Reader;
+namespace Soap\WsdlReader\OldStuff\Reader;
 
 use Soap\Engine\Metadata\Collection\MethodCollection;
 use Soap\Engine\Metadata\Collection\ParameterCollection;
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
 use Soap\Engine\Metadata\Model\XsdType;
-use Soap\WsdlReader\Parser\QnameParser;
+use Soap\WsdlReader\OldStuff\Parser\QnameParser;
 use VeeWee\Xml\Dom\Document;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Reader\Iterator;
+namespace Soap\WsdlReader\OldStuff\Reader\Iterator;
 
 use Generator;
 use IteratorAggregate;
