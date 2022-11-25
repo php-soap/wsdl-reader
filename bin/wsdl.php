@@ -2,8 +2,8 @@
 <?php
 
 use Soap\Wsdl\Loader\StreamWrapperLoader;
-use Soap\WsdlReader\Metadata\Provider\WsdlReadingMetadataProvider;
-use Soap\WsdlReader\OldStuff\Wsdl1Reader;
+use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
+use Soap\WsdlReader\Wsdl1Reader;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
@@ -13,8 +13,16 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
     }
 
     echo "Reading WSDL".PHP_EOL;
-    $reader = (new Wsdl1Reader(new StreamWrapperLoader()));
-    $metadata = $reader($file);
+    $wsdl = (new Wsdl1Reader(new StreamWrapperLoader()))($file);
+    var_dump(
+        $wsdl->bindings->items,
+        $wsdl->portTypes->items,
+        $wsdl->messages->items,
+        $wsdl->services->items,
+        //$wsdl->schema
+    );
+    $metadataProvider = new Wsdl1MetadataProvider($wsdl);
+    $metadata = $metadataProvider->getMetadata();
 
     echo "Methods:".PHP_EOL;
     dump($metadata->getMethods());
