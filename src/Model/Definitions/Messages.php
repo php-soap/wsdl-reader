@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Model\Definitions;
 
+use Psl\Option\Option;
+use function Psl\Option\none;
+use function Psl\Option\some;
+
 class Messages
 {
     /**
@@ -14,5 +18,19 @@ class Messages
         Message ... $items
     ){
         $this->items = $items;
+    }
+
+    /**
+     * @return Option<Message>
+     */
+    public function lookupByName(string $name): Option
+    {
+        foreach ($this->items as $message) {
+            if ($message->name === $name) {
+                return some($message);
+            }
+        }
+
+        return none();
     }
 }

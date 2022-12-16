@@ -16,6 +16,7 @@ class OperationParser
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
         return new Operation(
+            name: $xpath->evaluate('string(./@name)', Type\string(), $operation),
             input: OperationParamParser::tryParseOptionally($wsdl, 'input', $operation),
             output: OperationParamParser::tryParseOptionally($wsdl, 'output', $operation),
             fault: OperationParamParser::tryParseList($wsdl, $xpath->query('./wsdl:fault', $operation)),

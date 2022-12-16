@@ -7,11 +7,11 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Type as SoapType;
 use Soap\Engine\Metadata\Model\XsdType;
-use Soap\WsdlReader\Metadata\Converter\Types\ConverterContext;
+use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
 class ElementVisitor
 {
-    public function __invoke(ElementDef $element, ConverterContext $context): SoapType
+    public function __invoke(ElementDef $element, TypesConverterContext $context): SoapType
     {
         return new SoapType(
             (new XsdType($element->getName()))

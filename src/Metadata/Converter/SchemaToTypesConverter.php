@@ -8,7 +8,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\Engine\Metadata\Collection\TypeCollection;
 use Soap\Engine\Metadata\Model\Type as SoapType;
-use Soap\WsdlReader\Metadata\Converter\Types\ConverterContext;
+use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use Soap\WsdlReader\Metadata\Converter\Types\Visitor\ElementVisitor;
 use Soap\WsdlReader\Metadata\Converter\Types\Visitor\SoapTypeVisitor;
 use function Psl\Vec\flat_map;
@@ -20,7 +20,7 @@ use function Psl\Vec\map;
 // * https://github.com/goetas-webservices/xsd2php/blob/master/src/Php/PhpConverter.php
 class SchemaToTypesConverter
 {
-    public function __invoke(Schema $schema, ConverterContext $context): TypeCollection
+    public function __invoke(Schema $schema, TypesConverterContext $context): TypeCollection
     {
         return $context->visit($schema, function () use ($schema, $context): TypeCollection {
             return new TypeCollection(

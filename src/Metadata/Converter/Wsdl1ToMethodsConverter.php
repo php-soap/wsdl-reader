@@ -3,94 +3,113 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter;
 
+use Psl\Option\Option;
 use Soap\Engine\Metadata\Collection\MethodCollection;
+use Soap\Engine\Metadata\Collection\ParameterCollection;
+use Soap\Engine\Metadata\Model\Method;
+use Soap\Engine\Metadata\Model\Parameter;
+use Soap\Engine\Metadata\Model\Type;
+use Soap\Engine\Metadata\Model\XsdType;
+use Soap\WsdlReader\Locator\SelectedServiceLocator;
+use Soap\WsdlReader\Metadata\Converter\Methods\MethodsConverterContext;
+use Soap\WsdlReader\Model\Definitions\BindingOperation;
+use Soap\WsdlReader\Model\Definitions\Message;
+use Soap\WsdlReader\Model\Definitions\Operation;
+use Soap\WsdlReader\Model\Definitions\Part;
+use Soap\WsdlReader\Model\Definitions\SelectedService;
 use Soap\WsdlReader\Model\Wsdl1;
+use Soap\WsdlReader\Parser\Xml\QnameParser;
+use Soap\WsdlReader\Todo\OptionsHelper;
+use function Psl\Dict\pull;
+use function Psl\Iter\first;
+use function Psl\Vec\filter_nulls;
+use function Psl\Vec\map;
+use function Psl\Vec\map_with_key;
 
+/**
+ * TODO : split in small testable chunks
+ */
 class Wsdl1ToMethodsConverter
 {
-    public function __invoke(Wsdl1 $wsdl): MethodCollection
+    public function __invoke(Wsdl1 $wsdl, MethodsConverterContext $context): MethodCollection
     {
-        $bindings = $wsdl->bindings->items;
-        $operations = $wsdl->bindings->items;
+        $selectedService = (new SelectedServiceLocator())($wsdl, $context->preferredSoapVersion());
 
-
-        return new MethodCollection();
-    }
-
-
-    /*
-    public function serviceReader(Document $wsdl): array
-    {
-        $services = new ServiceIterator($wsdl);
-        $ports = iterator_to_array(new PortIterator($wsdl), true);
-        $bindings = iterator_to_array(new BindingIterator($wsdl), true);
-        $messages = iterator_to_array(new MessageIterator($wsdl), true);
-        $namespaces = recursive_linked_namespaces($wsdl->map(document_element()));
-        $parseQname = new QnameParser();
-
-        foreach ($services as $service) {
-            var_dump($service);
-            [$bindingNamespace, $requiredBinding] = $parseQname($service['port']['binding']);
-            $binding = $bindings[$requiredBinding] ?? null;
-            [$portNamespace, $requiredPort] = $parseQname($binding['type']);
-            $port = $ports[$requiredPort] ?? null;
-
-            if (!$binding || !$port) {
-                continue;
-            }
-
-            return [
-                'service' => $service,
-                'port' => $port,
-                'binding' => $binding,
-                'messages' => $messages,
-                'namespaceMap' => $namespaces->reduce(
-                    static fn (array $map, DOMNameSpaceNode $node): array
-                    => merge($map, [$node->localName => $node->namespaceURI]),
-                    []
-                ),
-            ];
-        }
-
-        throw new RuntimeException('Parsing WSDL: Couldn\'t bind to any service');
-    }
-
-
-    public function readMethods(Document $wsdl): MethodCollection
-    {
-        $service = $this->serviceReader->read($wsdl);
-
-        return new MethodCollection(...array_values(array_map(
-            fn (array $operation) => $this->parseMethod($service, $operation['name']),
-            $service['binding']['operations']
+        return new MethodCollection(...filter_nulls(map(
+            $selectedService->binding->operations->items,
+            fn (BindingOperation $operation): ?Method => $this->parseMethod($selectedService, $operation->name, $context),
         )));
     }
 
-    private function parseMethod(array $service, string $operationName): Method
+    private function parseMethod(SelectedService $service, string $operationName, MethodsConverterContext $context): ?Method
     {
-        $portInfo = $service['port']['operations'][$operationName] ?? [];
-        $inputInfo = $portInfo['input'];
-        $outputInfo = $portInfo['output'];
+        $portInfo = $service->portType->operations->lookupByName($operationName);
+        if (!$portInfo->isSome()) {
+            return null;
+        }
 
         $filterMessageName = static fn (string $namespaced): string => (new QnameParser())($namespaced)[1];
-        $inputMessage = $filterMessageName($inputInfo['message']);
-        $outputMessage = $filterMessageName($outputInfo['message']);
+        $lookupMessage = static fn (string $messageName): Option => $service->messages->lookupByName($messageName);
 
-        $messages = [
-            $inputMessage => $service['messages'][$inputMessage] ?? [],
-            $outputMessage => $service['messages'][$outputMessage] ?? [],
-        ];
+        $inputMessage = OptionsHelper::andThen($portInfo, static fn (Operation $portType) => OptionsHelper::fromNullable($portType->input?->message))
+            ->map($filterMessageName);
+            // ->andThen($lookupMessage);
 
-        return new Method(
+        $outputMessage = OptionsHelper::andThen($portInfo, static fn (Operation $portType) => OptionsHelper::fromNullable($portType->output?->message))
+            ->map($filterMessageName);
+            // ->andThen($lookupMessage);
+
+        return $this->convertOperationMessagesIntoMethod(
             $operationName,
-            new ParameterCollection(...$this->parseXsdTypesFromMessage($service, $messages[$inputMessage])),
-            current($this->parseXsdTypesFromMessage($service, $messages[$outputMessage]))->getType()
+            OptionsHelper::andThen($inputMessage, $lookupMessage),
+            OptionsHelper::andThen($outputMessage, $lookupMessage),
+            $context
         );
     }
 
     /**
+     * @param Option<Message> $inputMessage
+     * @param Option<Message> $outputMessage
+     */
+    private function convertOperationMessagesIntoMethod(string $operationName, Option $inputMessage, Option $outputMessage, MethodsConverterContext $context): Method
+    {
+        $filterMessageName = static fn (string $namespaced): string => (new QnameParser())($namespaced)[1];
+
+        // Todo : make sure namespaces match, currently just looking for name is not sufficient!!
+        // Todo : what for simple Types in message element? Maybe better to load xsd from wsdl info instead from collected types?
+        $convertMessageToTypesDict = static fn(Message $message): array => pull(
+            $message->parts->items,
+            static fn (Part $part): XsdType => $context->types->fetchFirstByName($filterMessageName($part->element))->getXsdType(),
+            static fn (Part $message): string => $message->name
+        );
+
+        $parameters = $inputMessage->map($convertMessageToTypesDict)->mapOr(
+            static fn (array $types) => map_with_key(
+                $types,
+                static fn (string $name, XsdType $type) => new Parameter($name, $type)
+            ),
+            []
+        );
+
+        $void = XsdType::guess('void');
+        $returnType = $outputMessage->map($convertMessageToTypesDict)->mapOr(
+            fn (array $types): XsdType => first($types) ?? $void,
+            $void
+        );
+
+        return new Method(
+            $operationName,
+            new ParameterCollection(...$parameters->unwrap()),
+            $returnType->unwrap()
+        );
+    }
+
+    /**
+     * TODO - remove me once the above makes sense ;)
+     *
      * @return array|Parameter[]
-    private function parseXsdTypesFromMessage(array $service, array $message): array
+
+    private function oldyparseXsdTypesFromMessage(SelectedService $service, Message $message): array
     {
         $lookupNsUri = static fn (string $prefix): string => $service['namespaceMap'][$prefix] ?? '';
 
@@ -114,5 +133,5 @@ class Wsdl1ToMethodsConverter
             $message['parts']
         ));
     }
-     */
+     * */
 }

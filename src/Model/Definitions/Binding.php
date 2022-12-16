@@ -9,7 +9,7 @@ class Binding
         public readonly string $name,
         public readonly string $type,
         public readonly SoapVersion $soapVersion,
-        public readonly string $transport,
+        public readonly TransportType $transport,
         public readonly BindingOperations $operations,
     ){
     }

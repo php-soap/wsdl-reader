@@ -11,7 +11,7 @@ use Soap\Xml\Xmlns;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class ConverterContext
+class TypesConverterContext
 {
     private static array $baseSchemas = [
         'http://www.w3.org/2001/XMLSchema',

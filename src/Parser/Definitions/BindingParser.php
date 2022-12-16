@@ -7,6 +7,7 @@ use DOMElement;
 use Soap\WsdlReader\Model\Definitions\Binding;
 use Soap\WsdlReader\Model\Definitions\BindingOperations;
 use Soap\WsdlReader\Model\Definitions\Bindings;
+use Soap\WsdlReader\Model\Definitions\TransportType;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use Psl\Type;
@@ -27,7 +28,7 @@ class BindingParser
             name: $binding->getAttribute('name'),
             type: $binding->getAttribute('type'),
             soapVersion: $soapVersion,
-            transport: $xpath->evaluate('string(./@transport)', Type\string(), $soapBinding),
+            transport: TransportType::from($xpath->evaluate('string(./@transport)', Type\string(), $soapBinding)),
             operations: new BindingOperations(
                 ...$xpath->query('./wsdl:operation', $binding)
                     ->expectAllOfType(DOMElement::class)

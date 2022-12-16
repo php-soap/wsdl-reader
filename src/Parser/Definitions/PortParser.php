@@ -22,6 +22,14 @@ class PortParser
         invariant($address !== null, 'Unable to locate an address section in a service port!');
         $soapVersion = (new SoapVersionParser())($wsdl, $address);
 
+        /***
+         * TODO:
+         * Addresses could also be HTTP 11 HTTP12 etc.
+         * See PHP's implementation
+         * https://github.com/php/php-src/blob/b9cd1cdb4f236b7e336b688b16d58a913f4d5c69/ext/soap/php_sdl.c#L787-L810
+         *
+         */
+
         return new Port(
             name: $xpath->evaluate('string(./@name)', Type\string(), $servicePort),
             binding: $xpath->evaluate('string(./@binding)', Type\string(), $servicePort),

@@ -11,14 +11,14 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\XsdType;
-use Soap\WsdlReader\Metadata\Converter\Types\ConverterContext;
+use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
 class PropertiesVisitor
 {
     /**
      * @return \Generator<Property>
      */
-    public function __invoke(Type $type, ConverterContext $context): \Generator
+    public function __invoke(Type $type, TypesConverterContext $context): \Generator
     {
         $elements = $type instanceof ElementContainer ? $type->getElements() : [];
         if ($elements) {

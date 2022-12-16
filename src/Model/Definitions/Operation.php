@@ -20,6 +20,7 @@ namespace Soap\WsdlReader\Model\Definitions;
 class Operation
 {
     public function __construct(
+        public readonly string $name,
         public readonly ?Param $input,
         public readonly ?Param $output,
         public readonly Params $fault,
