@@ -8,6 +8,7 @@ final class Port
     public function __construct(
         public readonly string $name,
         public readonly string $binding,
+        public readonly Address $address
     ){
     }
 }

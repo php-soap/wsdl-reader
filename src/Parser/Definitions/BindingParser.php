@@ -5,11 +5,13 @@ namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
 use Soap\WsdlReader\Model\Definitions\Binding;
+use Soap\WsdlReader\Model\Definitions\BindingOperations;
 use Soap\WsdlReader\Model\Definitions\Bindings;
-use Soap\WsdlReader\Model\Definitions\Operations;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use Psl\Type;
+use function Psl\invariant;
+use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 
 class BindingParser
 {
@@ -17,15 +19,20 @@ class BindingParser
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
+        $soapBinding = locate_by_tag_name($binding, 'binding')->first();
+        invariant($soapBinding !== null, 'Unable to locate the SOAP binding in a WSDL binding element!');
+        $soapVersion = (new SoapVersionParser())($wsdl, $soapBinding);
+
         return new Binding(
             name: $binding->getAttribute('name'),
             type: $binding->getAttribute('type'),
-            transport: $xpath->evaluate('string(./soap:binding/@transport)', Type\string(), $binding),
-            operations: new Operations(
+            soapVersion: $soapVersion,
+            transport: $xpath->evaluate('string(./@transport)', Type\string(), $soapBinding),
+            operations: new BindingOperations(
                 ...$xpath->query('./wsdl:operation', $binding)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        fn (DOMElement $operation) => (new OperationParser())($wsdl, $operation)
+                        fn (DOMElement $operation) => (new BindingOperationParser())($wsdl, $operation, $soapVersion)
                     )
             ),
         );

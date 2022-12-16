@@ -3,7 +3,10 @@
 
 use Soap\Wsdl\Loader\StreamWrapperLoader;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
+use Soap\WsdlReader\Model\Definitions\Binding;
+use Soap\WsdlReader\Model\Definitions\PortType;
 use Soap\WsdlReader\Wsdl1Reader;
+use function Psl\Vec\map;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 

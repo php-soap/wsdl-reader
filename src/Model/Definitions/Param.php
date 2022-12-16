@@ -11,7 +11,6 @@ final class Param
     public function __construct(
         public readonly string $name,
         public readonly string $message,
-        public readonly string $bodyUse,
     ){
     }
 }

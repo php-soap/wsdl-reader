@@ -8,8 +8,9 @@ class Binding
     public function __construct(
         public readonly string $name,
         public readonly string $type,
+        public readonly SoapVersion $soapVersion,
         public readonly string $transport,
-        public readonly Operations $operations,
+        public readonly BindingOperations $operations,
     ){
     }
 }

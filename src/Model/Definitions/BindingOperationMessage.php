@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Model\Definitions;
 
-class Service
+class BindingOperationMessage
 {
     public function __construct(
         public readonly string $name,
-        public readonly Ports $ports
-    ){
-    }
+        public readonly BindingUse $bindingUse,
+    ) {}
 }

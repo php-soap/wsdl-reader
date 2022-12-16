@@ -4,13 +4,12 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
-use Soap\WsdlReader\Model\Definitions\Address;
 use Soap\WsdlReader\Model\Definitions\Port;
+use Soap\WsdlReader\Model\Definitions\Ports;
 use Soap\WsdlReader\Model\Definitions\Service;
 use Soap\WsdlReader\Model\Definitions\Services;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use Psl\Type;
 
 class ServiceParser
 {
@@ -20,13 +19,13 @@ class ServiceParser
 
         return new Service(
             name: $service->getAttribute('name'),
-            port: new Port(
-                name: $xpath->evaluate('string(./wsdl:port/@name)', Type\string(), $service),
-                binding: $xpath->evaluate('string(./wsdl:port/@binding)', Type\string(), $service),
-            ),
-            address: new Address(
-                location: $xpath->evaluate('string(./wsdl:port/soap:address/@location)', Type\string(), $service),
-            ),
+            ports: new Ports(
+                ...$xpath->query('./wsdl:port', $service)
+                    ->expectAllOfType(DOMElement::class)
+                    ->map(
+                        fn (DOMElement $servicePort): Port => (new PortParser())($wsdl, $servicePort)
+                    )
+            )
         );
     }
 
