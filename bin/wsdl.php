@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+use Soap\Engine\Metadata\Model\Method;
+use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Loader\StreamWrapperLoader;
+use Soap\WsdlReader\Formatter\MethodFormatter;
+use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 
@@ -12,21 +16,17 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
         throw new InvalidArgumentException('Expected wsdl file as first argument');
     }
 
-    echo "Reading WSDL".PHP_EOL;
+    echo "Reading WSDL $file".PHP_EOL;
     $wsdl = (new Wsdl1Reader(new StreamWrapperLoader()))($file);
-    /*var_dump(
-        $wsdl->bindings->items,
-        $wsdl->portTypes->items,
-        $wsdl->messages->items,
-        $wsdl->services->items,
-        //$wsdl->schema
-    );*/
     $metadataProvider = new Wsdl1MetadataProvider($wsdl);
     $metadata = $metadataProvider->getMetadata();
+    echo PHP_EOL;
 
     echo "Methods:".PHP_EOL;
-    dump($metadata->getMethods());
+    echo implode(PHP_EOL, $metadata->getMethods()->map(fn (Method $method) => '  > '.(new MethodFormatter())($method)));
+    echo PHP_EOL.PHP_EOL;
 
     echo "Types:".PHP_EOL;
-    dump($metadata->getTypes());
+    echo implode(PHP_EOL, $metadata->getTypes()->map(fn (Type $type) => '  > '.(new ShortTypeFormatter())($type)));
+    echo PHP_EOL.PHP_EOL;
 })($argv);
