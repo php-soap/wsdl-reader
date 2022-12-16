@@ -17,13 +17,13 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
 
     echo "Reading WSDL".PHP_EOL;
     $wsdl = (new Wsdl1Reader(new StreamWrapperLoader()))($file);
-    var_dump(
+    /*var_dump(
         $wsdl->bindings->items,
         $wsdl->portTypes->items,
         $wsdl->messages->items,
         $wsdl->services->items,
         //$wsdl->schema
-    );
+    );*/
     $metadataProvider = new Wsdl1MetadataProvider($wsdl);
     $metadata = $metadataProvider->getMetadata();
 
