@@ -1,7 +1,5 @@
 --TEST--
 SOAP XML Schema 25: SOAP 1.2 Array
---SKIPIF--
-<?php exit('skip: enc12 Array does not work yet'); ?>
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";

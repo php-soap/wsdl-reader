@@ -13,4 +13,4 @@ EOF;
 test_schema($schema,'type="tns:testType"');
 ?>
 --EXPECT--
-FATAL (GoetasWebservices\XML\XSDReader\Exception\TypeException):Can't find type named {http://test-uri/}#testType2, at line 18 in some.wsdl
+FATAL (GoetasWebservices\XML\XSDReader\Exception\TypeException):Can't find type named {http://test-uri/}#testType2, at line 17 in some.wsdl

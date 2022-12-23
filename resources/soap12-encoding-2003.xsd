@@ -98,8 +98,30 @@
   <xs:attributeGroup name="arrayAttributes">
     <xs:attribute ref="tns:arraySize"/>
 	<xs:attribute ref="tns:itemType"/>
-  </xs:attributeGroup>    
-  
+  </xs:attributeGroup>
+
+
+  <!--
+    These are not available in SOAP12 20003 - yet are valid in PHP!
+    This type was added to keep things compatible!
+  -->
+  <xs:group name="Array">
+    <xs:sequence>
+      <xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="Array" type="tns:Array"/>
+  <xs:complexType name="Array">
+    <xs:annotation>
+      <xs:documentation>
+        'Array' is a complex type for accessors identified by position
+      </xs:documentation>
+    </xs:annotation>
+    <xs:group ref="tns:Array" minOccurs="0"/>
+    <xs:attributeGroup ref="tns:arrayAttributes"/>
+    <xs:attributeGroup ref="tns:commonAttributes"/>
+  </xs:complexType>
+
   <!-- 'Base64' can be used to serialize binary data using base64 encoding
        as defined in RFC2045 but without the MIME line length limitation. -->
 

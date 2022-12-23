@@ -1,7 +1,5 @@
 --TEST--
 SOAP XML Schema 83: SOAP 1.2 Array with SOAP_USE_XSI_ARRAY_TYPE
---SKIPIF--
-<?php exit('skip: enc12 Array does not work yet'); ?>
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";

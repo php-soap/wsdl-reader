@@ -26,7 +26,6 @@ function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeForm
     <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test-uri/" $attributeFormDefault>
      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" /><!-- SOAP 1.1-->
      <xsd:import namespace="http://www.w3.org/2003/05/soap-encoding" /><!-- SOAP 1.2 - 2003-05 -->
-     <xsd:import namespace="http://www.w3.org/2001/09/soap-encoding" /><!-- SOAP 1.2 - 2001-09 Draft -->
      <xsd:import namespace="http://xml.apache.org/xml-soap" />
      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
       $schema
