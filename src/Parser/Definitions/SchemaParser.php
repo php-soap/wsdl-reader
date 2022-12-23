@@ -12,13 +12,10 @@ class SchemaParser
 {
     public static array $knownSchemas = [
         'http://schemas.xmlsoap.org/wsdl/' => __DIR__.'/../../../resources/wsdl.xsd',
-        'https://schemas.xmlsoap.org/wsdl/' => __DIR__.'/../../../resources/wsdl.xsd',
         'http://schemas.xmlsoap.org/soap/encoding/' => __DIR__.'/../../../resources/soap11-encoding.xsd',
-        'https://schemas.xmlsoap.org/soap/encoding/' => __DIR__.'/../../../resources/soap11-encoding.xsd',
         'http://www.w3.org/2001/09/soap-encoding' => __DIR__.'/../../../resources/soap12-encoding-2001.xsd',
-        'https://www.w3.org/2001/09/soap-encoding' => __DIR__.'/../../../resources/soap12-encoding-2001.xsd',
         'http://www.w3.org/2003/05/soap-encoding' => __DIR__.'/../../../resources/soap12-encoding-2003.xsd',
-        'https://www.w3.org/2003/05/soap-encoding' => __DIR__.'/../../../resources/soap12-encoding-2003.xsd',
+        'http://xml.apache.org/xml-soap' => __DIR__.'/../../../resources/apache-xml-soap.xsd',
     ];
 
     public static function tryParse(Document $wsdl): Schema

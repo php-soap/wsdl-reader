@@ -2,8 +2,6 @@
 SOAP XML Schema 55: Apache Map (extension)
 --INI--
 precision=14
---SKIPIF--
-<?php exit('skip: Apache not implemented yet'); ?>
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";

@@ -1,0 +1,19 @@
+<schema
+    targetNamespace="http://xml.apache.org/xml-soap"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:apache="http://xml.apache.org/xml-soap"
+>
+    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+    <complexType name="mapItem">
+        <sequence>
+            <element name="key" nillable="true" type="xsd:anyType"/>
+            <element name="value" nillable="true" type="xsd:anyType"/>
+        </sequence>
+    </complexType>
+    <complexType name="Map">
+        <sequence>
+            <element maxOccurs="unbounded" minOccurs="0" name="item" type="apache:mapItem"/>
+        </sequence>
+    </complexType>
+</schema>

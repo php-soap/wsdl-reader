@@ -1,12 +1,6 @@
 --TEST--
 SOAP XML Schema 64: standard date/time types
-
---SKIPIF--
-<?php
-if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-    die('skip, windows has different TZ format');
-}
-?>--FILE--
+--FILE--
 <?php
 include __DIR__."/test_schema.inc";
 $schema = <<<EOF
