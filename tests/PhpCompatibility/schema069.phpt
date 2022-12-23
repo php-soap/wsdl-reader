@@ -1,7 +1,5 @@
 --TEST--
 SOAP XML Schema 69: Attribute with default value (reference)
---SKIPIF--
-<?php exit('skip: AttributeDef::getuse() not found'); ?>
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";

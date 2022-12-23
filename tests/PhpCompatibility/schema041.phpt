@@ -1,7 +1,5 @@
 --TEST--
 SOAP XML Schema 41: Structure (group)
---SKIPIF--
-<?php exit('skip: GroupRef issue must be dealt with'); ?>
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";

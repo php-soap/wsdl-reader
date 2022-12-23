@@ -5,9 +5,11 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
+use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeDef;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Element;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
+use GoetasWebservices\XML\XSDReader\Schema\Element\GroupRef;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\XsdType;
@@ -22,9 +24,14 @@ class PropertiesVisitor
     {
         $elements = $type instanceof ElementContainer ? $type->getElements() : [];
         if ($elements) {
-            /** @var Element $element */
+            /** @var Element|GroupRef $element */
             foreach ($elements as $element) {
-                $name = $element->getType()->getName() ?: $element->getName();
+                if ($element instanceof GroupRef) {
+                    // TODO : parse $element->getElements();
+                    continue;
+                }
+
+                $name = $element->getType()?->getName() ?: $element->getName();
 
                 yield new Property(
                     $element->getName(),
@@ -49,15 +56,16 @@ class PropertiesVisitor
             // The content of the type:
             yield new Property('_', new XsdType('todo'));
 
-            /** @var Attribute|Group $attribute */
+            /** @var Attribute|Group|AttributeDef $attribute */
             foreach ($attributes as $attribute) {
-                if ($attribute instanceof Group) {
+                if ($attribute instanceof Group || $attribute instanceof AttributeDef) {
+                    // TODO : What to do here... ?
+                    // THis doesnt seem right
                     continue;
                 }
 
-
                 $attributeType = $attribute->getType();
-                $name = $attributeType->getName() ?: $attribute->getName();
+                $name = $attributeType?->getName() ?: $attribute->getName();
 
                 yield new Property(
                     $attribute->getName(),
@@ -75,5 +83,10 @@ class PropertiesVisitor
             }
             return;
         }
+    }
+
+    private function parseElements()
+    {
+
     }
 }
