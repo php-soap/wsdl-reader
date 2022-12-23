@@ -18,7 +18,14 @@ class Wsdl1Reader
     public function __invoke(string $location): Wsdl1
     {
         $wsdlContent = ($this->loader)($location);
-        $wsdlDocument = Document::fromXmlString($wsdlContent);
+        $wsdlDocument = Document::fromXmlString(
+            $wsdlContent,
+            // TODO : Create new configurator...
+            static function (\DOMDocument $document) use ($location): \DOMDocument {
+                $document->documentURI = $location;
+                return $document;
+            }
+        );
 
         return (new Wsdl1Parser())($wsdlDocument);
     }

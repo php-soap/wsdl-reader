@@ -7,6 +7,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Psl\Option\Option;
 use Soap\Engine\Metadata\Collection\TypeCollection;
+use Soap\WsdlReader\Parser\Definitions\SchemaParser;
 use Soap\Xml\Xmlns;
 use function Psl\Option\none;
 use function Psl\Option\some;
@@ -86,7 +87,11 @@ class TypesConverterContext
 
     public function isBaseSchema(Schema $schema): bool
     {
-        return in_array($schema->getTargetNamespace(), self::$baseSchemas, true);
+        return in_array(
+            $schema->getTargetNamespace(),
+            [...self::$baseSchemas, ...array_keys(SchemaParser::$knownSchemas)],
+            true
+        );
     }
 
     /**
