@@ -16,24 +16,30 @@ class ElementVisitor
         // When there is no type set on the element, we cannot do anything with it here.
         $type = $element->getType();
         if (!$type) {
+            // TODO : could be optional / nil / ... ?
+
             return null;
         }
 
         // On <element name="Categories" type="tns:Categories" />
-        // Skip Element -> Type will be imported instead!
+        // The element proxies to a type.
+        // This method will skip the Element -> The complex type will be imported instead!
         if ($type->getName() === $element->getName() && $type->getSchema()->getTargetNamespace() === $element->getSchema()->getTargetNamespace()) {
             return null;
         }
 
+        $restrictions = $type->getRestriction();
+        $parent = $type->getParent();
+        $extension = $type->getExtension();
+
         return new SoapType(
             (new XsdType($element->getName()))
                 ->withMeta([
-                    'docs' =>$element->getDoc(),
-                    'abstract' => $element->getType() && $element->getType()->isAbstract(),
-                    // TODO :
-                    // 'extension' => $element->getType()->getExtension()->getBase()->getName(),
-                    // 'resitriction'
-                    // $element->getType()->getRestriction() && $element->getType()->getRestriction()->getChecks();
+                    'docs' => $element->getDoc() ?: $type->getDoc(),
+                    'abstract' => $type->isAbstract(),
+                    'restrictions' => $restrictions ? $restrictions->getChecks() : [],
+                    'parent' => $parent && method_exists($parent, 'getChecks') ? $parent->getChecks() : [],
+                    'extension' => $extension?->getBase()?->getName() ?? '',
                 ])
                 ->withXmlNamespaceName('TODO') // TODO
                 ->withXmlNamespace($element->getSchema()->getTargetNamespace()),

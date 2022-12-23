@@ -23,7 +23,7 @@ class SoapTypeVisitor
                     'abstract' => $type->isAbstract(),
                     'restrictions' => $restrictions ? $restrictions->getChecks() : [],
                     'parent' => $parent && method_exists($parent, 'getChecks') ? $parent->getChecks() : [],
-                    'extension' => $extension ? $extension->getBase()->getName() : '',
+                    'extension' => $extension?->getBase()?->getName() ?? '',
                 ])
                 ->withXmlNamespaceName('TODO') // TODO
                 ->withXmlNamespace($type->getSchema()->getTargetNamespace()),
