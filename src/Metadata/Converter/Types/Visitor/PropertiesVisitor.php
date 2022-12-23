@@ -30,6 +30,7 @@ class PropertiesVisitor
                     $element->getName(),
                     (new XsdType($name))
                         ->withXmlNamespace($element->getSchema()->getTargetNamespace())
+                        ->withXmlNamespaceName('TODO') // TODO
                         ->withMeta([
                             'min' => $element->getMin(),
                             'max' => $element->getMax(),
@@ -42,7 +43,6 @@ class PropertiesVisitor
 
             return;
         }
-
 
         $attributes = $type instanceof AttributeContainer ? $type->getAttributes() : [];
         if ($attributes) {
@@ -63,6 +63,7 @@ class PropertiesVisitor
                     $attribute->getName(),
                     (new XsdType($name))
                         ->withXmlNamespace($attribute->getSchema()->getTargetNamespace())
+                        ->withXmlNamespaceName('TODO') // TODO
                         ->withMeta([
                             'use' => $attribute->getUse(),
                             'docs' => $attribute->getDoc(),

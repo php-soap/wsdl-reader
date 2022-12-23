@@ -11,6 +11,7 @@ use Soap\Engine\Metadata\Model\Type as SoapType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use Soap\WsdlReader\Metadata\Converter\Types\Visitor\ElementVisitor;
 use Soap\WsdlReader\Metadata\Converter\Types\Visitor\SoapTypeVisitor;
+use function Psl\Vec\filter_nulls;
 use function Psl\Vec\flat_map;
 use function Psl\Vec\map;
 
@@ -24,12 +25,14 @@ class SchemaToTypesConverter
     {
         return $context->visit($schema, function () use ($schema, $context): TypeCollection {
             return new TypeCollection(
-                ...map($schema->getTypes(), fn (Type $type): SoapType => (new SoapTypeVisitor())($type, $context)),
-                ...map($schema->getElements(), fn (ElementDef $element): SoapType => (new ElementVisitor())($element, $context)),
-                ...flat_map(
-                    $schema->getSchemas(),
-                    fn (Schema $childSchema): TypeCollection => $this->__invoke($childSchema, $context)
-                )
+                ...filter_nulls([
+                    ...map($schema->getTypes(), fn (Type $type): SoapType => (new SoapTypeVisitor())($type, $context)),
+                    ...map($schema->getElements(), fn (ElementDef $element): ?SoapType => (new ElementVisitor())($element, $context)),
+                    ...flat_map(
+                        $schema->getSchemas(),
+                        fn (Schema $childSchema): TypeCollection => $this->__invoke($childSchema, $context)
+                    )
+                ])
             );
         });
     }
