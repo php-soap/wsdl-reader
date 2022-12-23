@@ -9,7 +9,6 @@ use Soap\WsdlReader\Model\Definitions\Port;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
 use Soap\WsdlReader\Model\Wsdl1;
-use Soap\WsdlReader\Parser\Xml\QnameParser;
 use Soap\WsdlReader\Todo\OptionsHelper;
 
 /**
@@ -22,8 +21,8 @@ class Wsdl1SelectedServiceLocator
     {
         foreach ($wsdl->services->items as $service) {
             $port = $service->ports->lookupBySoapVersion($preferredVersion);
-            $binding = OptionsHelper::andThen($port, static fn (Port $port): Option => $wsdl->bindings->lookupByQName($port->binding));
-            $portType = OptionsHelper::andThen($binding, static fn (Binding $binding): Option => $wsdl->portTypes->lookupByQName($binding->type));
+            $binding = OptionsHelper::andThen($port, static fn (Port $port): Option => $wsdl->bindings->lookupByName($port->binding->localName));
+            $portType = OptionsHelper::andThen($binding, static fn (Binding $binding): Option => $wsdl->portTypes->lookupByName($binding->type->localName));
 
             if ($portType->isSome()) {
                 $selectedService = new Wsdl1SelectedService(

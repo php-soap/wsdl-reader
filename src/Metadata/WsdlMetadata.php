@@ -7,6 +7,9 @@ use Soap\Engine\Metadata\Collection\MethodCollection;
 use Soap\Engine\Metadata\Collection\TypeCollection;
 use Soap\Engine\Metadata\Metadata;
 
+/**
+ * TODO : move basic implementation to engine
+ */
 final class WsdlMetadata implements Metadata
 {
     public function __construct(

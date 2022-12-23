@@ -8,38 +8,24 @@ use Soap\WsdlReader\Model\Definitions\SoapVersion;
 
 class MethodsConverterContext
 {
-    private ?SoapVersion $preferredSoapVersion = null;
-
     private function __construct(
         public readonly TypeCollection $types,
+        public readonly ?SoapVersion $preferredSoapVersion = null
     ){
     }
 
-    public static function defaults(TypeCollection $types): self
+    public static function defaults(TypeCollection $types, ?SoapVersion $preferredSoapVersion): self
     {
-        return new self($types, null);
+        return new self($types, $preferredSoapVersion);
     }
 
     public static function soap11(TypeCollection $types): self
     {
-        return self::defaults($types)->withPreferredSoapVersion(SoapVersion::SOAP_11);
+        return self::defaults($types, SoapVersion::SOAP_11);
     }
 
     public static function soap12(TypeCollection $types): self
     {
-        return self::defaults($types)->withPreferredSoapVersion(SoapVersion::SOAP_12);
-    }
-
-    public function withPreferredSoapVersion(SoapVersion $soapVersion): self
-    {
-        $new = clone $this;
-        $new->preferredSoapVersion = $soapVersion;
-
-        return $new;
-    }
-
-    public function preferredSoapVersion(): ?SoapVersion
-    {
-        return $this->preferredSoapVersion;
+        return self::defaults($types, SoapVersion::SOAP_12);
     }
 }

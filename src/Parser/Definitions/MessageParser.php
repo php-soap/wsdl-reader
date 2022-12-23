@@ -25,7 +25,7 @@ class MessageParser
                     ->map(
                         fn (DOMElement $part) => new Part(
                             name: $part->getAttribute('name'),
-                            element: $part->getAttribute('element')
+                            element: QNamed::parse($part->getAttribute('element'))
                         )
                     )
             )

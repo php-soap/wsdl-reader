@@ -32,7 +32,7 @@ class PortParser
 
         return new Port(
             name: $xpath->evaluate('string(./@name)', Type\string(), $servicePort),
-            binding: $xpath->evaluate('string(./@binding)', Type\string(), $servicePort),
+            binding: QNamed::parse($xpath->evaluate('string(./@binding)', Type\string(), $servicePort)),
             address: new Address(
                 soapVersion: $soapVersion,
                 location: $xpath->evaluate('string(./@location)', Type\string(), $address),

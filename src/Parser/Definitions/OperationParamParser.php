@@ -20,7 +20,7 @@ class OperationParamParser
 
         return new Param(
             name: $xpath->evaluate('string(./@name)', Type\string(), $operation),
-            message: $xpath->evaluate('string(./@message)', Type\string(), $operation)
+            message: QNamed::parse($xpath->evaluate('string(./@message)', Type\string(), $operation))
         );
     }
 

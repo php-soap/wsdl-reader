@@ -26,7 +26,7 @@ class BindingParser
 
         return new Binding(
             name: $binding->getAttribute('name'),
-            type: $binding->getAttribute('type'),
+            type: QNamed::parse($binding->getAttribute('type')),
             soapVersion: $soapVersion,
             transport: TransportType::from($xpath->evaluate('string(./@transport)', Type\string(), $soapBinding)),
             operations: new BindingOperations(

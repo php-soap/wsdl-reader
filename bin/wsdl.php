@@ -3,6 +3,7 @@
 
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Type;
+use Soap\Wsdl\Loader\FlatteningLoader;
 use Soap\Wsdl\Loader\StreamWrapperLoader;
 use Soap\WsdlReader\Formatter\MethodFormatter;
 use Soap\WsdlReader\Formatter\ShortTypeFormatter;
@@ -17,7 +18,7 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
     }
 
     echo "Reading WSDL $file".PHP_EOL;
-    $wsdl = (new Wsdl1Reader(new StreamWrapperLoader()))($file);
+    $wsdl = (new Wsdl1Reader(new FlatteningLoader(new StreamWrapperLoader())))($file);
     $metadataProvider = new Wsdl1MetadataProvider($wsdl);
     $metadata = $metadataProvider->getMetadata();
     echo PHP_EOL;

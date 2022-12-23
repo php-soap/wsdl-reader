@@ -9,6 +9,7 @@ use Soap\WsdlReader\Metadata\Converter\Methods\MethodsConverterContext;
 use Soap\WsdlReader\Metadata\Converter\SchemaToTypesConverter;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use Soap\WsdlReader\Metadata\Converter\Wsdl1ToMethodsConverter;
+use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\WsdlReader\Model\Wsdl1;
 use function Psl\Fun\lazy;
 
@@ -20,12 +21,19 @@ class Wsdl1MetadataProvider implements MetadataProvider
     private \Closure $metadata;
 
     public function __construct(
-        Wsdl1 $wsdl
+        public readonly Wsdl1 $wsdl,
+        public readonly ?SoapVersion $soapVersion = null
     ){
-        $this->metadata = lazy(static function () use ($wsdl): Metadata {
+        $this->metadata = lazy(static function () use ($wsdl, $soapVersion): Metadata {
             return new WsdlMetadata(
-                $types = (new SchemaToTypesConverter())($wsdl->schema, TypesConverterContext::default()),
-                $methods = (new Wsdl1ToMethodsConverter())($wsdl, MethodsConverterContext::defaults($types))
+                $types = (new SchemaToTypesConverter())(
+                    $wsdl->schema,
+                    TypesConverterContext::default()
+                ),
+                $methods = (new Wsdl1ToMethodsConverter())(
+                    $wsdl,
+                    MethodsConverterContext::defaults($types, $soapVersion)
+                )
             );
         });
     }
