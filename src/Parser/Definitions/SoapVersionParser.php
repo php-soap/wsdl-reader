@@ -12,10 +12,6 @@ class SoapVersionParser
 {
     public function __invoke(Document $wsdl, DOMElement $soapNamespacedElement): SoapVersion
     {
-        // TODO : Fallback on some generic soap version?
-        // TODO : Find highest in document?
-        // TODO : Decisions decisions...
-
         return match ($soapNamespacedElement->namespaceURI ?? '') {
             Xmlns::soap()->value() => SoapVersion::SOAP_11,
             Xmlns::soap12()->value() => SoapVersion::SOAP_12,
