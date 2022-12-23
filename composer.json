@@ -23,7 +23,8 @@
     },
     "require-dev": {
         "veewee/composer-run-parallel": "^1.2",
-        "symfony/var-dumper": "^6.1"
+        "symfony/var-dumper": "^6.1",
+        "php-soap/ext-soap-engine": "^1.4"
     },
     "license": "MIT",
     "authors": [
