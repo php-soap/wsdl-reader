@@ -15,7 +15,7 @@ class XsdTypeFormatter
         $nil = (bool)($meta['nil'] ?? false);
 
         $nullable = $nil || ($min === 0 && $max === 1);
-        $list = ($min === 0 && $max !== 1);
+        $list = ($max > 1 || $max === -1);
 
         return join('', [
             $nullable ? '?': '',
