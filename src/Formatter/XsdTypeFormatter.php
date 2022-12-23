@@ -9,6 +9,18 @@ class XsdTypeFormatter
 {
     public function __invoke(XsdType $xsdType): string
     {
-        return $xsdType->getName();
+        $meta = $xsdType->getMeta();
+        $min = (int)($meta['min'] ?? 1);
+        $max = (int)($meta['max'] ?? 1);
+        $nil = (bool)($meta['nil'] ?? false);
+
+        $nullable = $nil || ($min === 0 && $max === 1);
+        $list = ($min === 0 && $max !== 1);
+
+        return join('', [
+            $nullable ? '?': '',
+            $xsdType->getName(), //$xsdType->getXmlNamespace().':'.$xsdType->getName(),
+            $list ? '[]' : ''
+        ]);
     }
 }

@@ -14,18 +14,25 @@ class LongTypeFormatter
      */
     public function __invoke(Type $type, int $level = 1): string
     {
-        return format(
-            '{%s:%s}{%s}',
-            $type->getXsdType()->getXmlNamespace(),
-            $type->getName(),
-            join('', $type->getProperties()->map(
-                fn (Property $property): string => format(
-                    '%s    %s $%s',
-                    PHP_EOL,
+        $hasProps = (bool) $type->getProperties()->count();
+        $declaration = [
+            $type->getXsdType()->getXmlNamespace() . ':'.$type->getName(),
+            $type->getXsdType()->getBaseType() ? ' extends '.$type->getXsdType()->getBaseType() : '', // TODO : FQN Base type?
+            $hasProps ? ' {' : '',
+        ];
+
+        $parts = [
+            join('', $declaration),
+            ...$type->getProperties()->map(
+                static fn (Property $property): string => format(
+                    '    %s $%s',
                     (new XsdTypeFormatter())($property->getType()),
                     $property->getName()
                 )
-            )).PHP_EOL.'  '
-        );
+            ),
+            $hasProps ? '  }' : '',
+        ];
+
+        return join(PHP_EOL, $parts);
     }
 }

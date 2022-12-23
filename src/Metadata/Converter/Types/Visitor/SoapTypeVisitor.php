@@ -16,6 +16,7 @@ class SoapTypeVisitor
         $restrictions = $type->getRestriction();
         $parent = $type->getParent();
         $extension = $type->getExtension();
+        $base = $restrictions?->getBase() ?: $extension?->getBase();
 
         return new SoapType(
             (new XsdType($type->getName()))
@@ -23,8 +24,9 @@ class SoapTypeVisitor
                     'abstract' => $type->isAbstract(),
                     'restrictions' => $restrictions ? $restrictions->getChecks() : [],
                     'parent' => $parent && method_exists($parent, 'getChecks') ? $parent->getChecks() : [],
-                    'extension' => $extension?->getBase()?->getName() ?? '',
+                    'extends' => $base?->getName() ?? '',
                 ])
+                ->withBaseType($base?->getName() ?? '')
                 ->withXmlNamespaceName('TODO') // TODO
                 ->withXmlNamespace($type->getSchema()->getTargetNamespace()),
             new PropertyCollection(...(new PropertiesVisitor())($type, $context))

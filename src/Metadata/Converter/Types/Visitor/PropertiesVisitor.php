@@ -41,6 +41,7 @@ class PropertiesVisitor
                         ->withMeta([
                             'min' => $element->getMin(),
                             'max' => $element->getMax(),
+                            'nil' => $element->isNil(),
                             'default' => $element->getDefault(),
                             'docs' => $element->getDoc(),
                             // 'type' => $element->getType()

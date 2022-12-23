@@ -31,6 +31,7 @@ class ElementVisitor
         $restrictions = $type->getRestriction();
         $parent = $type->getParent();
         $extension = $type->getExtension();
+        $base = $restrictions?->getBase() ?: $extension?->getBase();
 
         return new SoapType(
             (new XsdType($element->getName()))
@@ -39,8 +40,9 @@ class ElementVisitor
                     'abstract' => $type->isAbstract(),
                     'restrictions' => $restrictions ? $restrictions->getChecks() : [],
                     'parent' => $parent && method_exists($parent, 'getChecks') ? $parent->getChecks() : [],
-                    'extension' => $extension?->getBase()?->getName() ?? '',
+                    'extends' => $base?->getName() ?? '',
                 ])
+                ->withBaseType($base?->getName() ?? '')
                 ->withXmlNamespaceName('TODO') // TODO
                 ->withXmlNamespace($element->getSchema()->getTargetNamespace()),
             new PropertyCollection(...(new PropertiesVisitor())($element->getType(), $context))
