@@ -7,6 +7,7 @@ use DOMElement;
 use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Address;
 use Soap\WsdlReader\Model\Definitions\Port;
+use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use function Psl\invariant;

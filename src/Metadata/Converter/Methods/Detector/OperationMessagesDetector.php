@@ -5,8 +5,8 @@ namespace Soap\WsdlReader\Metadata\Converter\Methods\Detector;
 
 use Psl\Option\Option;
 use Soap\WsdlReader\Model\Definitions\Message;
+use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
-use Soap\WsdlReader\Parser\Definitions\QNamed;
 use Soap\WsdlReader\Todo\OptionsHelper;
 use function Psl\Option\none;
 use function Psl\Option\some;

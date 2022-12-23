@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
+use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Param;
 use Soap\WsdlReader\Model\Definitions\Params;
+use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Collection\NodeList;
 use VeeWee\Xml\Dom\Document;
-use Psl\Type;
 use function Psl\Result\wrap;
 
 class OperationParamParser

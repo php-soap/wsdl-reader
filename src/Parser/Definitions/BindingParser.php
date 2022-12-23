@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
+use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Binding;
 use Soap\WsdlReader\Model\Definitions\BindingOperations;
 use Soap\WsdlReader\Model\Definitions\Bindings;
+use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\WsdlReader\Model\Definitions\TransportType;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use Psl\Type;
 use function Psl\invariant;
 use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 

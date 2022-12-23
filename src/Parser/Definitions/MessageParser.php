@@ -8,6 +8,7 @@ use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\Messages;
 use Soap\WsdlReader\Model\Definitions\Part;
 use Soap\WsdlReader\Model\Definitions\Parts;
+use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 
@@ -25,7 +26,7 @@ class MessageParser
                     ->map(
                         fn (DOMElement $part) => new Part(
                             name: $part->getAttribute('name'),
-                            element: QNamed::parse($part->getAttribute('element'))
+                            element: QNamed::parse($part->getAttribute('element') ?: $part->getAttribute('type'))
                         )
                     )
             )

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Model\Definitions;
 
-use Soap\WsdlReader\Parser\Definitions\QNamed;
-
 class Binding
 {
     public function __construct(

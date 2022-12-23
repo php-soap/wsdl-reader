@@ -18,14 +18,4 @@ class MethodsConverterContext
     {
         return new self($types, $preferredSoapVersion);
     }
-
-    public static function soap11(TypeCollection $types): self
-    {
-        return self::defaults($types, SoapVersion::SOAP_11);
-    }
-
-    public static function soap12(TypeCollection $types): self
-    {
-        return self::defaults($types, SoapVersion::SOAP_12);
-    }
 }
