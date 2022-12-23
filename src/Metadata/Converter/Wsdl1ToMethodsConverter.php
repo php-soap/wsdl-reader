@@ -8,15 +8,14 @@ use Soap\Engine\Metadata\Collection\MethodCollection;
 use Soap\Engine\Metadata\Collection\ParameterCollection;
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
-use Soap\Engine\Metadata\Model\Type;
 use Soap\Engine\Metadata\Model\XsdType;
-use Soap\WsdlReader\Locator\SelectedServiceLocator;
+use Soap\WsdlReader\Locator\Wsdl1SelectedServiceLocator;
 use Soap\WsdlReader\Metadata\Converter\Methods\MethodsConverterContext;
 use Soap\WsdlReader\Model\Definitions\BindingOperation;
 use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\Operation;
 use Soap\WsdlReader\Model\Definitions\Part;
-use Soap\WsdlReader\Model\Definitions\SelectedService;
+use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
 use Soap\WsdlReader\Model\Wsdl1;
 use Soap\WsdlReader\Parser\Xml\QnameParser;
 use Soap\WsdlReader\Todo\OptionsHelper;
@@ -33,7 +32,7 @@ class Wsdl1ToMethodsConverter
 {
     public function __invoke(Wsdl1 $wsdl, MethodsConverterContext $context): MethodCollection
     {
-        $selectedService = (new SelectedServiceLocator())($wsdl, $context->preferredSoapVersion());
+        $selectedService = (new Wsdl1SelectedServiceLocator())($wsdl, $context->preferredSoapVersion());
 
         return new MethodCollection(...filter_nulls(map(
             $selectedService->binding->operations->items,
@@ -41,7 +40,7 @@ class Wsdl1ToMethodsConverter
         )));
     }
 
-    private function parseMethod(SelectedService $service, string $operationName, MethodsConverterContext $context): ?Method
+    private function parseMethod(Wsdl1SelectedService $service, string $operationName, MethodsConverterContext $context): ?Method
     {
         $portInfo = $service->portType->operations->lookupByName($operationName);
         if (!$portInfo->isSome()) {

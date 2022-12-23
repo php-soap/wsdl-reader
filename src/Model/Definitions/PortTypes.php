@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Model\Definitions;
 
 use Psl\Option\Option;
+use Soap\WsdlReader\Parser\Xml\QnameParser;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
@@ -23,8 +24,9 @@ class PortTypes
     /**
      * @return Option<Binding>
      */
-    public function lookupByName(string $name): Option
+    public function lookupByQName(string $qname): Option
     {
+        [$namespace, $name] = (new QnameParser())($qname);
         foreach ($this->items as $portType) {
             if ($portType->name === $name) {
                 return some($portType);

@@ -6,4 +6,5 @@ namespace Soap\WsdlReader\Model\Definitions;
 enum TransportType: string
 {
     case HTTP = 'http://schemas.xmlsoap.org/soap/http';
+    case SMTP = 'http://schemas.xmlsoap.org/soap/smtp';
 }

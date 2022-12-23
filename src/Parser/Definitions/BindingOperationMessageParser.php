@@ -23,9 +23,9 @@ class BindingOperationMessageParser
 
         return new BindingOperationMessage(
             name: $xpath->evaluate('string(./@name)', Type\string(), $message),
-            bindingUse: BindingUse::from(
+            bindingUse: BindingUse::tryFrom(
                 $xpath->evaluate('string(./'.$soapVersionPrefix.':body/@use)', Type\string(), $message)
-            ),
+            ) ?? BindingUse::LITERAL,
         );
     }
 

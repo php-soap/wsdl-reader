@@ -22,7 +22,7 @@ class BindingOperationParser
             name: $operation->getAttribute('name'),
             soapVersion: $soapVersion,
             soapAction: $xpath->evaluate('string(./'.$soapVersionPrefix.':operation/@soapAction)', Type\string(), $operation),
-            style: BindingStyle::from($xpath->evaluate('string(./'.$soapVersionPrefix.':operation/@style)', Type\string(), $operation)),
+            style: BindingStyle::tryFrom($xpath->evaluate('string(./'.$soapVersionPrefix.':operation/@style)', Type\string(), $operation)) ?? BindingStyle::DOCUMENT,
             input: BindingOperationMessageParser::tryParseFromOptionalSingleOperationMessage($wsdl, $operation, 'input', $soapVersion),
             output: BindingOperationMessageParser::tryParseFromOptionalSingleOperationMessage($wsdl, $operation, 'output', $soapVersion),
             fault: BindingOperationMessageParser::tryParseList($wsdl, $xpath->query('./wsdl:fault', $operation), $soapVersion),
