@@ -1,7 +1,5 @@
 --TEST--
 SOAP XML Schema 63: standard unsignedLong type
---SKIPIF--
-<?php exit('skip: method parser cannot deal with base types yet'); ?>
 --INI--
 precision=14
 --FILE--
