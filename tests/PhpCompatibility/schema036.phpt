@@ -24,4 +24,7 @@ Methods:
   > test(testType $testParam): void
 
 Types:
-  > http://test-uri/:testType
+  > http://test-uri/:testType {
+    int $int
+    testType2 $testType2
+  }

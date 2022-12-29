@@ -21,4 +21,4 @@ Methods:
   > test(testType $testParam): void
 
 Types:
-  > http://test-uri/:testType
+  > http://test-uri/:testType extends Array

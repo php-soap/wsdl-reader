@@ -24,4 +24,13 @@ Methods:
   > test(testType $testParam): void
 
 Types:
-  > http://test-uri/:testType
+  > http://test-uri/:testType {
+    dateTime $dateTime
+    time $time
+    date $date
+    gYearMonth $gYearMonth
+    gYear $gYear
+    gMonthDay $gMonthDay
+    gDay $gDay
+    gMonth $gMonth
+  }

@@ -3,6 +3,7 @@
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Loader\CallbackLoader;
+use Soap\WsdlReader\Formatter\LongTypeFormatter;
 use Soap\WsdlReader\Formatter\MethodFormatter;
 use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
@@ -66,7 +67,7 @@ function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeForm
       echo PHP_EOL . PHP_EOL;
 
       echo "Types:" . PHP_EOL;
-      echo implode(PHP_EOL, $metadata->getTypes()->map(fn(Type $type) => '  > ' . (new ShortTypeFormatter())($type)));
+      echo implode(PHP_EOL, $metadata->getTypes()->map(fn(Type $type) => '  > ' . (new LongTypeFormatter())($type)));
       echo PHP_EOL . PHP_EOL;
   } catch (\Exception $exception) {
       echo "FATAL (".get_class($exception).'):'. $exception->getMessage();

@@ -6,6 +6,7 @@ namespace Soap\WsdlReader\Formatter;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\Type;
 use function Psl\Str\format;
+use function Psl\Vec\filter;
 
 class LongTypeFormatter
 {
@@ -33,6 +34,6 @@ class LongTypeFormatter
             $hasProps ? '  }' : '',
         ];
 
-        return join(PHP_EOL, $parts);
+        return join(PHP_EOL, filter($parts));
     }
 }
