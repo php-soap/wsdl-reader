@@ -10,7 +10,6 @@ use Soap\WsdlReader\Model\Definitions\Port;
 use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use function Psl\invariant;
 use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 
 class PortParser
@@ -19,8 +18,7 @@ class PortParser
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
-        $address = locate_by_tag_name($servicePort, 'address')->first();
-        invariant($address !== null, 'Unable to locate an address section in a service port!');
+        $address = locate_by_tag_name($servicePort, 'address')->expectFirst('Unable to locate an address section in a service port!');
         $soapVersion = (new SoapVersionParser())($wsdl, $address);
 
         /***

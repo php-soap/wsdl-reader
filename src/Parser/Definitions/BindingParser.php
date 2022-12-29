@@ -12,7 +12,6 @@ use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\WsdlReader\Model\Definitions\TransportType;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use function Psl\invariant;
 use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 
 class BindingParser
@@ -21,8 +20,7 @@ class BindingParser
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
-        $soapBinding = locate_by_tag_name($binding, 'binding')->first();
-        invariant($soapBinding !== null, 'Unable to locate the SOAP binding in a WSDL binding element!');
+        $soapBinding = locate_by_tag_name($binding, 'binding')->expectFirst('Unable to locate the SOAP binding in a WSDL binding element!');
         $soapVersion = (new SoapVersionParser())($wsdl, $soapBinding);
 
         return new Binding(
