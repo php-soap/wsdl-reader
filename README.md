@@ -1,4 +1,4 @@
-⚠️⚠️⚠️ **EXPERIMENTAL - FOR EDUCATIONAL USE ONLY** ⚠️⚠️⚠️
+⚠️⚠️⚠️ **EXPERIMENTAL** ⚠️⚠️⚠️
 
 
 # WSDL Reader
@@ -84,9 +84,13 @@ $metadataProvider = new Wsdl1MetadataProvider($wsdl, SoapVersion::SOAP_12);
 This will read the WSDL1 file and parse the SOAP 1.2 information into metadata.
 If no SOAP version is specified, it will automatically detect the first SOAP version it encounters.
 
+![WSDL 1 schema](resources/diagrams/wsdl1.png)
+
 ### WSDL2
 
-Not implemented yet!
+**Not implemented yet!**
+
+![WSDL 2 schema](resources/diagrams/wsdl2.png)
 
 ## Console
 
