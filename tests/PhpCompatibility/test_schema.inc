@@ -4,7 +4,7 @@ use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Loader\CallbackLoader;
 use Soap\WsdlReader\Formatter\LongTypeFormatter;
-use Soap\WsdlReader\Formatter\MethodFormatter;
+use Soap\WsdlReader\Formatter\ShortMethodFormatter;
 use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
@@ -63,7 +63,7 @@ function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeForm
       $metadata = $metadataProvider->getMetadata();
 
       echo "Methods:" . PHP_EOL;
-      echo implode(PHP_EOL, $metadata->getMethods()->map(fn(Method $method) => '  > ' . (new MethodFormatter())($method)));
+      echo implode(PHP_EOL, $metadata->getMethods()->map(fn(Method $method) => '  > ' . (new ShortMethodFormatter())($method)));
       echo PHP_EOL . PHP_EOL;
 
       echo "Types:" . PHP_EOL;

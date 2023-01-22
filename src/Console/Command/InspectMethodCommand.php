@@ -6,7 +6,8 @@ namespace Soap\WsdlReader\Console\Command;
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
 use Soap\Wsdl\Console\Helper\ConfiguredLoader;
-use Soap\WsdlReader\Formatter\MethodFormatter;
+use Soap\WsdlReader\Formatter\LongMethodFormatter;
+use Soap\WsdlReader\Formatter\ShortMethodFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 use Symfony\Component\Console\Command\Command;
@@ -49,13 +50,18 @@ class InspectMethodCommand extends Command
         $wsdl = (new Wsdl1Reader($loader))($wsdl);
         $metadataProvider = new Wsdl1MetadataProvider($wsdl);
         $metadata = $metadataProvider->getMetadata();
+
         $detectedMethods = filter($metadata->getMethods(), fn (Method $methodInfo): bool => $methodInfo->getName() === $method);
+        if (!$detectedMethods) {
+            $style->error('Unable to find method '.$method);
+            return self::FAILURE;
+        }
 
         $style->info('Methods:');
         $style->writeln(
             map(
                 $detectedMethods,
-                fn (Method $method) => '  > '.(new MethodFormatter())($method)
+                fn (Method $method) => '  > '.(new LongMethodFormatter())($method)
             )
         );
 

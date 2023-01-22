@@ -6,7 +6,7 @@ namespace Soap\WsdlReader\Console\Command;
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Console\Helper\ConfiguredLoader;
-use Soap\WsdlReader\Formatter\MethodFormatter;
+use Soap\WsdlReader\Formatter\ShortMethodFormatter;
 use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
@@ -48,7 +48,7 @@ class InspectCommand extends Command
         $metadata = $metadataProvider->getMetadata();
 
         $style->info('Methods:');
-        $style->writeln($metadata->getMethods()->map(fn (Method $method) => '  > '.(new MethodFormatter())($method)));
+        $style->writeln($metadata->getMethods()->map(fn (Method $method) => '  > '.(new ShortMethodFormatter())($method)));
 
         $style->info('Types:');
         $style->writeln($metadata->getTypes()->map(fn (Type $type) => '  > '.(new ShortTypeFormatter())($type)));

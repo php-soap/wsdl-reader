@@ -8,7 +8,7 @@ use Soap\ExtSoapEngine\ExtSoapMetadata;
 use Soap\ExtSoapEngine\ExtSoapOptions;
 use Soap\Wsdl\Loader\FlatteningLoader;
 use Soap\Wsdl\Loader\StreamWrapperLoader;
-use Soap\WsdlReader\Formatter\MethodFormatter;
+use Soap\WsdlReader\Formatter\ShortMethodFormatter;
 use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;

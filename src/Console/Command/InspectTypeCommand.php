@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Console\Command;
 
-use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Console\Helper\ConfiguredLoader;
 use Soap\WsdlReader\Formatter\LongTypeFormatter;
-use Soap\WsdlReader\Formatter\MethodFormatter;
-use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 use Symfony\Component\Console\Command\Command;
@@ -50,10 +47,14 @@ class InspectTypeCommand extends Command
         $metadataProvider = new Wsdl1MetadataProvider($wsdl);
         $metadata = $metadataProvider->getMetadata();
 
+        $detectedTypes = $metadata->getTypes()->filter(fn (Type $type): bool => $type->getName() === $typeName);
+        if (!$detectedTypes->count()) {
+            $style->error('Unable to find type '.$typeName);
+            return self::FAILURE;
+        }
+
         $style->writeln(
-            $metadata->getTypes()
-                ->filter(fn (Type $type): bool => $type->getName() === $typeName)
-                ->map(fn (Type $type) => '  > '.(new LongTypeFormatter())($type))
+            $detectedTypes->map(fn (Type $type) => '  > '.(new LongTypeFormatter())($type))
         );
 
         return self::SUCCESS;
