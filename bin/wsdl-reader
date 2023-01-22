@@ -1,0 +1,37 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Soap\WsdlReader\Console\AppFactory;
+
+(function () {
+    $loaded = array_reduce(
+        [
+            __DIR__.'/../vendor/autoload.php', // Used when executed in this package's SRC
+            __DIR__.'/../../../autoload.php' // Used when executed in vendor/bin of your project
+        ],
+        static function (?string $loaded, string $file): ?string {
+            if ( ! $loaded && is_file($file)) {
+                require_once($file);
+
+                return $file;
+            }
+
+            return $loaded;
+        }
+    );
+
+    if (!$loaded) {
+        fwrite(
+            STDERR,
+            'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+            'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
+            'php composer.phar install'.PHP_EOL
+        );
+        exit(1);
+    }
+
+    $app = AppFactory::create();
+    $app->run();
+})();

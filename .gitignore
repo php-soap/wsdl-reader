@@ -2,3 +2,4 @@
 .phpunit.cache
 .php-cs-fixer.cache
 /*.wsdl
+composer.lock
