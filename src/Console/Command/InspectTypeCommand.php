@@ -20,7 +20,7 @@ class InspectTypeCommand extends Command
 {
     public static function getDefaultName(): string
     {
-        return 'inspect:types';
+        return 'inspect:type';
     }
 
     /**
