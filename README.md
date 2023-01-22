@@ -33,28 +33,22 @@ use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 
-echo "Reading WSDL $wsdlLocation".PHP_EOL;
+// Reading WSDL
 $loader = new FlatteningLoader(new StreamWrapperLoader());
 $wsdl = (new Wsdl1Reader($loader))($wsdlLocation);
 
-echo "Parsing metadata".PHP_EOL;
+// Parsing metadata
 $metadataProvider = new Wsdl1MetadataProvider($wsdl);
 $metadata = $metadataProvider->getMetadata();
-echo PHP_EOL;
 
-echo "Methods:".PHP_EOL;
-echo implode(PHP_EOL, $metadata->getMethods()->map(fn (Method $method) => '  > '.(new ShortMethodFormatter())($method)));
-echo PHP_EOL.PHP_EOL;
-
-echo "Types:".PHP_EOL;
-echo implode(PHP_EOL, $metadata->getTypes()->map(fn (Type $type) => '  > '.(new ShortTypeFormatter())($type)));
-echo PHP_EOL.PHP_EOL;
+// Processing collected info:
+var_dump($metadata->getMethods(), $metadata->getTypes());
 ```
 
 As shown above, parsing the WSDL is done in phases:
 
 * Loading
-* Reading raw WSDL XML into value objects
+* Reading raw WSDL XML into value objects and [XSD schema](https://github.com/goetas-webservices/xsd-reader).
 * Converting this WSDL to usable metadata
 
 This gives you the flexibility in all different layers:
@@ -72,6 +66,8 @@ This gives you some flexibility in what version of WSDL is being parsed, what SO
 
 ### WSDL1 and 1.1
 
+![WSDL 1 schema](resources/diagrams/wsdl1.png)
+
 ```php
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
@@ -84,13 +80,12 @@ $metadataProvider = new Wsdl1MetadataProvider($wsdl, SoapVersion::SOAP_12);
 This will read the WSDL1 file and parse the SOAP 1.2 information into metadata.
 If no SOAP version is specified, it will automatically detect the first SOAP version it encounters.
 
-![WSDL 1 schema](resources/diagrams/wsdl1.png)
-
 ### WSDL2
+
+![WSDL 2 schema](resources/diagrams/wsdl2.png)
 
 **Not implemented yet!**
 
-![WSDL 2 schema](resources/diagrams/wsdl2.png)
 
 ## Console
 
@@ -137,15 +132,18 @@ Example custom PHP loader:
 ```php
 <?php
 
+use Soap\Wsdl\Loader\FlatteningLoader;
 use Soap\Wsdl\Loader\StreamWrapperLoader;
 
-return new StreamWrapperLoader(
-    stream_context_create([
-        'http' => [
-            'method' => 'GET',
-            'header'=> sprintf('Authorization: Basic %s', base64_encode('username:password')),
-        ],        
-    ])
+return new FlatteningLoader(
+    StreamWrapperLoader(
+        stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'header'=> sprintf('Authorization: Basic %s', base64_encode('username:password')),
+            ],        
+        ])
+    )
 );
 ```
 
