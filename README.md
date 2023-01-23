@@ -17,8 +17,7 @@ Want more information about the future of this project? Check out this list of t
 # Installation
 
 ```bash
-composer config repositories.wsdlreader git https://github.com/php-soap/wsdl-reader.git
-composer require php-soap/wsdl-reader@dev-master
+composer require php-soap/wsdl-reader@dev-main
 ```
 
 ## Example usage
