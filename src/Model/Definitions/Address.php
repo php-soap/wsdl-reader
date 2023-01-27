@@ -6,7 +6,7 @@ namespace Soap\WsdlReader\Model\Definitions;
 final class Address
 {
     public function __construct(
-        public readonly SoapVersion $soapVersion,
+        public readonly AddressBindingType $type,
         public readonly string $location
     ) {
     }

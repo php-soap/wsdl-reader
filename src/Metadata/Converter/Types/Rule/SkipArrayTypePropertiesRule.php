@@ -10,7 +10,7 @@ use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
  * This rule can be used to skip property generation for e.g. array types that will be converted in the encoder/decoder.
  *
  */
-class SkipArrayTypePropertiesRule
+final class SkipArrayTypePropertiesRule
 {
     public function __invoke(Type $type, TypesConverterContext $context): bool
     {

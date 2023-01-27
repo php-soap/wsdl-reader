@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
-use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Binding;
 use Soap\WsdlReader\Model\Definitions\BindingOperations;
 use Soap\WsdlReader\Model\Definitions\Bindings;
 use Soap\WsdlReader\Model\Definitions\QNamed;
-use Soap\WsdlReader\Model\Definitions\TransportType;
+use Soap\WsdlReader\Parser\Strategy\StrategySelector;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
@@ -21,18 +20,19 @@ final class BindingParser
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
         $soapBinding = locate_by_tag_name($binding, 'binding')->expectFirst('Unable to locate the SOAP binding in a WSDL binding element!');
-        $soapVersion = (new SoapVersionParser())($wsdl, $soapBinding);
+        $addressBindingType = (new AddressBindingTypeParser())($wsdl, $soapBinding);
+        $strategy = (new StrategySelector())($addressBindingType);
 
         return new Binding(
             name: $binding->getAttribute('name'),
             type: QNamed::parse($binding->getAttribute('type')),
-            soapVersion: $soapVersion,
-            transport: TransportType::from($xpath->evaluate('string(./@transport)', Type\string(), $soapBinding)),
+            addressBindingType: $addressBindingType,
+            implementation: $strategy->parseBindingImplementation($wsdl, $soapBinding),
             operations: new BindingOperations(
                 ...$xpath->query('./wsdl:operation', $binding)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        static fn (DOMElement $operation) => (new BindingOperationParser())($wsdl, $operation, $soapVersion)
+                        static fn (DOMElement $operation) => (new BindingOperationParser())($wsdl, $operation, $strategy)
                     )
             ),
         );

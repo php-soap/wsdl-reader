@@ -19,21 +19,13 @@ final class PortParser
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
         $address = locate_by_tag_name($servicePort, 'address')->expectFirst('Unable to locate an address section in a service port!');
-        $soapVersion = (new SoapVersionParser())($wsdl, $address);
-
-        /*
-         * TODO:
-         * Addresses could also be HTTP 11 HTTP12 etc.
-         * See PHP's implementation
-         * https://github.com/php/php-src/blob/b9cd1cdb4f236b7e336b688b16d58a913f4d5c69/ext/soap/php_sdl.c#L787-L810
-         *
-         */
+        $type = (new AddressBindingTypeParser())($wsdl, $address);
 
         return new Port(
             name: $xpath->evaluate('string(./@name)', Type\string(), $servicePort),
             binding: QNamed::parse($xpath->evaluate('string(./@binding)', Type\string(), $servicePort)),
             address: new Address(
-                soapVersion: $soapVersion,
+                type: $type,
                 location: $xpath->evaluate('string(./@location)', Type\string(), $address),
             ),
         );

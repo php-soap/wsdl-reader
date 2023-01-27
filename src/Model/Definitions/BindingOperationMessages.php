@@ -6,12 +6,12 @@ namespace Soap\WsdlReader\Model\Definitions;
 final class BindingOperationMessages
 {
     /**
-     * @var list<BindingOperation>
+     * @var list<BindingOperationMessage>
      */
     public readonly array $items;
 
     public function __construct(
-        BindingOperation ... $items
+        BindingOperationMessage ... $items
     ) {
         $this->items = $items;
     }
