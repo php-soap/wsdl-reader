@@ -21,6 +21,7 @@ final class ElementSingleConfigurator
                 'qualified' => $xsdType->isQualified(),
                 'local' => $xsdType->isLocal(),
                 'nil' => $xsdType->isNil(),
+                'isNullable' => ((bool) ($metaType->getMeta()['isNullable'] ?? false)) || $xsdType->isNil(),
             ]);
     }
 }

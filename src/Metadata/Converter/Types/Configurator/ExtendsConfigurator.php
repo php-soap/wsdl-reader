@@ -25,8 +25,10 @@ final class ExtendsConfigurator
         return $metaType
             ->withMeta([
                 ...$metaType->getMeta(),
-                'extends' => $name,
-                'extendsNamespace' => $base?->getSchema()->getTargetNamespace() ?? '',
+                'extends' => [
+                    'type' => $name,
+                    'namespace' => $base?->getSchema()->getTargetNamespace() ?? '',
+                ],
             ])
             ->withBaseType($name);
     }

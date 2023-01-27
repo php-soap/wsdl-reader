@@ -22,6 +22,7 @@ final class TypeConfigurator
             static fn (MetaType $metaType): MetaType => (new RestrictionsConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new AbstractConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new ExtendsConfigurator())($metaType, $xsdType, $context),
+            static fn (MetaType $metaType): MetaType => (new SimpleTypeConfigurator())($metaType, $xsdType, $context),
         )($metaType);
     }
 }

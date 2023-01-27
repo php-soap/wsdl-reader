@@ -26,6 +26,7 @@ final class AttributeSingleConfigurator
                     ...$metaType->getMeta(),
                     'qualified' => $xsdType->isQualified(),
                     'nil' => $xsdType->isNil(),
+                    'isNullable' => ((bool) ($metaType->getMeta()['isNullable'] ?? false)) || $xsdType->isNil(),
                     'use' => $xsdType->getUse(),
                 ])
         );

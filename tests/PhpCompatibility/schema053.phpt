@@ -28,9 +28,9 @@ Types:
   > http://test-uri/:testTypeWrapper extends testType
   > http://test-uri/:testType {
     int $int1
-    int[] $int2
-    int[] $int3
-    int[] $int4
+    array<int<0, max>, int> $int2
+    array<int<1, max>, int> $int3
+    array<int<1, 3>, int> $int4
     ?int $int5
     ?int $int6
   }

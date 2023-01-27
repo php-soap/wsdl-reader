@@ -16,6 +16,8 @@ final class LongTypeFormatter
         $declaration = [
             $type->getXsdType()->getXmlNamespace() . ':'.$type->getName(),
             $type->getXsdType()->getBaseType() ? ' extends '.$type->getXsdType()->getBaseType() : '', // TODO : FQN Base type?
+            (new EnumFormatter())($type->getXsdType()),
+            (new UnionFormatter())($type->getXsdType()),
             $hasProps ? ' {' : '',
         ];
 
@@ -23,9 +25,11 @@ final class LongTypeFormatter
             join('', $declaration),
             ...$type->getProperties()->map(
                 static fn (Property $property): string => format(
-                    '    %s%s %s%s',
+                    '    %s%s%s%s %s%s',
                     ($property->getType()->getMeta()['isAttribute'] ?? false) ? '@' : '',
                     (new XsdTypeFormatter())($property->getType()),
+                    (new EnumFormatter())($property->getType()),
+                    (new UnionFormatter())($property->getType()),
                     '$',
                     $property->getName()
                 )
