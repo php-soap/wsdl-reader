@@ -19,7 +19,7 @@ Methods:
 
 Types:
   > http://test-uri/:testType {
-    int $int1
-    int $int2
-    int $int3
+    @int $int1
+    @int $int2
+    @int $int3
   }

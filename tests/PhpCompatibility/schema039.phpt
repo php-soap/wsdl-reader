@@ -23,5 +23,5 @@ Methods:
 Types:
   > http://test-uri/:testType {
     string $_
-    int $int
+    @int $int
   }

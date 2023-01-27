@@ -28,10 +28,10 @@ Methods:
 Types:
   > http://test-uri/:testType2 extends integer {
     int $_
-    int $int
+    @int $int
   }
   > http://test-uri/:testType extends testType2 {
     int $_
-    int $int
-    int $int2
+    @int $int
+    @int $int2
   }

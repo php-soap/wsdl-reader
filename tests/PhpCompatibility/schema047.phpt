@@ -29,5 +29,5 @@ Types:
   }
   > http://test-uri/:testType extends testType2 {
     int $_
-    int $int2
+    @int $int2
   }
