@@ -29,7 +29,7 @@ final class Wsdl1MetadataProvider implements MetadataProvider
             return new WsdlMetadata(
                 $types = (new SchemaToTypesConverter())(
                     $wsdl->schema,
-                    TypesConverterContext::default()
+                    TypesConverterContext::default($wsdl->namespaces)
                 ),
                 $methods = (new Wsdl1ToMethodsConverter())(
                     $wsdl,

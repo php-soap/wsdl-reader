@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Metadata\Converter\Types\Detector;
+namespace Soap\WsdlReader\Metadata\Converter\GoetasTypes\Detector;
 
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Type\ComplexType;

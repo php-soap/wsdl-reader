@@ -22,6 +22,11 @@ final class NamespacesParser
                 static fn (array $map, DOMNameSpaceNode $node): array
                     => merge($map, [$node->localName => $node->namespaceURI]),
                 []
+            ),
+            $allNamespaces->reduce(
+                static fn (array $map, DOMNameSpaceNode $node): array
+                => merge($map, [$node->namespaceURI => $node->localName]),
+                []
             )
         );
     }
