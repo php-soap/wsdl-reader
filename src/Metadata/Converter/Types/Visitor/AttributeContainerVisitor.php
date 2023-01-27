@@ -36,8 +36,7 @@ final class AttributeContainerVisitor
             $properties = (new ComplexBaseTypeVisitor())($type, $context);
 
             if ($properties->count() !== 1) {
-                // TODO : Validate if multiple elements is somehow possible...
-                throw new RuntimeException('Expected only 1 element to be available');
+                throw new RuntimeException('Expected only 1 element to be available as the attribute containers base.');
             }
 
             return first($properties);

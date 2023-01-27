@@ -14,11 +14,9 @@ final class ElementVisitor
 {
     public function __invoke(ElementDef $element, TypesConverterContext $context): ?EngineType
     {
-        // When there is no type set on the element, we cannot do anything with it here.
+        // When there is no type set on the element, we cannot do anything with it here. There should always be one somehow.
         $xsdType = $element->getType();
         if (!$xsdType) {
-            // TODO : could be optional / nil / ... ?
-
             return null;
         }
 
