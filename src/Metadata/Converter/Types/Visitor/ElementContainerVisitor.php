@@ -8,7 +8,6 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementItem;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Group;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
-use Soap\Engine\Metadata\Model\XsdType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
@@ -41,7 +40,7 @@ final class ElementContainerVisitor
         return new PropertyCollection(
             new Property(
                 $element->getName(),
-                $configure(XsdType::guess($typeName))
+                $configure(MetaType::guess($typeName))
             )
         );
     }
