@@ -5,11 +5,14 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementItem;
-use GoetasWebservices\XML\XSDReader\Schema\Element\GroupRef;
+use GoetasWebservices\XML\XSDReader\Schema\Element\Group;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\XsdType;
+use Soap\Engine\Metadata\Model\XsdType as MetaType;
+use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
+use function Psl\Fun\pipe;
 use function Psl\Vec\flat_map;
 
 final class ElementContainerVisitor
@@ -19,35 +22,26 @@ final class ElementContainerVisitor
         return new PropertyCollection(
             ...flat_map(
                 $container->getElements(),
-                fn (ElementItem $element): PropertyCollection => $this->parseElementItem($element)
+                fn (ElementItem $element): PropertyCollection => $this->parseElementItem($element, $context)
             )
         );
     }
 
-    private function parseElementItem(ElementItem $element): PropertyCollection
+    private function parseElementItem(ElementItem $element, TypesConverterContext $context): PropertyCollection
     {
-        if ($element instanceof GroupRef) {
-            // TODO : parse $element->getElements(); ? What with min/max occurences on this type?
-            return new PropertyCollection();
+        if ($element instanceof Group) {
+            return $this->__invoke($element, $context);
         }
 
         $typeName = $element->getType()?->getName() ?: $element->getName();
+        $configure = pipe(
+            static fn (MetaType $metaType): MetaType => (new Configurator\ElementConfigurator())($metaType, $element, $context),
+        );
 
         return new PropertyCollection(
             new Property(
                 $element->getName(),
-                // TODO : Type info...
-                (new XsdType($typeName))
-                    ->withXmlNamespace($element->getSchema()->getTargetNamespace())
-                    ->withXmlNamespaceName('TODO') // TODO
-                    ->withMeta([
-                        'min' => $element->getMin(),
-                        'max' => $element->getMax(),
-                        'nil' => $element->isNil(),
-                        'default' => $element->getDefault(),
-                        'docs' => $element->getDoc(),
-                        // 'type' => $element->getType()
-                    ])
+                $configure(XsdType::guess($typeName))
             )
         );
     }
