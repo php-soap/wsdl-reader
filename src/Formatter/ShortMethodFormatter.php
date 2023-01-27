@@ -16,10 +16,7 @@ final class ShortMethodFormatter
         $this->xsdTypeFormatter = new XsdTypeFormatter();
     }
 
-    /**
-     * TODO : level depth for types?
-     */
-    public function __invoke(Method $method, int $level=1): string
+    public function __invoke(Method $method): string
     {
         return format(
             '%s(%s): %s',

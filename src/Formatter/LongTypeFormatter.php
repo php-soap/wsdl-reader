@@ -10,10 +10,7 @@ use function Psl\Vec\filter;
 
 final class LongTypeFormatter
 {
-    /**
-     * TODO: level
-     */
-    public function __invoke(Type $type, int $level = 1): string
+    public function __invoke(Type $type): string
     {
         $hasProps = (bool) $type->getProperties()->count();
         $declaration = [

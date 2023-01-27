@@ -8,9 +8,6 @@ use function Psl\Str\format;
 
 final class ShortTypeFormatter
 {
-    /**
-     * TODO: level
-     */
     public function __invoke(Type $type): string
     {
         return format(
