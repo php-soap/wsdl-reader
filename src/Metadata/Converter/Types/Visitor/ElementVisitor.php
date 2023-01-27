@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
-use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Type as EngineType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
@@ -34,16 +33,12 @@ final class ElementVisitor
         }
 
         $configure = pipe(
-            static fn (MetaType $metaType): MetaType => (new Configurator\TypeConfigurator())($metaType, $xsdType, $context),
-            static fn (MetaType $metaType): MetaType => (new Configurator\NamespaceConfigurator())($metaType, $element, $context),
-            static fn (MetaType $metaType): MetaType => (new Configurator\DocsConfigurator())($metaType, $element, $context),
+            static fn (MetaType $metaType): MetaType => (new Configurator\ElementConfigurator())($metaType, $element, $context),
         );
 
         return new EngineType(
-            $configure(MetaType::create($element->getName())),
-            new PropertyCollection(
-                ...(new PropertiesVisitor())($element->getType(), $context)
-            )
+            $configure(MetaType::guess($element->getName())),
+            (new PropertiesVisitor())($element->getType(), $context)
         );
     }
 }

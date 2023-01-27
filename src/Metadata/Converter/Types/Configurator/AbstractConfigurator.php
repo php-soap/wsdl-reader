@@ -3,22 +3,22 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
-use GoetasWebservices\XML\XSDReader\Schema\SchemaItem;
+use GoetasWebservices\XML\XSDReader\Schema\Type\Type as XsdType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
-final class DocsConfigurator
+final class AbstractConfigurator
 {
     public function __invoke(MetaType $metaType, mixed $xsdType, TypesConverterContext $context): MetaType
     {
-        if (!$xsdType instanceof SchemaItem) {
+        if (!$xsdType instanceof XsdType) {
             return $metaType;
         }
 
         return $metaType
             ->withMeta([
                 ...$metaType->getMeta(),
-                'docs' => $xsdType->getDoc() ?: ($metaType->getMeta()['docs'] ?? ''),
+                'abstract' => $xsdType->isAbstract(),
             ]);
     }
 }

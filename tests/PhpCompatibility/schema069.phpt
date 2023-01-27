@@ -18,6 +18,6 @@ Methods:
 
 Types:
   > http://test-uri/:testType {
-    todo $_
     string $str
+    int $int
   }

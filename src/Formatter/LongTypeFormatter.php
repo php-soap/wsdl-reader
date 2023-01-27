@@ -26,8 +26,9 @@ final class LongTypeFormatter
             join('', $declaration),
             ...$type->getProperties()->map(
                 static fn (Property $property): string => format(
-                    '    %s $%s',
+                    '    %s %s%s',
                     (new XsdTypeFormatter())($property->getType()),
+                    '$',//$property->getType()->getMeta()['isAttribute'] ? '$' : '$',
                     $property->getName()
                 )
             ),

@@ -3,91 +3,22 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
-use Generator;
-use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
-use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeDef;
-use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
-use GoetasWebservices\XML\XSDReader\Schema\Element\Element;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
-use GoetasWebservices\XML\XSDReader\Schema\Element\GroupRef;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
-use Soap\Engine\Metadata\Model\Property;
-use Soap\Engine\Metadata\Model\XsdType;
+use Soap\Engine\Metadata\Collection\PropertyCollection;
+use Soap\WsdlReader\Metadata\Converter\Types\Rule\SkipArrayTypePropertiesRule;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
 final class PropertiesVisitor
 {
-    /**
-     * @return Generator<Property>
-     */
-    public function __invoke(Type $type, TypesConverterContext $context): Generator
+    public function __invoke(Type $type, TypesConverterContext $context): PropertyCollection
     {
-        $elements = $type instanceof ElementContainer ? $type->getElements() : [];
-        if ($elements) {
-            /** @var Element|GroupRef $element */
-            foreach ($elements as $element) {
-                if ($element instanceof GroupRef) {
-                    // TODO : parse $element->getElements();
-                    continue;
-                }
-
-                $name = $element->getType()?->getName() ?: $element->getName();
-
-                yield new Property(
-                    $element->getName(),
-                    (new XsdType($name))
-                        ->withXmlNamespace($element->getSchema()->getTargetNamespace())
-                        ->withXmlNamespaceName('TODO') // TODO
-                        ->withMeta([
-                            'min' => $element->getMin(),
-                            'max' => $element->getMax(),
-                            'nil' => $element->isNil(),
-                            'default' => $element->getDefault(),
-                            'docs' => $element->getDoc(),
-                            // 'type' => $element->getType()
-                        ])
-                );
-            }
-
-            return;
-        }
-
-        $attributes = $type instanceof AttributeContainer ? $type->getAttributes() : [];
-        if ($attributes) {
-            // The content of the type:
-            yield new Property('_', new XsdType('todo'));
-
-            /** @var Attribute|Group|AttributeDef $attribute */
-            foreach ($attributes as $attribute) {
-                if ($attribute instanceof Group || $attribute instanceof AttributeDef) {
-                    // TODO : What to do here... ?
-                    // THis doesnt seem right
-                    continue;
-                }
-
-                $attributeType = $attribute->getType();
-                $name = $attributeType?->getName() ?: $attribute->getName();
-
-                yield new Property(
-                    $attribute->getName(),
-                    (new XsdType($name))
-                        ->withXmlNamespace($attribute->getSchema()->getTargetNamespace())
-                        ->withXmlNamespaceName('TODO') // TODO
-                        ->withMeta([
-                            'use' => $attribute->getUse(),
-                            'docs' => $attribute->getDoc(),
-                            'default' => $attribute->getDefault(),
-                            'fixed' => $attribute->getFixed(),
-                            'restrictions' => $attributeType->getRestriction() ? $attributeType->getRestriction()->getChecks() : [],
-                        ])
-                );
-            }
-            return;
-        }
-    }
-
-    private function parseElements()
-    {
+        return match (true) {
+            (new SkipArrayTypePropertiesRule())($type, $context) => new PropertyCollection(),
+            $type instanceof AttributeContainer && $type->getAttributes() => (new AttributeContainerVisitor())($type, $context),
+            $type instanceof ElementContainer && $type->getElements() => (new ElementContainerVisitor())($type, $context),
+            default => new PropertyCollection()
+        };
     }
 }

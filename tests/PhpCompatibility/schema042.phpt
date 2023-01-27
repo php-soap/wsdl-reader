@@ -20,6 +20,6 @@ Methods:
 
 Types:
   > http://test-uri/:testType extends integer {
-    todo $_
+    int $_
     int $int
   }

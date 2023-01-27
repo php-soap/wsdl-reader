@@ -19,7 +19,6 @@ Methods:
 
 Types:
   > http://test-uri/:testType {
-    todo $_
     int $int1
     int $int2
     int $int3

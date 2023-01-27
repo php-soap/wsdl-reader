@@ -9,8 +9,12 @@ use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
 final class NamespaceConfigurator
 {
-    public function __invoke(MetaType $metaType, SchemaItem $xsdType, TypesConverterContext $context): MetaType
+    public function __invoke(MetaType $metaType, mixed $xsdType, TypesConverterContext $context): MetaType
     {
+        if (!$xsdType instanceof SchemaItem) {
+            return $metaType;
+        }
+
         $currentNamespace = $xsdType->getSchema()->getTargetNamespace();
 
         return $metaType

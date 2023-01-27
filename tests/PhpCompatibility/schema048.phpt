@@ -27,7 +27,11 @@ Methods:
 
 Types:
   > http://test-uri/:testType2 extends integer {
-    todo $_
+    int $_
     int $int
   }
-  > http://test-uri/:testType extends testType2
+  > http://test-uri/:testType extends testType2 {
+    int $_
+    int $int
+    int $int2
+  }
