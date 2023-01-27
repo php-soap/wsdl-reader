@@ -14,7 +14,7 @@ use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 
-class BindingParser
+final class BindingParser
 {
     public function __invoke(Document $wsdl, DOMElement $binding)
     {
@@ -32,7 +32,7 @@ class BindingParser
                 ...$xpath->query('./wsdl:operation', $binding)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        fn (DOMElement $operation) => (new BindingOperationParser())($wsdl, $operation, $soapVersion)
+                        static fn (DOMElement $operation) => (new BindingOperationParser())($wsdl, $operation, $soapVersion)
                     )
             ),
         );
@@ -47,7 +47,7 @@ class BindingParser
             ...$xpath->query('/wsdl:definitions/wsdl:binding')
                 ->expectAllOfType(DOMElement::class)
                 ->map(
-                    fn (DOMElement $binding) => $parse($wsdl, $binding)
+                    static fn (DOMElement $binding) => $parse($wsdl, $binding)
                 )
         );
     }

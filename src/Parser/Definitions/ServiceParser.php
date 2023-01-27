@@ -11,7 +11,7 @@ use Soap\WsdlReader\Model\Definitions\Services;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 
-class ServiceParser
+final class ServiceParser
 {
     public function __invoke(Document $wsdl, DOMElement $service): Service
     {
@@ -23,7 +23,7 @@ class ServiceParser
                 ...$xpath->query('./wsdl:port', $service)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        fn (DOMElement $servicePort): Port => (new PortParser())($wsdl, $servicePort)
+                        static fn (DOMElement $servicePort): Port => (new PortParser())($wsdl, $servicePort)
                     )
             )
         );
@@ -38,7 +38,7 @@ class ServiceParser
             ...$xpath->query('/wsdl:definitions/wsdl:service')
                 ->expectAllOfType(DOMElement::class)
                 ->map(
-                    fn (DOMElement $service) => $parse($wsdl, $service)
+                    static fn (DOMElement $service) => $parse($wsdl, $service)
                 )
         );
     }

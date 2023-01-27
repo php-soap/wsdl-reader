@@ -20,7 +20,7 @@ use function Psl\Vec\filter_nulls;
 use function Psl\Vec\map;
 use function Psl\Vec\map_with_key;
 
-class Wsdl1ToMethodsConverter
+final class Wsdl1ToMethodsConverter
 {
     public function __invoke(Wsdl1 $wsdl, MethodsConverterContext $context): MethodCollection
     {
@@ -52,7 +52,7 @@ class Wsdl1ToMethodsConverter
 
         $void = XsdType::guess('void');
         $returnType = $outputMessage->map($convertMessageToTypesDict)->mapOr(
-            fn (array $types): XsdType => first($types) ?? $void,
+            static fn (array $types): XsdType => first($types) ?? $void,
             $void
         );
 

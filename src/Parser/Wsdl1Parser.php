@@ -12,7 +12,7 @@ use Soap\WsdlReader\Parser\Definitions\SchemaParser;
 use Soap\WsdlReader\Parser\Definitions\ServiceParser;
 use VeeWee\Xml\Dom\Document;
 
-class Wsdl1Parser
+final class Wsdl1Parser
 {
     public function __invoke(Document $wsdl): Wsdl1
     {

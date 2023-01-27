@@ -7,7 +7,7 @@ use Psl\Option\Option;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class Bindings
+final class Bindings
 {
     /**
      * @var list<Binding>
@@ -16,7 +16,7 @@ class Bindings
 
     public function __construct(
         Binding ... $items
-    ){
+    ) {
         $this->items = $items;
     }
 

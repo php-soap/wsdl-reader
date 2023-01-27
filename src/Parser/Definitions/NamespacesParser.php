@@ -10,7 +10,7 @@ use function Psl\Dict\merge;
 use function VeeWee\Xml\Dom\Locator\document_element;
 use function VeeWee\Xml\Dom\Locator\Xmlns\recursive_linked_namespaces;
 
-class NamespacesParser
+final class NamespacesParser
 {
     public static function tryParse(Document $wsdl): Namespaces
     {

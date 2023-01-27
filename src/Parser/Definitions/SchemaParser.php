@@ -8,7 +8,7 @@ use GoetasWebservices\XML\XSDReader\SchemaReader;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 
-class SchemaParser
+final class SchemaParser
 {
     public static array $knownSchemas = [
         'http://schemas.xmlsoap.org/wsdl/' => __DIR__.'/../../../resources/xsd/wsdl.xsd',

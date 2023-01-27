@@ -7,7 +7,7 @@ use Psl\Option\Option;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class Messages
+final class Messages
 {
     /**
      * @var list<Message>
@@ -16,7 +16,7 @@ class Messages
 
     public function __construct(
         Message ... $items
-    ){
+    ) {
         $this->items = $items;
     }
 

@@ -9,7 +9,7 @@ use Soap\Engine\Metadata\Model\Type as SoapType;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
-class SoapTypeVisitor
+final class SoapTypeVisitor
 {
     public function __invoke(Type $type, TypesConverterContext $context): SoapType
     {

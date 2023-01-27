@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Model\Definitions;
 
-class Params
+final class Params
 {
     /**
      * @var list<Param>
@@ -12,7 +12,7 @@ class Params
 
     public function __construct(
         Param ... $items
-    ){
+    ) {
         $this->items = $items;
     }
 }

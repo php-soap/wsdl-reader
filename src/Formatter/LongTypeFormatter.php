@@ -8,7 +8,7 @@ use Soap\Engine\Metadata\Model\Type;
 use function Psl\Str\format;
 use function Psl\Vec\filter;
 
-class LongTypeFormatter
+final class LongTypeFormatter
 {
     /**
      * TODO: level

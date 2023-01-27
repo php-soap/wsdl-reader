@@ -8,7 +8,7 @@ use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\Xml\Xmlns;
 use VeeWee\Xml\Dom\Document;
 
-class SoapVersionParser
+final class SoapVersionParser
 {
     public function __invoke(Document $wsdl, DOMElement $soapNamespacedElement): SoapVersion
     {

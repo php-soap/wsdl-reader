@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Console\Command;
 
 use Soap\Engine\Metadata\Model\Method;
-use Soap\Engine\Metadata\Model\Parameter;
 use Soap\Wsdl\Console\Helper\ConfiguredLoader;
 use Soap\WsdlReader\Formatter\LongMethodFormatter;
-use Soap\WsdlReader\Formatter\ShortMethodFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 use Symfony\Component\Console\Command\Command;
@@ -20,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use function Psl\Vec\filter;
 use function Psl\Vec\map;
 
-class InspectMethodCommand extends Command
+final class InspectMethodCommand extends Command
 {
     public static function getDefaultName(): string
     {
@@ -51,7 +49,7 @@ class InspectMethodCommand extends Command
         $metadataProvider = new Wsdl1MetadataProvider($wsdl);
         $metadata = $metadataProvider->getMetadata();
 
-        $detectedMethods = filter($metadata->getMethods(), fn (Method $methodInfo): bool => $methodInfo->getName() === $method);
+        $detectedMethods = filter($metadata->getMethods(), static fn (Method $methodInfo): bool => $methodInfo->getName() === $method);
         if (!$detectedMethods) {
             $style->error('Unable to find method '.$method);
             return self::FAILURE;
@@ -61,7 +59,7 @@ class InspectMethodCommand extends Command
         $style->writeln(
             map(
                 $detectedMethods,
-                fn (Method $method) => '  > '.(new LongMethodFormatter())($method)
+                static fn (Method $method) => '  > '.(new LongMethodFormatter())($method)
             )
         );
 

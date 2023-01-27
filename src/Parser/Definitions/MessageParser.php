@@ -12,7 +12,7 @@ use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 
-class MessageParser
+final class MessageParser
 {
     public function __invoke(Document $wsdl, DOMElement $message): Message
     {
@@ -24,7 +24,7 @@ class MessageParser
                 ...$xpath->query('./wsdl:part', $message)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        fn (DOMElement $part) => new Part(
+                        static fn (DOMElement $part) => new Part(
                             name: $part->getAttribute('name'),
                             element: QNamed::parse($part->getAttribute('element') ?: $part->getAttribute('type'))
                         )
@@ -42,7 +42,7 @@ class MessageParser
             ...$xpath->query('/wsdl:definitions/wsdl:message')
                 ->expectAllOfType(DOMElement::class)
                 ->map(
-                    fn (DOMElement $message) => $parse($wsdl, $message)
+                    static fn (DOMElement $message) => $parse($wsdl, $message)
                 )
         );
     }

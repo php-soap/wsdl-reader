@@ -9,6 +9,6 @@ final class Port
         public readonly string $name,
         public readonly QNamed $binding,
         public readonly Address $address
-    ){
+    ) {
     }
 }

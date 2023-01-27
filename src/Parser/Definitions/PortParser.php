@@ -12,7 +12,7 @@ use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 
-class PortParser
+final class PortParser
 {
     public function __invoke(Document $wsdl, DOMElement $servicePort): Port
     {
@@ -21,7 +21,7 @@ class PortParser
         $address = locate_by_tag_name($servicePort, 'address')->expectFirst('Unable to locate an address section in a service port!');
         $soapVersion = (new SoapVersionParser())($wsdl, $address);
 
-        /***
+        /*
          * TODO:
          * Addresses could also be HTTP 11 HTTP12 etc.
          * See PHP's implementation

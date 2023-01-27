@@ -5,13 +5,13 @@ namespace Soap\WsdlReader\Model\Definitions;
 
 use Soap\WsdlReader\Parser\Xml\QnameParser;
 
-class QNamed
+final class QNamed
 {
     private function __construct(
         public readonly string $qname,
         public readonly string $prefix,
         public readonly string $localName,
-    ){
+    ) {
     }
 
     public static function parse(string $qname): self

@@ -10,6 +10,6 @@ final class Namespaces
      */
     public function __construct(
         public readonly array $items
-    ){
+    ) {
     }
 }

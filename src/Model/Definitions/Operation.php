@@ -17,7 +17,7 @@ namespace Soap\WsdlReader\Model\Definitions;
  *     Notification: Output -> no input
  *     Solicit response: Output -> Input
  */
-class Operation
+final class Operation
 {
     public function __construct(
         public readonly string $name,
@@ -25,7 +25,7 @@ class Operation
         public readonly ?Param $output,
         public readonly Params $fault,
         public readonly string $documentation,
-    ){
+    ) {
     }
 
     public function isOneWay(): bool

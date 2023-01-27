@@ -10,7 +10,7 @@ use Soap\WsdlReader\Model\Definitions\Port;
 use Soap\WsdlReader\Model\Definitions\PortType;
 use Soap\WsdlReader\Model\Definitions\Service;
 
-class Wsdl1SelectedService
+final class Wsdl1SelectedService
 {
     public function __construct(
         public readonly Service $service,
@@ -19,6 +19,6 @@ class Wsdl1SelectedService
         public readonly PortType $portType,
         public readonly Messages $messages,
         public readonly Namespaces $namespaces,
-    ){
+    ) {
     }
 }

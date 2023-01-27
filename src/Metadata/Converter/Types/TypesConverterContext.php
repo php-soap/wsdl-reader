@@ -12,7 +12,7 @@ use Soap\Xml\Xmlns;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class TypesConverterContext
+final class TypesConverterContext
 {
     private static array $baseSchemas = [
         'http://www.w3.org/2001/XMLSchema',
@@ -39,48 +39,48 @@ class TypesConverterContext
         $new = new self();
         $xsd = Xmlns::xsd()->value();
 
-        $new->addAliasMap($xsd, 'gYearMonth', fn () => 'int');
-        $new->addAliasMap($xsd, 'gMonthDay', fn () => 'int');
-        $new->addAliasMap($xsd, 'gMonth', fn () => 'int');
-        $new->addAliasMap($xsd, 'gYear', fn () => 'int');
-        $new->addAliasMap($xsd, 'NMTOKEN', fn () => 'string');
-        $new->addAliasMap($xsd, 'NMTOKENS', fn () => 'string');
-        $new->addAliasMap($xsd, 'QName', fn () => 'string');
-        $new->addAliasMap($xsd, 'NCName', fn () => 'string');
-        $new->addAliasMap($xsd, 'decimal', fn () => 'float');
-        $new->addAliasMap($xsd, 'float', fn () => 'float');
-        $new->addAliasMap($xsd, 'double', fn () => 'float');
-        $new->addAliasMap($xsd, 'string', fn () => 'string');
-        $new->addAliasMap($xsd, 'normalizedString', fn () => 'string');
-        $new->addAliasMap($xsd, 'integer', fn () => 'int');
-        $new->addAliasMap($xsd, 'int', fn () => 'int');
-        $new->addAliasMap($xsd, 'unsignedInt', fn () => 'int');
-        $new->addAliasMap($xsd, 'negativeInteger', fn () => 'int');
-        $new->addAliasMap($xsd, 'positiveInteger', fn () => 'int');
-        $new->addAliasMap($xsd, 'nonNegativeInteger', fn () => 'int');
-        $new->addAliasMap($xsd, 'nonPositiveInteger', fn () => 'int');
-        $new->addAliasMap($xsd, 'long', fn () => 'int');
-        $new->addAliasMap($xsd, 'unsignedLong', fn () => 'int');
-        $new->addAliasMap($xsd, 'short', fn () => 'int');
-        $new->addAliasMap($xsd, 'boolean', fn () => 'bool');
-        $new->addAliasMap($xsd, 'nonNegativeInteger', fn () => 'int');
-        $new->addAliasMap($xsd, 'positiveInteger', fn () => 'int');
-        $new->addAliasMap($xsd, 'language', fn () => 'string');
-        $new->addAliasMap($xsd, 'token', fn () => 'string');
-        $new->addAliasMap($xsd, 'anyURI', fn () => 'string');
-        $new->addAliasMap($xsd, 'byte', fn () => 'string');
-        $new->addAliasMap($xsd, 'duration', fn () => 'DateInterval');
-        $new->addAliasMap($xsd, 'ID', fn () => 'string');
-        $new->addAliasMap($xsd, 'IDREF', fn () => 'string');
-        $new->addAliasMap($xsd, 'IDREFS', fn () => 'string');
-        $new->addAliasMap($xsd, 'Name', fn () => 'string');
-        $new->addAliasMap($xsd, 'NCName', fn () => 'string');
-        $new->addAliasMap($xsd, 'dateTime', fn () => 'DateTime');
-        $new->addAliasMap($xsd, 'time', fn () => 'DateTime');
-        $new->addAliasMap($xsd, 'date', fn () => 'DateTime');
-        $new->addAliasMap($xsd, 'anySimpleType', fn () => 'mixed');
-        $new->addAliasMap($xsd, 'anyType', fn () => 'mixed');
-        $new->addAliasMap($xsd, 'base64Binary', fn () => 'string');
+        $new->addAliasMap($xsd, 'gYearMonth', static fn () => 'int');
+        $new->addAliasMap($xsd, 'gMonthDay', static fn () => 'int');
+        $new->addAliasMap($xsd, 'gMonth', static fn () => 'int');
+        $new->addAliasMap($xsd, 'gYear', static fn () => 'int');
+        $new->addAliasMap($xsd, 'NMTOKEN', static fn () => 'string');
+        $new->addAliasMap($xsd, 'NMTOKENS', static fn () => 'string');
+        $new->addAliasMap($xsd, 'QName', static fn () => 'string');
+        $new->addAliasMap($xsd, 'NCName', static fn () => 'string');
+        $new->addAliasMap($xsd, 'decimal', static fn () => 'float');
+        $new->addAliasMap($xsd, 'float', static fn () => 'float');
+        $new->addAliasMap($xsd, 'double', static fn () => 'float');
+        $new->addAliasMap($xsd, 'string', static fn () => 'string');
+        $new->addAliasMap($xsd, 'normalizedString', static fn () => 'string');
+        $new->addAliasMap($xsd, 'integer', static fn () => 'int');
+        $new->addAliasMap($xsd, 'int', static fn () => 'int');
+        $new->addAliasMap($xsd, 'unsignedInt', static fn () => 'int');
+        $new->addAliasMap($xsd, 'negativeInteger', static fn () => 'int');
+        $new->addAliasMap($xsd, 'positiveInteger', static fn () => 'int');
+        $new->addAliasMap($xsd, 'nonNegativeInteger', static fn () => 'int');
+        $new->addAliasMap($xsd, 'nonPositiveInteger', static fn () => 'int');
+        $new->addAliasMap($xsd, 'long', static fn () => 'int');
+        $new->addAliasMap($xsd, 'unsignedLong', static fn () => 'int');
+        $new->addAliasMap($xsd, 'short', static fn () => 'int');
+        $new->addAliasMap($xsd, 'boolean', static fn () => 'bool');
+        $new->addAliasMap($xsd, 'nonNegativeInteger', static fn () => 'int');
+        $new->addAliasMap($xsd, 'positiveInteger', static fn () => 'int');
+        $new->addAliasMap($xsd, 'language', static fn () => 'string');
+        $new->addAliasMap($xsd, 'token', static fn () => 'string');
+        $new->addAliasMap($xsd, 'anyURI', static fn () => 'string');
+        $new->addAliasMap($xsd, 'byte', static fn () => 'string');
+        $new->addAliasMap($xsd, 'duration', static fn () => 'DateInterval');
+        $new->addAliasMap($xsd, 'ID', static fn () => 'string');
+        $new->addAliasMap($xsd, 'IDREF', static fn () => 'string');
+        $new->addAliasMap($xsd, 'IDREFS', static fn () => 'string');
+        $new->addAliasMap($xsd, 'Name', static fn () => 'string');
+        $new->addAliasMap($xsd, 'NCName', static fn () => 'string');
+        $new->addAliasMap($xsd, 'dateTime', static fn () => 'DateTime');
+        $new->addAliasMap($xsd, 'time', static fn () => 'DateTime');
+        $new->addAliasMap($xsd, 'date', static fn () => 'DateTime');
+        $new->addAliasMap($xsd, 'anySimpleType', static fn () => 'mixed');
+        $new->addAliasMap($xsd, 'anyType', static fn () => 'mixed');
+        $new->addAliasMap($xsd, 'base64Binary', static fn () => 'string');
 
         return $new;
     }
@@ -105,7 +105,6 @@ class TypesConverterContext
     }
 
     /**
-     * @param Type $type
      * @return Option<string>
      */
     public function getTypeAlias(Type $type): Option
@@ -117,9 +116,7 @@ class TypesConverterContext
     }
 
     /**
-     * @param Schema $schema
      * @param callable(Schema $schema): TypeCollection $visitor
-     * @return TypeCollection
      */
     public function visit(Schema $schema, callable $visitor): TypeCollection
     {

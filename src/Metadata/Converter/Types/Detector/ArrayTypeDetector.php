@@ -10,10 +10,9 @@ use Psl\Option\Option;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class ArrayTypeDetector
+final class ArrayTypeDetector
 {
     /**
-     * @param Type $type
      * @return Option<SimpleType>
      */
     public function __invoke(Type $type): Option

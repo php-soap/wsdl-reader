@@ -11,7 +11,7 @@ use function Psl\Iter\first;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class ArrayNestedElementDetector
+final class ArrayNestedElementDetector
 {
     /**
      * @return Option<ElementSingle>
@@ -37,7 +37,7 @@ class ArrayNestedElementDetector
 
         $element = first($elements) ? some(first($elements)) : none(); // TODO use new option factory instead ;)
         return $element->map(
-            fn (mixed $element) => (new ArrayElementDetector())($element)
+            static fn (mixed $element) => (new ArrayElementDetector())($element)
         );
     }
 }

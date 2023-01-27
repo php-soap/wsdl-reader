@@ -5,7 +5,7 @@ namespace Soap\WsdlReader\Formatter;
 
 use Soap\Engine\Metadata\Model\XsdType;
 
-class XsdTypeFormatter
+final class XsdTypeFormatter
 {
     public function __invoke(XsdType $xsdType): string
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Model\Definitions;
 
-class BindingOperationMessages
+final class BindingOperationMessages
 {
     /**
      * @var list<BindingOperation>
@@ -12,7 +12,7 @@ class BindingOperationMessages
 
     public function __construct(
         BindingOperation ... $items
-    ){
+    ) {
         $this->items = $items;
     }
 }

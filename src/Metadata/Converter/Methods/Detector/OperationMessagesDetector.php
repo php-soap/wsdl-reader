@@ -7,11 +7,11 @@ use Psl\Option\Option;
 use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\QNamed;
 use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
-use Soap\WsdlReader\Todo\OptionsHelper;
+use function Psl\Option\from_nullable;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
-class OperationMessagesDetector
+final class OperationMessagesDetector
 {
     /**
      * @return Option<array{input: Option<Message>, output: Option<Message>}>
@@ -25,8 +25,8 @@ class OperationMessagesDetector
 
         $lookupMessage = static fn (QNamed $message): Option => $service->messages->lookupByName($message->localName);
 
-        $inputMessage = OptionsHelper::andThen(OptionsHelper::fromNullable($portType->input?->message), $lookupMessage);
-        $outputMessage = OptionsHelper::andThen(OptionsHelper::fromNullable($portType->output?->message), $lookupMessage);
+        $inputMessage = from_nullable($portType->input?->message)->andThen($lookupMessage);
+        $outputMessage = from_nullable($portType->output?->message)->andThen($lookupMessage);
 
         return some([
             'input' => $inputMessage,

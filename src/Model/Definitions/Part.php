@@ -8,6 +8,6 @@ final class Part
     public function __construct(
         public readonly string $name,
         public readonly QNamed $element,
-    ){
+    ) {
     }
 }

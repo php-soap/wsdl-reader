@@ -13,7 +13,7 @@ use VeeWee\Xml\Dom\Collection\NodeList;
 use VeeWee\Xml\Dom\Document;
 use function Psl\Result\wrap;
 
-class OperationParamParser
+final class OperationParamParser
 {
     public function __invoke(Document $wsdl, DOMElement $operation): Param
     {
@@ -28,11 +28,11 @@ class OperationParamParser
     public static function tryParseOptionally(Document $wsdl, string $message, DOMElement $operation): ?Param
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
-        return wrap(fn () => $xpath->querySingle('./wsdl:'.$message, $operation))
+        return wrap(static fn () => $xpath->querySingle('./wsdl:'.$message, $operation))
             ->proceed(
-                fn (DOMElement $messageElement): Param =>
+                static fn (DOMElement $messageElement): Param =>
                     (new self())($wsdl, $messageElement),
-                fn () => null
+                static fn () => null
             );
     }
 
@@ -40,7 +40,7 @@ class OperationParamParser
     {
         return new Params(
             ...$params->map(
-                fn (DOMElement $param): Param => (new self)($wsdl, $param)
+                static fn (DOMElement $param): Param => (new self)($wsdl, $param)
             )
         );
     }

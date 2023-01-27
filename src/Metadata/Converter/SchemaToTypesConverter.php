@@ -19,15 +19,15 @@ use function Psl\Vec\map;
 // * https://github.com/goetas-webservices/wsdl2php/tree/master/src/Generation
 // * https://github.com/goetas-webservices/xsd2php/blob/master/src/AbstractConverter.php
 // * https://github.com/goetas-webservices/xsd2php/blob/master/src/Php/PhpConverter.php
-class SchemaToTypesConverter
+final class SchemaToTypesConverter
 {
     public function __invoke(Schema $schema, TypesConverterContext $context): TypeCollection
     {
         return $context->visit($schema, function () use ($schema, $context): TypeCollection {
             return new TypeCollection(
                 ...filter_nulls([
-                    ...map($schema->getTypes(), fn (Type $type): SoapType => (new SoapTypeVisitor())($type, $context)),
-                    ...map($schema->getElements(), fn (ElementDef $element): ?SoapType => (new ElementVisitor())($element, $context)),
+                    ...map($schema->getTypes(), static fn (Type $type): SoapType => (new SoapTypeVisitor())($type, $context)),
+                    ...map($schema->getElements(), static fn (ElementDef $element): ?SoapType => (new ElementVisitor())($element, $context)),
                     ...flat_map(
                         $schema->getSchemas(),
                         fn (Schema $childSchema): TypeCollection => $this->__invoke($childSchema, $context)

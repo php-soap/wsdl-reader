@@ -10,19 +10,22 @@ use Soap\WsdlReader\Model\Definitions\Port;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
 use Soap\WsdlReader\Model\Wsdl1;
-use Soap\WsdlReader\Todo\OptionsHelper;
 
 /**
  * Searches best fit for services -> ports -> bindings
  */
-class Wsdl1SelectedServiceLocator
+final class Wsdl1SelectedServiceLocator
 {
     public function __invoke(Wsdl1 $wsdl, ?SoapVersion $preferredVersion): Wsdl1SelectedService
     {
         foreach ($wsdl->services->items as $service) {
             $port = $service->ports->lookupBySoapVersion($preferredVersion);
-            $binding = OptionsHelper::andThen($port, static fn (Port $port): Option => $wsdl->bindings->lookupByName($port->binding->localName));
-            $portType = OptionsHelper::andThen($binding, static fn (Binding $binding): Option => $wsdl->portTypes->lookupByName($binding->type->localName));
+            $binding = $port->andThen(
+                static fn (Port $port): Option => $wsdl->bindings->lookupByName($port->binding->localName)
+            );
+            $portType = $binding->andThen(
+                static fn (Binding $binding): Option => $wsdl->portTypes->lookupByName($binding->type->localName)
+            );
 
             if ($portType->isSome()) {
                 return new Wsdl1SelectedService(

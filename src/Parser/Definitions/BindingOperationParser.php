@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
+use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\BindingOperation;
 use Soap\WsdlReader\Model\Definitions\BindingStyle;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use Psl\Type;
 
-class BindingOperationParser
+final class BindingOperationParser
 {
     public function __invoke(Document $wsdl, DOMElement $operation, SoapVersion $soapVersion): BindingOperation
     {

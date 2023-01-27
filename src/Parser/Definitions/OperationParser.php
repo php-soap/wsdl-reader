@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Parser\Definitions;
 
 use DOMElement;
+use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Operation;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use Psl\Type;
 
-class OperationParser
+final class OperationParser
 {
     public function __invoke(Document $wsdl, DOMElement $operation): Operation
     {

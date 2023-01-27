@@ -10,7 +10,7 @@ use Soap\WsdlReader\Model\Definitions\PortTypes;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 
-class PortTypeParser
+final class PortTypeParser
 {
     public function __invoke(Document $wsdl, DOMElement $portType): PortType
     {
@@ -22,7 +22,7 @@ class PortTypeParser
                 ...$xpath->query('./wsdl:operation', $portType)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        fn (DOMElement $operation) => (new OperationParser())($wsdl, $operation)
+                        static fn (DOMElement $operation) => (new OperationParser())($wsdl, $operation)
                     )
             ),
         );
@@ -37,7 +37,7 @@ class PortTypeParser
             ...$xpath->query('/wsdl:definitions/wsdl:portType')
                 ->expectAllOfType(DOMElement::class)
                 ->map(
-                    fn (DOMElement $portType) => $parse($wsdl, $portType)
+                    static fn (DOMElement $portType) => $parse($wsdl, $portType)
                 )
         );
     }

@@ -10,17 +10,15 @@ use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\Part;
 use Soap\WsdlReader\Model\Definitions\QNamed;
 use function Psl\Dict\pull;
-use function Psl\Result\wrap;
 
-class MessageToMetadataTypesConverter
+final class MessageToMetadataTypesConverter
 {
     public function __construct(
         private TypeCollection $knownTypes
-    ){
+    ) {
     }
 
     /**
-     * @param Message $message
      * @return array<string, XsdType>
      */
     public function __invoke(Message $message): array

@@ -7,7 +7,7 @@ use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
 use function Psl\Str\format;
 
-class ShortMethodFormatter
+final class ShortMethodFormatter
 {
     private XsdTypeFormatter $xsdTypeFormatter;
 

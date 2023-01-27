@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Exception;
 
+use RuntimeException;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
 
-class ServiceException extends \RuntimeException
+final class ServiceException extends RuntimeException
 {
     public static function notFound(?SoapVersion $preferredSoapVersion): self
     {

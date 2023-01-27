@@ -6,7 +6,7 @@ namespace Soap\WsdlReader\Formatter;
 use Soap\Engine\Metadata\Model\Type;
 use function Psl\Str\format;
 
-class ShortTypeFormatter
+final class ShortTypeFormatter
 {
     /**
      * TODO: level

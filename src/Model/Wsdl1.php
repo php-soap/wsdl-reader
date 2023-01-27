@@ -19,6 +19,6 @@ final class Wsdl1
         public readonly Services $services,
         public readonly Schema $schema,
         public readonly Namespaces $namespaces,
-    ){
+    ) {
     }
 }

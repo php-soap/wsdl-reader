@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Model\Definitions;
 
-class BindingOperation
+final class BindingOperation
 {
     public function __construct(
         public readonly string $name,
@@ -13,6 +13,6 @@ class BindingOperation
         public readonly ?BindingOperationMessage $input,
         public readonly ?BindingOperationMessage $output,
         public readonly BindingOperationMessages $fault,
-    ){
+    ) {
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Xml;
 
-class QnameParser
+final class QnameParser
 {
     /**
      * @param non-empty-string $qname

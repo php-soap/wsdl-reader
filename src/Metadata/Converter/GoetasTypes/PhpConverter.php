@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace GoetasWebservices\Xsd\XsdToPhp\Php;
 
@@ -25,28 +25,28 @@ use GoetasWebservices\Xsd\XsdToPhp\Php\Structure\PHPClassOf;
 use GoetasWebservices\Xsd\XsdToPhp\Php\Structure\PHPProperty;
 use Psr\Log\LoggerInterface;
 
-class PhpConverter extends AbstractConverter
+final class PhpConverter extends AbstractConverter
 {
     public function __construct(NamingStrategy $namingStrategy, LoggerInterface $loggerInterface = null)
     {
         parent::__construct($namingStrategy, $loggerInterface);
 
-        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'dateTime', function (Type $type) {
+        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'dateTime', static function (Type $type) {
             return 'DateTime';
         });
-        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'time', function (Type $type) {
+        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'time', static function (Type $type) {
             return 'DateTime';
         });
-        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'date', function (Type $type) {
+        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'date', static function (Type $type) {
             return 'DateTime';
         });
-        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'anySimpleType', function (Type $type) {
+        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'anySimpleType', static function (Type $type) {
             return 'mixed';
         });
-        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'anyType', function (Type $type) {
+        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'anyType', static function (Type $type) {
             return 'mixed';
         });
-        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'base64Binary', function (Type $type) {
+        $this->addAliasMap('http://www.w3.org/2001/XMLSchema', 'base64Binary', static function (Type $type) {
             return 'string';
         });
     }
@@ -69,7 +69,7 @@ class PhpConverter extends AbstractConverter
      */
     private function getTypes()
     {
-        uasort($this->classes, function ($a, $b) {
+        uasort($this->classes, static function ($a, $b) {
             return strcmp($a['class']->getFullName(), $b['class']->getFullName());
         });
         $ret = [];
@@ -145,7 +145,6 @@ class PhpConverter extends AbstractConverter
     private $skipByType = [];
 
     /**
-     * @param bool $skip
      *
      * @return PHPClass
      */
@@ -198,12 +197,11 @@ class PhpConverter extends AbstractConverter
                     substr($className, $pos + 1),
                     substr($className, 0, $pos),
                 ];
-            } else {
-                return [
-                    $className,
-                    null,
-                ];
             }
+            return [
+                $className,
+                null,
+            ];
         }
 
         $name = $this->getNamingStrategy()->getTypeName($type);
@@ -221,7 +219,6 @@ class PhpConverter extends AbstractConverter
 
     /**
      * @param bool $force
-     * @param bool $skip
      *
      * @return PHPClass
      *
@@ -242,7 +239,7 @@ class PhpConverter extends AbstractConverter
                 return $class;
             }
 
-            list($name, $ns) = $this->findPHPName($type);
+            [$name, $ns] = $this->findPHPName($type);
             $class->setName($name);
             $class->setNamespace($ns);
 
@@ -258,7 +255,6 @@ class PhpConverter extends AbstractConverter
             }
 
             if (($this->isArrayType($type) || $this->isArrayNestedElement($type)) && !$force) {
-
                 $this->classes[spl_object_hash($type)]['skip'] = true;
                 $this->skipByType[spl_object_hash($class)] = true;
 
@@ -419,9 +415,7 @@ class PhpConverter extends AbstractConverter
         $t = $element->getType();
 
         if ($arrayize) {
-
             if ($itemOfArray = $this->isArrayType($t)) {
-
                 if (!$itemOfArray->getName()) {
                     if ($element instanceof ElementRef) {
                         $refClass = $this->visitElementDef($element->getReferencedElement());
@@ -441,7 +435,6 @@ class PhpConverter extends AbstractConverter
 
                 return $property;
             } elseif ($itemOfArray = $this->isArrayNestedElement($t)) {
-
                 if (!$t->getName()) {
                     if ($element instanceof ElementRef) {
                         $refClass = $this->visitElementDef($element->getReferencedElement());
@@ -484,9 +477,8 @@ class PhpConverter extends AbstractConverter
         }
         if (!$node->getType()->getName()) {
             return $this->visitTypeAnonymous($node->getType(), $node->getName(), $class);
-        } else {
-            return $this->visitType($node->getType(), $force);
         }
+        return $this->visitType($node->getType(), $force);
     }
 
     private function typeHasValue(Type $type, PHPClass $parentClass, $name)

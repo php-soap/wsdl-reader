@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class InspectTypeCommand extends Command
+final class InspectTypeCommand extends Command
 {
     public static function getDefaultName(): string
     {
@@ -47,14 +47,14 @@ class InspectTypeCommand extends Command
         $metadataProvider = new Wsdl1MetadataProvider($wsdl);
         $metadata = $metadataProvider->getMetadata();
 
-        $detectedTypes = $metadata->getTypes()->filter(fn (Type $type): bool => $type->getName() === $typeName);
+        $detectedTypes = $metadata->getTypes()->filter(static fn (Type $type): bool => $type->getName() === $typeName);
         if (!$detectedTypes->count()) {
             $style->error('Unable to find type '.$typeName);
             return self::FAILURE;
         }
 
         $style->writeln(
-            $detectedTypes->map(fn (Type $type) => '  > '.(new LongTypeFormatter())($type))
+            $detectedTypes->map(static fn (Type $type) => '  > '.(new LongTypeFormatter())($type))
         );
 
         return self::SUCCESS;

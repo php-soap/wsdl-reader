@@ -9,7 +9,7 @@ use Soap\Engine\Metadata\Model\Type as SoapType;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
-class ElementVisitor
+final class ElementVisitor
 {
     public function __invoke(ElementDef $element, TypesConverterContext $context): ?SoapType
     {
@@ -49,4 +49,3 @@ class ElementVisitor
         );
     }
 }
-

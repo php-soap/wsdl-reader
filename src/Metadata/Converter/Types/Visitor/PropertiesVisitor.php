@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
+use Generator;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeDef;
@@ -15,12 +16,12 @@ use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
-class PropertiesVisitor
+final class PropertiesVisitor
 {
     /**
-     * @return \Generator<Property>
+     * @return Generator<Property>
      */
-    public function __invoke(Type $type, TypesConverterContext $context): \Generator
+    public function __invoke(Type $type, TypesConverterContext $context): Generator
     {
         $elements = $type instanceof ElementContainer ? $type->getElements() : [];
         if ($elements) {
@@ -88,6 +89,5 @@ class PropertiesVisitor
 
     private function parseElements()
     {
-
     }
 }

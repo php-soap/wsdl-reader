@@ -10,7 +10,7 @@ use Soap\Wsdl\Loader\StreamWrapperLoader;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 
-class MetadataProviderTest extends AbstractMetadataProviderTest
+final class MetadataProviderTest extends AbstractMetadataProviderTest
 {
     private MetadataProvider $metadataProvider;
 

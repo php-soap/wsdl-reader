@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class InspectCommand extends Command
+final class InspectCommand extends Command
 {
     public static function getDefaultName(): string
     {
@@ -48,10 +48,10 @@ class InspectCommand extends Command
         $metadata = $metadataProvider->getMetadata();
 
         $style->info('Methods:');
-        $style->writeln($metadata->getMethods()->map(fn (Method $method) => '  > '.(new ShortMethodFormatter())($method)));
+        $style->writeln($metadata->getMethods()->map(static fn (Method $method) => '  > '.(new ShortMethodFormatter())($method)));
 
         $style->info('Types:');
-        $style->writeln($metadata->getTypes()->map(fn (Type $type) => '  > '.(new ShortTypeFormatter())($type)));
+        $style->writeln($metadata->getTypes()->map(static fn (Type $type) => '  > '.(new ShortTypeFormatter())($type)));
 
         return self::SUCCESS;
     }
