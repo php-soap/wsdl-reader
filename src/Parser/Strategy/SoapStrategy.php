@@ -33,20 +33,19 @@ final class SoapStrategy implements StrategyInterface
         return new SoapOperation(
             version: $this->parseVersionFromNode($wsdl, $operation),
             action: $operation->getAttribute('soapAction'),
-            style: $operation->hasAttribute('style')
-                ? BindingStyle::tryFrom($operation->getAttribute('style'))
-                : BindingStyle::DOCUMENT,
+            style: BindingStyle::tryFrom($operation->getAttribute('style')) ?? BindingStyle::DOCUMENT,
         );
     }
 
     public function parseMessageImplementation(Document $wsdl, DOMElement $message): MessageImplementation
     {
         $body = locate_by_tag_name($message, 'body')->item(0);
+        if (!$body) {
+            return new SoapMessage(bindingUse: BindingUse::LITERAL);
+        }
 
         return new SoapMessage(
-            bindingUse: ($body && $body->hasAttribute('use'))
-                ? BindingUse::tryFrom($body->getAttribute('use'))
-                : BindingUse::LITERAL,
+            bindingUse: BindingUse::tryFrom($body->getAttribute('use')) ?? BindingUse::LITERAL,
         );
     }
 
