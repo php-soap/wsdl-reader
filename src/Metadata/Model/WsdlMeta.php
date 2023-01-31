@@ -27,6 +27,7 @@ use function Psl\Type\vec;
  *   isElementValue ?: bool,
  *   isList ?: bool,
  *   isNullable ?: bool,
+ *   isSimple ?: bool,
  *   local ?: bool,
  *   nil ?: bool,
  *   min ?: int,
@@ -71,6 +72,7 @@ final class WsdlMeta
             'isElementValue' => optional(bool()), // Indicates the special _ value for attribute groups
             'isList' => optional(bool()), // Simple list or based on min/max occurrences
             'isNullable' => optional(bool()), // Nil or based on min/max occurrences
+            'isSimple' => optional(bool()), // Indicates simple types
             'local' => optional(bool()),
             'nil' => optional(bool()),
             'min' => optional(int()),

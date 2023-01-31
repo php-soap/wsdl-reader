@@ -22,6 +22,12 @@ final class SimpleTypeConfigurator
             static fn (MetaType $metaType): MetaType => (new SimpleUnionsConfigurator())($metaType, $xsdType, $context),
         );
 
-        return $configure($metaType);
+        return $configure(
+            $metaType
+                ->withMeta([
+                    ...$metaType->getMeta(),
+                    'isSimple' => true,
+                ])
+        );
     }
 }
