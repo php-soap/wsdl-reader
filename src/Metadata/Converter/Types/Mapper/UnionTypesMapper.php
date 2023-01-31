@@ -11,8 +11,8 @@ final class UnionTypesMapper
 {
     /**
      * @template T
-     * @param list<SimpleType> $types
-     * @param callable(SimpleType, array<string, mixed> $meta): T $mapper
+     * @param array<array-key, SimpleType> $types
+     * @param callable(SimpleType, array<string, mixed>): T $mapper
      * @return list<T>
      */
     public function __invoke(array $types, callable $mapper): array
@@ -28,8 +28,8 @@ final class UnionTypesMapper
                         return $mapper($union, ['isList' => false]);
                     }
 
-                    if ($union->getList()) {
-                        return $mapper($union->getList(), ['isList' => true]);
+                    if ($list = $union->getList()) {
+                        return $mapper($list, ['isList' => true]);
                     }
 
                     $base = $union->getParent()?->getBase();

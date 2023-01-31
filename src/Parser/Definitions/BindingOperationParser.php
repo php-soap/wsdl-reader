@@ -22,7 +22,11 @@ final class BindingOperationParser
             implementation: $strategy->parseOperationImplementation($wsdl, $soapOperation),
             input: BindingOperationMessageParser::tryParseFromOptionalSingleOperationMessage($wsdl, $operation, 'input', $strategy),
             output: BindingOperationMessageParser::tryParseFromOptionalSingleOperationMessage($wsdl, $operation, 'output', $strategy),
-            fault: BindingOperationMessageParser::tryParseList($wsdl, $xpath->query('./wsdl:fault', $operation), $strategy),
+            fault: BindingOperationMessageParser::tryParseList(
+                $wsdl,
+                $xpath->query('./wsdl:fault', $operation)->expectAllOfType(DOMElement::class),
+                $strategy
+            ),
         );
     }
 }

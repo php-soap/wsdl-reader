@@ -19,13 +19,21 @@ final class NamespacesParser
 
         return new Namespaces(
             $allNamespaces->reduce(
+                /**
+                 * @param array<string, string> $map
+                 * @return array<string, string>
+                 */
                 static fn (array $map, DOMNameSpaceNode $node): array
-                    => merge($map, [$node->localName => $node->namespaceURI]),
+                    => merge($map, [(string)$node->localName => (string)$node->namespaceURI]),
                 []
             ),
             $allNamespaces->reduce(
+                /**
+                 * @param array<string, string> $map
+                 * @return array<string, string>
+                 */
                 static fn (array $map, DOMNameSpaceNode $node): array
-                => merge($map, [$node->namespaceURI => $node->localName]),
+                    => merge($map, [(string)$node->namespaceURI => (string)$node->localName]),
                 []
             )
         );

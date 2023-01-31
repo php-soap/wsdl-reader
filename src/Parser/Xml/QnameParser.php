@@ -6,15 +6,16 @@ namespace Soap\WsdlReader\Parser\Xml;
 final class QnameParser
 {
     /**
-     * @param non-empty-string $qname
      * @return array{0: string, 1: string}
      */
     public function __invoke(string $qname): array
     {
-        if (strpos($qname, ':') === false) {
+        if (!str_contains($qname, ':')) {
             return ['', $qname];
         }
 
-        return explode(':', $qname, 2);
+        $parts = explode(':', $qname, 2);
+
+        return [$parts[0], $parts[1] ?? ''];
     }
 }

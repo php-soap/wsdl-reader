@@ -10,6 +10,9 @@ final class Params
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         Param ... $items
     ) {

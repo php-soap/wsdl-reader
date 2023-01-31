@@ -14,6 +14,9 @@ final class PortTypes
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         PortType ... $items
     ) {
@@ -21,7 +24,7 @@ final class PortTypes
     }
 
     /**
-     * @return Option<Binding>
+     * @return Option<PortType>
      */
     public function lookupByName(string $name): Option
     {

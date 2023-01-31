@@ -14,6 +14,9 @@ final class Operations
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         Operation ... $items
     ) {

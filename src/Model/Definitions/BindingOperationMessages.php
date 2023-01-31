@@ -10,6 +10,9 @@ final class BindingOperationMessages
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         BindingOperationMessage ... $items
     ) {

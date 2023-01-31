@@ -17,7 +17,7 @@ use function Psl\Fun\lazy;
 final class Wsdl1MetadataProvider implements MetadataProvider
 {
     /**
-     * @var \Closure(): Metadata
+     * @var Closure(): Metadata
      */
     private Closure $metadata;
 

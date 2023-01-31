@@ -12,6 +12,7 @@ use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Collection\NodeList;
 use VeeWee\Xml\Dom\Document;
 use function Psl\Result\wrap;
+use function VeeWee\Xml\Dom\Assert\assert_element;
 
 final class OperationParamParser
 {
@@ -28,7 +29,7 @@ final class OperationParamParser
     public static function tryParseOptionally(Document $wsdl, string $message, DOMElement $operation): ?Param
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
-        return wrap(static fn () => $xpath->querySingle('./wsdl:'.$message, $operation))
+        return wrap(static fn (): DOMElement => assert_element($xpath->querySingle('./wsdl:'.$message, $operation)))
             ->proceed(
                 static fn (DOMElement $messageElement): Param =>
                     (new self())($wsdl, $messageElement),
@@ -36,6 +37,9 @@ final class OperationParamParser
             );
     }
 
+    /**
+     * @param NodeList<DOMElement> $params
+     */
     public static function tryParseList(Document $wsdl, NodeList $params): Params
     {
         return new Params(

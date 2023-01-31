@@ -15,7 +15,7 @@ use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
 
 final class BindingParser
 {
-    public function __invoke(Document $wsdl, DOMElement $binding)
+    public function __invoke(Document $wsdl, DOMElement $binding): Binding
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
@@ -47,7 +47,7 @@ final class BindingParser
             ...$xpath->query('/wsdl:definitions/wsdl:binding')
                 ->expectAllOfType(DOMElement::class)
                 ->map(
-                    static fn (DOMElement $binding) => $parse($wsdl, $binding)
+                    static fn (DOMElement $binding): Binding => $parse($wsdl, $binding)
                 )
         );
     }

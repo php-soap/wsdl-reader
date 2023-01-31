@@ -10,6 +10,9 @@ final class Services
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         Service ... $items
     ) {

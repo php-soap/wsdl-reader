@@ -10,6 +10,9 @@ use VeeWee\Xml\Dom\Document;
 
 final class SchemaParser
 {
+    /**
+     * @var array<string, string>
+     */
     public static array $knownSchemas = [
         'http://schemas.xmlsoap.org/wsdl/' => __DIR__.'/../../../resources/xsd/wsdl.xsd',
         'http://schemas.xmlsoap.org/soap/encoding/' => __DIR__.'/../../../resources/xsd/soap11-encoding.xsd',

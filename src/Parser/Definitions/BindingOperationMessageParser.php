@@ -12,6 +12,7 @@ use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Collection\NodeList;
 use VeeWee\Xml\Dom\Document;
 use function Psl\Result\wrap;
+use function VeeWee\Xml\Dom\Assert\assert_element;
 
 final class BindingOperationMessageParser
 {
@@ -32,14 +33,19 @@ final class BindingOperationMessageParser
         StrategyInterface $strategy
     ): ?BindingOperationMessage {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
-        return wrap(static fn () => $xpath->querySingle('./wsdl:'.$message, $operation))
-            ->proceed(
-                static fn (DOMElement $messageElement): BindingOperationMessage =>
-                    (new self())($wsdl, $messageElement, $strategy),
-                static fn () => null
-            );
+
+        return wrap(
+            static fn (): DOMElement => assert_element($xpath->querySingle('./wsdl:'.$message, $operation))
+        )->proceed(
+            static fn (DOMElement $messageElement): BindingOperationMessage =>
+                (new self())($wsdl, $messageElement, $strategy),
+            static fn () => null
+        );
     }
 
+    /**
+     * @param NodeList<DOMElement> $list
+     */
     public static function tryParseList(Document $wsdl, NodeList $list, StrategyInterface $strategy): BindingOperationMessages
     {
         return new BindingOperationMessages(

@@ -11,6 +11,6 @@ final class AddressBindingTypeParser
 {
     public function __invoke(Document $wsdl, DOMElement $namespacedElement): AddressBindingType
     {
-        return AddressBindingType::tryFrom($namespacedElement->namespaceURI ?? '');
+        return AddressBindingType::from($namespacedElement->namespaceURI ?? '');
     }
 }

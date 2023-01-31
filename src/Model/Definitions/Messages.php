@@ -14,6 +14,9 @@ final class Messages
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         Message ... $items
     ) {

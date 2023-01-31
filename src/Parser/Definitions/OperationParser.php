@@ -19,7 +19,10 @@ final class OperationParser
             name: $xpath->evaluate('string(./@name)', Type\string(), $operation),
             input: OperationParamParser::tryParseOptionally($wsdl, 'input', $operation),
             output: OperationParamParser::tryParseOptionally($wsdl, 'output', $operation),
-            fault: OperationParamParser::tryParseList($wsdl, $xpath->query('./wsdl:fault', $operation)),
+            fault: OperationParamParser::tryParseList(
+                $wsdl,
+                $xpath->query('./wsdl:fault', $operation)->expectAllOfType(DOMElement::class)
+            ),
             documentation: $xpath->evaluate('string(./wsdl:documentation)', Type\string(), $operation),
         );
     }

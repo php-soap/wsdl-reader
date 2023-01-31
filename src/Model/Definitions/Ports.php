@@ -14,6 +14,9 @@ final class Ports
      */
     public readonly array $items;
 
+    /**
+     * @no-named-arguments
+     */
     public function __construct(
         Port ... $items
     ) {
@@ -29,7 +32,7 @@ final class Ports
     public function lookupBySoapVersion(?SoapVersion $preferredVersion): Option
     {
         foreach ($this->items as $port) {
-            if (!$preferredVersion || $port->address->soapVersion === $preferredVersion) {
+            if (!$preferredVersion || $port->address->type->soapVersion() === $preferredVersion) {
                 return some($port);
             }
         }

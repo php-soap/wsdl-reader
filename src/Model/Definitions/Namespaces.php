@@ -9,6 +9,7 @@ use function Psl\Option\from_nullable;
 final class Namespaces
 {
     /**
+     * @no-named-arguments
      * @param array<string, string> $nameToNamespaceMap
      * @param array<string, string> $namespaceToNameMap
      */

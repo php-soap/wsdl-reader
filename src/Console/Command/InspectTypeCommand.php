@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Psl\Type\non_empty_string;
 
 final class InspectTypeCommand extends Command
 {
@@ -38,7 +39,7 @@ final class InspectTypeCommand extends Command
     {
         $style = new SymfonyStyle($input, $output);
         $loader = ConfiguredLoader::createFromConfig($input->getOption('loader'));
-        $wsdl = $input->getArgument('wsdl');
+        $wsdl = non_empty_string()->assert($input->getArgument('wsdl'));
         $typeName = $input->getArgument('type');
 
         $style->info('Loading "'.$wsdl.'"...');
