@@ -10,17 +10,16 @@ final class XsdTypeFormatter
     public function __invoke(XsdType $xsdType): string
     {
         $meta = $xsdType->getMeta();
+        $isList = ($meta['isList'] ?? false) && !($meta['isAlias'] ?? false);
+        $isNullable = (bool)($meta['isNullable'] ?? false);
         $min = (int)($meta['min'] ?? 1);
         $max = (int)($meta['max'] ?? 1);
-        $nil = (bool)($meta['nil'] ?? false);
-
-        $nullable = $nil || ($min === 0 && $max === 1);
-        $list = ($max > 1 || $max === -1);
 
         return join('', [
-            $nullable ? '?': '',
+            $isNullable ? '?': '',
+            $isList ? 'array<int<'.($min === -1 ? 'min' : $min).', '.($max === -1 ? 'max' : $max).'>, ' : '',
             $xsdType->getName(), //$xsdType->getXmlNamespace().':'.$xsdType->getName(),
-            $list ? '[]' : ''
+            $isList ? '>' : ''
         ]);
     }
 }

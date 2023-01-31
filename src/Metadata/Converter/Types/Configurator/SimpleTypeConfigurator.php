@@ -6,6 +6,7 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
+use function Psl\Fun\pipe;
 
 final class SimpleTypeConfigurator
 {
@@ -15,12 +16,12 @@ final class SimpleTypeConfigurator
             return $metaType;
         }
 
-        // TODO : Parse lists and unions
+        $configure = pipe(
+            static fn (MetaType $metaType): MetaType => (new RestrictionsConfigurator())($metaType, $xsdType->getRestriction(), $context),
+            static fn (MetaType $metaType): MetaType => (new SimpleListConfigurator())($metaType, $xsdType, $context),
+            static fn (MetaType $metaType): MetaType => (new SimpleUnionsConfigurator())($metaType, $xsdType, $context),
+        );
 
-        return $metaType->withMeta([
-            ...$metaType->getMeta(),
-            'list' => ['TODO'],
-            'union' => ['TODO'],
-        ]);
+        return $configure($metaType);
     }
 }

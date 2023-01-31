@@ -20,5 +20,5 @@ Methods:
 Types:
   > http://test-uri/:testType {
     int $int
-    int[] $int2
+    array<int<1, max>, int> $int2
   }

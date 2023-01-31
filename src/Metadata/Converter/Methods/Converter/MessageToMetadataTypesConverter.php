@@ -43,12 +43,7 @@ final class MessageToMetadataTypesConverter
             return XsdType::guess($type->localName)
                 ->withXmlNamespaceName($type->prefix)
                 ->withXmlNamespace('TODO lookup')
-                ->withMeta(
-                    [
-                        'min' => 1,
-                        'max' => 1,
-                    ]
-                );
+                ->withMeta([]);
         }
     }
 }

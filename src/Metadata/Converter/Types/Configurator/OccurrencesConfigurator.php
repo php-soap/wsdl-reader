@@ -15,11 +15,19 @@ final class OccurrencesConfigurator
             return $metaType;
         }
 
+        $min = $xsdType->getMin();
+        $max = $xsdType->getMax();
+        $isNullable = ((bool) ($metaType->getMeta()['isNullable'] ?? false)) || ($min === 0 && $max === 1);
+        $isList = ((bool) ($metaType->getMeta()['isList'] ?? false)) || ($max > 1 || $max === -1);
+
         return $metaType
+            ->withBaseType($isList ? 'array' : $metaType->getBaseType())
             ->withMeta([
                 ...$metaType->getMeta(),
-                'min' => $xsdType->getMin(),
-                'max' => $xsdType->getMax(),
+                'min' => $min,
+                'max' => $max,
+                'isNullable' => $isNullable,
+                'isList' => $isList,
             ]);
     }
 }

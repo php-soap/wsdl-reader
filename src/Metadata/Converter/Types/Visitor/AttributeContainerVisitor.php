@@ -44,7 +44,10 @@ final class AttributeContainerVisitor
 
         return $element->proceed(
             static fn (Property $detected): PropertyCollection => new PropertyCollection(
-                new Property('_', $detected->getType())
+                new Property('_', $detected->getType()->withMeta([
+                    ...$detected->getType()->getMeta(),
+                    'isElementValue' => true,
+                ]))
             ),
             static fn (): PropertyCollection => new PropertyCollection(),
         );
