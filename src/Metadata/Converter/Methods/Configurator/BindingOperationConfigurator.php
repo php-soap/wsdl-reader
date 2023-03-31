@@ -19,7 +19,8 @@ final class BindingOperationConfigurator
             return $method;
         }
 
-        return $method->withMeta(fn (MethodMeta $meta): MethodMeta => $meta
+        return $method->withMeta(
+            fn (MethodMeta $meta): MethodMeta => $meta
             ->withSoapVersion($implementation->version->value)
             ->withAction($implementation->action)
             ->withBindingStyle($implementation->style->value)
@@ -38,4 +39,3 @@ final class BindingOperationConfigurator
         return $implementation->bindingUse->value;
     }
 }
-

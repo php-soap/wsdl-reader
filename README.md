@@ -68,16 +68,25 @@ This gives you some flexibility in what version of WSDL is being parsed, what SO
 ![WSDL 1 schema](resources/diagrams/wsdl1.png)
 
 ```php
+use Soap\WsdlReader\Locator\ServiceSelectionCriteria;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\WsdlReader\Wsdl1Reader;
 
 $wsdl = (new Wsdl1Reader($loader))($wsdlLocation);
-$metadataProvider = new Wsdl1MetadataProvider($wsdl, SoapVersion::SOAP_12);
+
+$criteria = ServiceSelectionCriteria::defaults()
+    ->withPreferredSoapVersion(SoapVersion::SOAP_12);
+
+$metadataProvider = new Wsdl1MetadataProvider($wsdl, $criteria);
 ```
 
 This will read the WSDL1 file and parse the SOAP 1.2 information into metadata.
-If no SOAP version is specified, it will automatically detect the first SOAP version it encounters.
+You can apply some criteria on which the correct SOAP service will be selected: By default,
+
+* The selection criteria allows any SOAP service. You can disable e.g. the services that implement HTTP.
+* no SOAP version is preferred. The first SOAP service the system detects, will be selected. But you can specify a specific soap version as well.
+
 
 ### WSDL2
 

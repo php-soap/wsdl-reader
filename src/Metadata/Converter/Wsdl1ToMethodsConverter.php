@@ -28,7 +28,7 @@ final class Wsdl1ToMethodsConverter
 {
     public function __invoke(Wsdl1 $wsdl, MethodsConverterContext $context): MethodCollection
     {
-        $selectedService = (new Wsdl1SelectedServiceLocator())($wsdl, $context->preferredSoapVersion);
+        $selectedService = (new Wsdl1SelectedServiceLocator())($wsdl, $context->serviceCriteria);
 
         return new MethodCollection(...filter_nulls(map(
             $selectedService->binding->operations->items,
@@ -57,7 +57,11 @@ final class Wsdl1ToMethodsConverter
 
         $void = XsdType::guess('void');
         $returnType = $outputMessage->map($convertMessageToTypesDict)->mapOr(
-            static fn (array $types): XsdType => first($types) ?? $void,
+            static fn (array $types): XsdType => match (count($types)) {
+                0 => $void,
+                1 => first($types),
+                default => XsdType::guess('array')
+            },
             $void
         );
 

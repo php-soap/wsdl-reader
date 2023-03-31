@@ -11,7 +11,8 @@ final class PortTypeOperationConfigurator
 {
     public function __invoke(Method $method, Operation $operation): Method
     {
-        return $method->withMeta(static fn (MethodMeta $meta): MethodMeta => $meta
+        return $method->withMeta(
+            static fn (MethodMeta $meta): MethodMeta => $meta
             ->withDocs($operation->documentation)
             ->withIsOneWay($operation->isOneWay())
         );

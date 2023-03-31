@@ -17,9 +17,9 @@ final class BindingConfigurator
             return $method;
         }
 
-        return $method->withMeta(static fn (MethodMeta $meta): MethodMeta => $meta
+        return $method->withMeta(
+            static fn (MethodMeta $meta): MethodMeta => $meta
             ->withTransport($implementation->transport->value)
         );
     }
 }
-
