@@ -9,12 +9,16 @@ use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Locator\Wsdl1SelectedServiceLocator;
+use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\BindingOperationConfigurator;
+use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\PortTypeOperationConfigurator;
+use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\Wsdl1SelectedServiceConfigurator;
 use Soap\WsdlReader\Metadata\Converter\Methods\Converter\MessageToMetadataTypesConverter;
 use Soap\WsdlReader\Metadata\Converter\Methods\Detector\OperationMessagesDetector;
 use Soap\WsdlReader\Metadata\Converter\Methods\MethodsConverterContext;
 use Soap\WsdlReader\Model\Definitions\BindingOperation;
 use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
 use Soap\WsdlReader\Model\Wsdl1;
+use function Psl\Fun\pipe;
 use function Psl\Iter\first;
 use function Psl\Vec\filter_nulls;
 use function Psl\Vec\map;
@@ -28,18 +32,19 @@ final class Wsdl1ToMethodsConverter
 
         return new MethodCollection(...filter_nulls(map(
             $selectedService->binding->operations->items,
-            fn (BindingOperation $operation): ?Method => $this->parseMethod($selectedService, $operation->name, $context),
+            fn (BindingOperation $operation): ?Method => $this->parseMethod($selectedService, $operation, $context),
         )));
     }
 
-    private function parseMethod(Wsdl1SelectedService $service, string $operationName, MethodsConverterContext $context): ?Method
+    private function parseMethod(Wsdl1SelectedService $service, BindingOperation $bindingOperation, MethodsConverterContext $context): ?Method
     {
-        $messages = (new OperationMessagesDetector())($service, $operationName);
-        if (!$messages->isSome()) {
+        $operationName = $bindingOperation->name;
+        $portTypeOperation = $service->portType->operations->lookupByName($operationName)->unwrapOr(null);
+        if (!$portTypeOperation) {
             return null;
         }
 
-        ['input' => $inputMessage, 'output' => $outputMessage] = $messages->unwrap();
+        ['input' => $inputMessage, 'output' => $outputMessage] = (new OperationMessagesDetector())($service, $portTypeOperation);
         $convertMessageToTypesDict = (new MessageToMetadataTypesConverter($context->types))(...);
 
         $parameters = $inputMessage->map($convertMessageToTypesDict)->mapOr(
@@ -56,10 +61,18 @@ final class Wsdl1ToMethodsConverter
             $void
         );
 
-        return new Method(
-            $operationName,
-            new ParameterCollection(...$parameters->unwrap()),
-            $returnType->unwrap()
+        $configure = pipe(
+            static fn (Method $method) => (new Wsdl1SelectedServiceConfigurator())($method, $service),
+            static fn (Method $method) => (new BindingOperationConfigurator())($method, $bindingOperation),
+            static fn (Method $method) => (new PortTypeOperationConfigurator())($method, $portTypeOperation),
+        );
+
+        return $configure(
+            new Method(
+                $operationName,
+                new ParameterCollection(...$parameters->unwrap()),
+                $returnType->unwrap()
+            )
         );
     }
 }

@@ -19,7 +19,7 @@ final class LongMethodFormatter
     public function __invoke(Method $method): string
     {
         return format(
-            '%s(%s): %s',
+            '%s(%s): %s%s',
             $method->getName(),
             implode(', ', $method->getParameters()->map(
                 fn (Parameter $parameter): string => format(
@@ -29,6 +29,7 @@ final class LongMethodFormatter
                 )
             )),
             ($this->xsdTypeFormatter)($method->getReturnType()),
+            PHP_EOL. '    '.print_r($method->getMeta(), true)
         );
     }
 }
