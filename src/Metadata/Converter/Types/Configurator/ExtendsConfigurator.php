@@ -23,13 +23,20 @@ final class ExtendsConfigurator
             return $engineType;
         }
 
-        return $engineType
+        $engineType = $engineType
             ->withMeta(
                 static fn (TypeMeta $meta): TypeMeta => $meta->withExtends([
                     'type' => $name,
                     'namespace' => $base?->getSchema()->getTargetNamespace() ?? '',
                 ])
-            )
-            ->withBaseType($name);
+            );
+
+        // Only set the base-type of the engine-type if current type is not part of the base-types.
+        // (e.g.: string, integer, ...)
+        if (!$context->isBaseSchema($xsdType->getSchema())) {
+            $engineType = $engineType->withBaseType($name);
+        }
+
+        return $engineType;
     }
 }

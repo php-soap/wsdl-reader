@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
+use GoetasWebservices\XML\XSDReader\Schema\Element\Choice;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementItem;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementSingle;
@@ -29,7 +30,7 @@ final class ElementContainerVisitor
 
     private function parseElementItem(ElementItem $element, TypesConverterContext $context): PropertyCollection
     {
-        if ($element instanceof Group) {
+        if ($element instanceof Group || $element instanceof Choice) {
             return $this->__invoke($element, $context);
         }
 
