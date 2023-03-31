@@ -15,10 +15,6 @@ use function Psl\Vec\filter_nulls;
 use function Psl\Vec\flat_map;
 use function Psl\Vec\map;
 
-// BASE ON
-// * https://github.com/goetas-webservices/wsdl2php/tree/master/src/Generation
-// * https://github.com/goetas-webservices/xsd2php/blob/master/src/AbstractConverter.php
-// * https://github.com/goetas-webservices/xsd2php/blob/master/src/Php/PhpConverter.php
 final class SchemaToTypesConverter
 {
     public function __invoke(Schema $schema, TypesConverterContext $context): TypeCollection

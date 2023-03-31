@@ -4,30 +4,30 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
 use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
-use Soap\Engine\Metadata\Model\XsdType as MetaType;
+use Soap\Engine\Metadata\Model\TypeMeta;
+use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
 
 final class SimpleTypeConfigurator
 {
-    public function __invoke(MetaType $metaType, mixed $xsdType, TypesConverterContext $context): MetaType
+    public function __invoke(EngineType $engineType, mixed $xsdType, TypesConverterContext $context): EngineType
     {
         if (!$xsdType instanceof SimpleType) {
-            return $metaType;
+            return $engineType;
         }
 
         $configure = pipe(
-            static fn (MetaType $metaType): MetaType => (new RestrictionsConfigurator())($metaType, $xsdType->getRestriction(), $context),
-            static fn (MetaType $metaType): MetaType => (new SimpleListConfigurator())($metaType, $xsdType, $context),
-            static fn (MetaType $metaType): MetaType => (new SimpleUnionsConfigurator())($metaType, $xsdType, $context),
+            static fn (EngineType $engineType): EngineType => (new RestrictionsConfigurator())($engineType, $xsdType->getRestriction(), $context),
+            static fn (EngineType $engineType): EngineType => (new SimpleListConfigurator())($engineType, $xsdType, $context),
+            static fn (EngineType $engineType): EngineType => (new SimpleUnionsConfigurator())($engineType, $xsdType, $context),
         );
 
         return $configure(
-            $metaType
-                ->withMeta([
-                    ...$metaType->getMeta(),
-                    'isSimple' => true,
-                ])
+            $engineType
+                ->withMeta(
+                    static fn (TypeMeta $meta): TypeMeta => $meta->withIsSimple(true)
+                )
         );
     }
 }

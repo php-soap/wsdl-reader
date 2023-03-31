@@ -32,7 +32,6 @@ final class MessageToMetadataTypesConverter
 
     /**
      * // Todo : make sure namespaces match, currently just looking for name is not sufficient!!
-     * // TODO : make sure simple types contain all info we have ...
      */
     private function findXsdType(QNamed $type): XsdType
     {
@@ -42,8 +41,7 @@ final class MessageToMetadataTypesConverter
             // Proxy to simple/base type ...
             return XsdType::guess($type->localName)
                 ->withXmlNamespaceName($type->prefix)
-                ->withXmlNamespace('TODO lookup')
-                ->withMeta([]);
+                ->withXmlNamespace('TODO lookup');
         }
     }
 }

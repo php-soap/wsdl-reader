@@ -6,7 +6,7 @@ namespace Soap\WsdlReader\Model\Definitions\Implementation\Binding;
 final class HttpBinding implements BindingImplementation
 {
     public function __construct(
-        public readonly string $verb, // TODO: POST, GET, ....
+        public readonly string $verb,
     ) {
     }
 }

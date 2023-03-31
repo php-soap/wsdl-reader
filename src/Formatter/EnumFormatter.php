@@ -10,7 +10,7 @@ final class EnumFormatter
     public function __invoke(XsdType $type): string
     {
         $meta = $type->getMeta();
-        $enums = (array) ($meta['enums'] ?? []);
+        $enums = $meta->enums()->unwrapOr([]);
         if (!$enums) {
             return '';
         }

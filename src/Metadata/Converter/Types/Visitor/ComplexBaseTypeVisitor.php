@@ -9,7 +9,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
-use Soap\Engine\Metadata\Model\XsdType as MetaType;
+use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
@@ -31,13 +31,14 @@ final class ComplexBaseTypeVisitor
     {
         $baseType = instance_of(Type::class)->assert($type->getParent()?->getBase());
         $configure = pipe(
-            static fn (MetaType $metaType): MetaType => (new Configurator\TypeConfigurator())($metaType, $baseType, $context),
+            static fn (EngineType $engineType): EngineType => (new Configurator\TypeConfigurator())($engineType, $baseType, $context),
         );
+        $typeName = $type->getName() ?? '';
 
         return new PropertyCollection(
             new Property(
-                $type->getName(),
-                $configure(MetaType::guess($baseType->getName() ?: $type->getName()))
+                $typeName,
+                $configure(EngineType::guess($baseType->getName() ?: $typeName))
             )
         );
     }
@@ -46,7 +47,7 @@ final class ComplexBaseTypeVisitor
     {
         $baseType = instance_of(Type::class)->assert($type->getParent()?->getBase());
         $configure = pipe(
-            static fn (MetaType $metaType): MetaType => (new Configurator\TypeConfigurator())($metaType, $baseType, $context),
+            static fn (EngineType $engineType): EngineType => (new Configurator\TypeConfigurator())($engineType, $baseType, $context),
         );
 
         // Nested complexTypes with simple content...
@@ -56,8 +57,8 @@ final class ComplexBaseTypeVisitor
 
         return new PropertyCollection(
             new Property(
-                $baseType->getName(),
-                $configure(MetaType::guess($baseType->getName() ?: $type->getName()))
+                $baseType->getName() ?? '',
+                $configure(EngineType::guess($baseType->getName() ?: ($type->getName() ?? '')))
             )
         );
     }
@@ -67,9 +68,9 @@ final class ComplexBaseTypeVisitor
         // The base type can refer to other complex / simple types.
         $baseType = $type->getParent()?->getBase();
 
-        return new PropertyCollection(
+        return new PropertyCollection(...[
             ...($baseType ? $this->__invoke($baseType, $context) : []),
             ...($type->getElements() ? (new ElementContainerVisitor())($type, $context) : [])
-        );
+        ]);
     }
 }
