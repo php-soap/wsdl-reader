@@ -17,7 +17,7 @@
         "ext-dom": "*",
         "goetas-webservices/xsd-reader": "^0.4.1",
         "php-soap/engine": "^2.0",
-        "php-soap/wsdl": "^1.3",
+        "php-soap/wsdl": "^1.4",
         "veewee/xml": "^2.6",
         "azjezz/psl": "^2.4",
         "symfony/console": "^6.2"
@@ -30,9 +30,6 @@
         "php-standard-library/psalm-plugin": "^2.2",
         "vimeo/psalm": "^5.6"
     },
-    "bin": [
-        "bin/wsdl-reader"
-    ],
     "license": "MIT",
     "authors": [
         {
