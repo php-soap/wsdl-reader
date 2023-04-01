@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Model\Definitions;
 
 use Psl\Option\Option;
+use Soap\WsdlReader\Locator\ServiceSelectionCriteria;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
@@ -29,12 +30,21 @@ final class Ports
      *
      * @return Option<Port>
      */
-    public function lookupBySoapVersion(?SoapVersion $preferredVersion): Option
+    public function lookupByLookupServiceCriteria(ServiceSelectionCriteria $criteria): Option
     {
+        $preferredVersion = $criteria->preferredSoapVersion;
+        $allowHttp = $criteria->allowHttpPorts;
+
         foreach ($this->items as $port) {
-            if (!$preferredVersion || $port->address->type->soapVersion() === $preferredVersion) {
-                return some($port);
+            if (!$allowHttp && $port->address->type->isHttp()) {
+                continue;
             }
+
+            if ($preferredVersion && $port->address->type->soapVersion() !== $preferredVersion) {
+                continue;
+            }
+
+            return some($port);
         }
 
         return none();

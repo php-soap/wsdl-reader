@@ -22,7 +22,7 @@ final class SkipArrayTypePropertiesRule
             return false;
         }
 
-        if ('array' === mb_strtolower($base->getName())) {
+        if ('array' === mb_strtolower($base->getName() ?? '')) {
             return true;
         }
 

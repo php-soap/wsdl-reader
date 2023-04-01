@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-         bootstrap="tests/bootstrap.php"
-         cacheResultFile=".phpunit.cache/test-results"
-         executionOrder="random"
-         forceCoversAnnotation="false"
-         beStrictAboutCoversAnnotation="false"
-         beStrictAboutOutputDuringTests="false"
-         beStrictAboutTodoAnnotatedTests="false"
-         failOnRisky="true"
-         failOnWarning="true"
-         verbose="true">
-    <testsuites>
-        <testsuite name="unit">
-            <directory suffix="Test.php">tests/Unit</directory>
-        </testsuite>
-        <testsuite name="compatibility">
-            <directory suffix=".phpt">tests/PhpCompatibility</directory>
-        </testsuite>
-        <testsuite name="integration">
-            <directory suffix="Test.php">tests/Integration</directory>
-        </testsuite>
-    </testsuites>
-
-    <coverage cacheDirectory=".phpunit.cache/code-coverage"
-              processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" bootstrap="tests/bootstrap.php" executionOrder="random" beStrictAboutOutputDuringTests="false" failOnRisky="true" failOnWarning="true" cacheDirectory=".phpunit.cache" requireCoverageMetadata="false" beStrictAboutCoverageMetadata="false">
+  <testsuites>
+    <testsuite name="unit">
+      <directory suffix="Test.php">tests/Unit</directory>
+    </testsuite>
+    <testsuite name="compatibility">
+      <directory suffix=".phpt">tests/PhpCompatibility</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory suffix="Test.php">tests/Integration</directory>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </coverage>
 </phpunit>

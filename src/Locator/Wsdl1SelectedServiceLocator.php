@@ -7,7 +7,6 @@ use Psl\Option\Option;
 use Soap\WsdlReader\Exception\ServiceException;
 use Soap\WsdlReader\Model\Definitions\Binding;
 use Soap\WsdlReader\Model\Definitions\Port;
-use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\WsdlReader\Model\Service\Wsdl1SelectedService;
 use Soap\WsdlReader\Model\Wsdl1;
 
@@ -16,10 +15,10 @@ use Soap\WsdlReader\Model\Wsdl1;
  */
 final class Wsdl1SelectedServiceLocator
 {
-    public function __invoke(Wsdl1 $wsdl, ?SoapVersion $preferredVersion): Wsdl1SelectedService
+    public function __invoke(Wsdl1 $wsdl, ServiceSelectionCriteria $criteria): Wsdl1SelectedService
     {
         foreach ($wsdl->services->items as $service) {
-            $port = $service->ports->lookupBySoapVersion($preferredVersion);
+            $port = $service->ports->lookupByLookupServiceCriteria($criteria);
             $binding = $port->andThen(
                 static fn (Port $port): Option => $wsdl->bindings->lookupByName($port->binding->localName)
             );
@@ -39,6 +38,6 @@ final class Wsdl1SelectedServiceLocator
             }
         }
 
-        throw ServiceException::notFound($preferredVersion);
+        throw ServiceException::notFound($criteria->preferredSoapVersion);
     }
 }

@@ -4,31 +4,32 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeSingle;
-use Soap\Engine\Metadata\Model\XsdType as MetaType;
+use Soap\Engine\Metadata\Model\TypeMeta;
+use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
 
 final class AttributeSingleConfigurator
 {
-    public function __invoke(MetaType $metaType, mixed $xsdType, TypesConverterContext $context): MetaType
+    public function __invoke(EngineType $engineType, mixed $xsdType, TypesConverterContext $context): EngineType
     {
         if (!$xsdType instanceof AttributeSingle) {
-            return $metaType;
+            return $engineType;
         }
 
         $configure = pipe(
-            static fn (MetaType $metaType): MetaType => (new RestrictionsConfigurator())($metaType, $xsdType->getType()?->getRestriction(), $context),
+            static fn (EngineType $engineType): EngineType => (new RestrictionsConfigurator())($engineType, $xsdType->getType()?->getRestriction(), $context),
         );
 
         return $configure(
-            $metaType
-                ->withMeta([
-                    ...$metaType->getMeta(),
-                    'qualified' => $xsdType->isQualified(),
-                    'nil' => $xsdType->isNil(),
-                    'isNullable' => ((bool) ($metaType->getMeta()['isNullable'] ?? false)) || $xsdType->isNil(),
-                    'use' => $xsdType->getUse(),
-                ])
+            $engineType
+                ->withMeta(
+                    static fn (TypeMeta $meta): TypeMeta => $meta
+                        ->withIsQualified($xsdType->isQualified())
+                        ->withIsNil($xsdType->isNil())
+                        ->withIsNullable($meta->isNullable()->unwrapOr(false) || $xsdType->isNil())
+                        ->withUse($xsdType->getUse())
+                )
         );
     }
 }

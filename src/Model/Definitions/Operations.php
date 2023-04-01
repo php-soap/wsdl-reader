@@ -28,9 +28,9 @@ final class Operations
      */
     public function lookupByName(string $name): Option
     {
-        foreach ($this->items as $portType) {
-            if ($portType->name === $name) {
-                return some($portType);
+        foreach ($this->items as $operation) {
+            if ($operation->name === $name) {
+                return some($operation);
             }
         }
 

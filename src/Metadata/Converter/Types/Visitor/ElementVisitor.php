@@ -36,7 +36,7 @@ final class ElementVisitor
 
         return new EngineType(
             $configure(MetaType::guess($element->getName())),
-            (new PropertiesVisitor())($element->getType(), $context)
+            (new PropertiesVisitor())($xsdType, $context)
         );
     }
 }

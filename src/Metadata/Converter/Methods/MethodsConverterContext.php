@@ -4,18 +4,21 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Metadata\Converter\Methods;
 
 use Soap\Engine\Metadata\Collection\TypeCollection;
-use Soap\WsdlReader\Model\Definitions\SoapVersion;
+use Soap\WsdlReader\Locator\ServiceSelectionCriteria;
 
 final class MethodsConverterContext
 {
     private function __construct(
         public readonly TypeCollection $types,
-        public readonly ?SoapVersion $preferredSoapVersion = null
+        public readonly ServiceSelectionCriteria $serviceCriteria
     ) {
     }
 
-    public static function defaults(TypeCollection $types, ?SoapVersion $preferredSoapVersion): self
+    public static function defaults(TypeCollection $types, ?ServiceSelectionCriteria $serviceSelectionCriteria): self
     {
-        return new self($types, $preferredSoapVersion);
+        return new self(
+            $types,
+            $serviceSelectionCriteria ?? ServiceSelectionCriteria::defaults()
+        );
     }
 }

@@ -5,12 +5,14 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeItem;
+use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use RuntimeException;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
-use Soap\Engine\Metadata\Model\XsdType as MetaType;
+use Soap\Engine\Metadata\Model\TypeMeta;
+use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
@@ -33,9 +35,9 @@ final class AttributeContainerVisitor
     {
         $element = wrap(static function () use ($container, $context) : Property {
             $type = instance_of(Type::class)->assert($container);
-            $properties = (new ComplexBaseTypeVisitor())($type, $context);
+            $properties = [...(new ComplexBaseTypeVisitor())($type, $context)];
 
-            if ($properties->count() !== 1) {
+            if (count($properties) !== 1) {
                 throw new RuntimeException('Expected only 1 element to be available as the attribute containers base.');
             }
 
@@ -44,10 +46,17 @@ final class AttributeContainerVisitor
 
         return $element->proceed(
             static fn (Property $detected): PropertyCollection => new PropertyCollection(
-                new Property('_', $detected->getType()->withMeta([
-                    ...$detected->getType()->getMeta(),
-                    'isElementValue' => true,
-                ]))
+                new Property(
+                    // TODO : Add a isElement to the meta-data....
+                    // TODO: Currently cheating by using minOccurs which is defined on an element.
+                    $detected->getType()->getMeta()->minOccurs()->mapOrElse(
+                        static fn (): string => $detected->getName(),
+                        static fn (): string => '_'
+                    )->unwrap(),
+                    $detected->getType()->withMeta(
+                        static fn (TypeMeta $meta): TypeMeta => $meta->withIsElementValue(true)
+                    )
+                )
             ),
             static fn (): PropertyCollection => new PropertyCollection(),
         );
@@ -87,18 +96,17 @@ final class AttributeContainerVisitor
             return $this->parseAttributes($attribute, $context);
         }
 
-        // TODO ! Better type exists validation
-        $attributeType = method_exists($attribute, 'getType') ? $attribute->getType() : null;
+        $attributeType = $attribute instanceof AttributeSingle ? $attribute->getType() : null;
         $typeName = $attributeType?->getName() ?: $attribute->getName();
 
         $configure = pipe(
-            static fn (MetaType $metaType): MetaType => (new Configurator\AttributeConfigurator())($metaType, $attribute, $context),
+            static fn (EngineType $engineType): EngineType => (new Configurator\AttributeConfigurator())($engineType, $attribute, $context),
         );
 
         return new PropertyCollection(
             new Property(
                 $attribute->getName(),
-                $configure(MetaType::guess($typeName))
+                $configure(EngineType::guess($typeName))
             )
         );
     }

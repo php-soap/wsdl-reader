@@ -19,7 +19,7 @@ final class TypeVisitor
         );
 
         return new EngineType(
-            $configure(MetaType::guess($xsdType->getName())),
+            $configure(MetaType::guess($xsdType->getName() ?? '')),
             (new PropertiesVisitor())($xsdType, $context)
         );
     }

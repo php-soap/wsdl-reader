@@ -10,10 +10,10 @@ final class XsdTypeFormatter
     public function __invoke(XsdType $xsdType): string
     {
         $meta = $xsdType->getMeta();
-        $isList = ($meta['isList'] ?? false) && !($meta['isAlias'] ?? false);
-        $isNullable = (bool)($meta['isNullable'] ?? false);
-        $min = (int)($meta['min'] ?? 1);
-        $max = (int)($meta['max'] ?? 1);
+        $isList = $meta->isList()->unwrapOr(false) && !$meta->isAlias()->unwrapOr(false);
+        $isNullable = $meta->isNullable()->unwrapOr(false);
+        $min = $meta->minOccurs()->unwrapOr(1);
+        $max = $meta->maxOccurs()->unwrapOr(1);
 
         return join('', [
             $isNullable ? '?': '',

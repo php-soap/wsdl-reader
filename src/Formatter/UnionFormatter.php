@@ -11,8 +11,8 @@ final class UnionFormatter
     public function __invoke(XsdType $type): string
     {
         $meta = $type->getMeta();
-        $isList = (bool)($meta['isList'] ?? false);
-        $unions = (array)($meta['unions'] ?? []);
+        $isList = $meta->isList()->unwrapOr(false);
+        $unions = $meta->unions()->unwrapOr([]);
         if (!$unions) {
             return '';
         }
@@ -20,7 +20,7 @@ final class UnionFormatter
         return ' = ('.($isList ? 'list<' : '').join('|', map(
             $unions,
             static function (array $union): string {
-                $isList = (bool)($union['isList'] ?? false);
+                $isList = $union['isList'];
                 return $isList ? 'list<'.$union['type'].'>' : $union['type'];
             }
         )).($isList ? '>' : '').')';
