@@ -102,40 +102,38 @@ You can apply additional service selection criteria that will be used to find th
 
 ## Console
 
-This package provides some console commands that can be used to debug what is inside your WSDL.
+This package extends the WSDL CLI Tools that are provided by the [WSDL package](https://github.com/php-soap/wsdl#wsdl-cli-tools).
+It provides these additional commands:
 
 ```shell
-$ ./bin/wsdl-reader
+$ ./vendor/bin/wsdl
 
 Available commands:
-  completion      Dump the shell completion script
-  help            Display help for a command
-  list            List commands
- inspect
   inspect         Inspects WSDL file.
   inspect:method  Inspects a method of a WSDL file.
-  inspect:types   Inspects types from WSDL file.
+  inspect:type    Inspects types from WSDL file.
 ```
 
 ### Listing all contents
 
 ```shell
-./bin/wsdl-reader inspect your.wsdl
+./vendor/bin/wsdl inspect your.wsdl
 ```
 
 ### Method details
 
 ```shell
-./bin/wsdl-reader inspect:method your.wsdl SomeMethodName
+./vendor/bin/wsdl inspect:method your.wsdl SomeMethodName
 ```
 
 ### Type details
 
 ```shell
-./bin/wsdl-reader inspect:type your.wsdl SomeType
+./vendor/bin/wsdl inspect:type your.wsdl SomeType
 ```
 
 ### Custom WSDL Loader
+
 By default, all CLI tools use the StreamWrapperLoader.
 All CLI tools have a `--loader=file.php` option that can be used to apply a custom WSDL loader.
 This can be handy if your WSDL is located behind authentication or if you want to get control over the HTTP level.
