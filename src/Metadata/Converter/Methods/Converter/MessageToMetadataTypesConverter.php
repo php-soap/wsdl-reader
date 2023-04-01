@@ -5,8 +5,11 @@ namespace Soap\WsdlReader\Metadata\Converter\Methods\Converter;
 
 use Soap\Engine\Exception\MetadataException;
 use Soap\Engine\Metadata\Collection\TypeCollection;
+use Soap\Engine\Metadata\Model\Type as EngineType;
+use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Model\Definitions\Message;
+use Soap\WsdlReader\Model\Definitions\Namespaces;
 use Soap\WsdlReader\Model\Definitions\Part;
 use Soap\WsdlReader\Model\Definitions\QNamed;
 use function Psl\Dict\pull;
@@ -14,7 +17,8 @@ use function Psl\Dict\pull;
 final class MessageToMetadataTypesConverter
 {
     public function __construct(
-        private TypeCollection $knownTypes
+        private TypeCollection $knownTypes,
+        private Namespaces $namespaces
     ) {
     }
 
@@ -30,18 +34,23 @@ final class MessageToMetadataTypesConverter
         );
     }
 
-    /**
-     * // Todo : make sure namespaces match, currently just looking for name is not sufficient!!
-     */
     private function findXsdType(QNamed $type): XsdType
     {
+        $namespace = $this->namespaces->lookupNamespaceByQname($type);
+
         try {
-            return $this->knownTypes->fetchFirstByName($type->localName)->getXsdType();
+            return $namespace->mapOrElse(
+                fn (string $namespace): EngineType => $this->knownTypes->fetchByNameAndXmlNamespace($type->localName, $namespace),
+                fn (): EngineType => $this->knownTypes->fetchFirstByName($type->localName),
+            )->unwrap()->getXsdType();
         } catch (MetadataException $e) {
             // Proxy to simple/base type ...
             return XsdType::guess($type->localName)
                 ->withXmlNamespaceName($type->prefix)
-                ->withXmlNamespace('TODO lookup');
+                ->withXmlNamespace($namespace->unwrapOr(''))
+                ->withMeta(
+                    static fn (TypeMeta $meta): TypeMeta => $meta->withIsSimple(true)
+                );
         }
     }
 }

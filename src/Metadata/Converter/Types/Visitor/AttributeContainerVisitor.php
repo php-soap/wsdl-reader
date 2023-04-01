@@ -47,9 +47,7 @@ final class AttributeContainerVisitor
         return $element->proceed(
             static fn (Property $detected): PropertyCollection => new PropertyCollection(
                 new Property(
-                    // TODO : Add a isElement to the meta-data....
-                    // TODO: Currently cheating by using minOccurs which is defined on an element.
-                    $detected->getType()->getMeta()->minOccurs()->mapOrElse(
+                    $detected->getType()->getMeta()->isElement()->mapOrElse(
                         static fn (): string => $detected->getName(),
                         static fn (): string => '_'
                     )->unwrap(),

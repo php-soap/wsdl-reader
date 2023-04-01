@@ -1,6 +1,3 @@
-⚠️⚠️⚠️ **EXPERIMENTAL** ⚠️⚠️⚠️
-
-
 # WSDL Reader
 
 This package provides tools for reading WSDL files and to converting them to metadata that will be used in other parts of the php-soap packages. 
@@ -17,7 +14,7 @@ Want more information about the future of this project? Check out this list of t
 # Installation
 
 ```bash
-composer require php-soap/wsdl-reader@dev-main
+composer require php-soap/wsdl-reader
 ```
 
 ## Example usage
