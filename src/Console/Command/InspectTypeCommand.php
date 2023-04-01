@@ -6,6 +6,7 @@ namespace Soap\WsdlReader\Console\Command;
 use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Console\Helper\ConfiguredLoader;
 use Soap\WsdlReader\Formatter\LongTypeFormatter;
+use Soap\WsdlReader\Formatter\MetaTableFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 use Symfony\Component\Console\Command\Command;
@@ -54,9 +55,11 @@ final class InspectTypeCommand extends Command
             return self::FAILURE;
         }
 
-        $style->writeln(
-            $detectedTypes->map(static fn (Type $type) => '  > '.(new LongTypeFormatter())($type))
-        );
+        foreach ($detectedTypes as $detectedType) {
+            $style->title($detectedType->getName());
+            $style->writeln(['> '.(new LongTypeFormatter())($detectedType), '']);
+            (new MetaTableFormatter($output))($detectedType->getXsdType()->getMeta())->render();
+        }
 
         return self::SUCCESS;
     }

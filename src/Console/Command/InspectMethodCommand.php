@@ -6,6 +6,7 @@ namespace Soap\WsdlReader\Console\Command;
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Wsdl\Console\Helper\ConfiguredLoader;
 use Soap\WsdlReader\Formatter\LongMethodFormatter;
+use Soap\WsdlReader\Formatter\MetaTableFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 use Symfony\Component\Console\Command\Command;
@@ -17,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Psl\Type\non_empty_string;
 use function Psl\Vec\filter;
-use function Psl\Vec\map;
 
 final class InspectMethodCommand extends Command
 {
@@ -56,13 +56,11 @@ final class InspectMethodCommand extends Command
             return self::FAILURE;
         }
 
-        $style->info('Methods:');
-        $style->writeln(
-            map(
-                $detectedMethods,
-                static fn (Method $method) => '  > '.(new LongMethodFormatter())($method)
-            )
-        );
+        foreach ($detectedMethods as $detectedMethod) {
+            $style->title($detectedMethod->getName());
+            $style->writeln(['> '.(new LongMethodFormatter())($detectedMethod), '']);
+            (new MetaTableFormatter($output))($detectedMethod->getMeta())->render();
+        }
 
         return self::SUCCESS;
     }
