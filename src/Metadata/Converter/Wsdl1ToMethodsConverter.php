@@ -45,7 +45,7 @@ final class Wsdl1ToMethodsConverter
         }
 
         ['input' => $inputMessage, 'output' => $outputMessage] = (new OperationMessagesDetector())($service, $portTypeOperation);
-        $convertMessageToTypesDict = (new MessageToMetadataTypesConverter($context->types))(...);
+        $convertMessageToTypesDict = (new MessageToMetadataTypesConverter($context->types, $service->namespaces))(...);
 
         $parameters = $inputMessage->map($convertMessageToTypesDict)->mapOr(
             static fn (array $types) => map_with_key(
