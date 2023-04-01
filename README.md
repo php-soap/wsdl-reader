@@ -43,7 +43,7 @@ var_dump($metadata->getMethods(), $metadata->getTypes());
 
 As shown above, parsing the WSDL is done in phases:
 
-* Loading
+* Select any [loader](https://github.com/php-soap/wsdl#wsdl-loader) to load the content of the WSDL. Tip: make sure to flatten it!
 * Reading raw WSDL XML into value objects and [XSD schema](https://github.com/goetas-webservices/xsd-reader).
 * Converting this WSDL to usable metadata
 
