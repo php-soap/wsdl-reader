@@ -5,6 +5,7 @@ namespace Soap\WsdlReader\Parser\Definitions;
 
 use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\SchemaReader;
+use Soap\WsdlReader\Parser\Context\ParserContext;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
 
@@ -21,13 +22,12 @@ final class SchemaParser
         'http://xml.apache.org/xml-soap' => __DIR__.'/../../../resources/xsd/apache-xml-soap.xsd',
     ];
 
-    public static function tryParse(Document $wsdl): Schema
+    public static function tryParse(Document $wsdl, ParserContext $context): Schema
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
         $reader = new SchemaReader();
 
-        // TODO : configurable from the outside?
-        foreach (self::$knownSchemas as $namespace => $location) {
+        foreach ($context->knownSchemas as $namespace => $location) {
             $reader->addKnownNamespaceSchemaLocation($namespace, $location);
         }
 

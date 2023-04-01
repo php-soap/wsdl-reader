@@ -81,10 +81,15 @@ $criteria = ServiceSelectionCriteria::defaults()
 $metadataProvider = new Wsdl1MetadataProvider($wsdl, $criteria);
 ```
 
-This will read the WSDL1 file and parse the SOAP 1.2 information into metadata.
-You can apply some criteria on which the correct SOAP service will be selected: By default,
+The WSDL1Reader accepts a `ParserContext`. You don't have to configure it since it falls back to defaults.
+But if you want to configure things like known XSD schema locations, that would be the place to go!
 
-* The selection criteria allows any SOAP service. You can disable e.g. the services that implement HTTP.
+Once the WSDL1 file has been read, it will try to find a SOAP 1.2 service from your WSDL file.
+This service will be converted into metadata you, as a human, can understand.
+
+You can apply additional service selection criteria that will be used to find the SOAP service you prefer. By default,
+
+* The selection criteria allows any SOAP service. You can disable e.g. the HTTP-based SOAP services.
 * no SOAP version is preferred. The first SOAP service the system detects, will be selected. But you can specify a specific soap version as well.
 
 
