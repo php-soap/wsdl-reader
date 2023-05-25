@@ -3,3 +3,4 @@
 .php-cs-fixer.cache
 /*.wsdl
 composer.lock
+.phpunit.result.cache

@@ -5,7 +5,6 @@ use Soap\Engine\Metadata\Model\Type;
 use Soap\Wsdl\Loader\CallbackLoader;
 use Soap\WsdlReader\Formatter\LongTypeFormatter;
 use Soap\WsdlReader\Formatter\ShortMethodFormatter;
-use Soap\WsdlReader\Formatter\ShortTypeFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 
@@ -25,10 +24,6 @@ function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeForm
       >
     <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test-uri/" $attributeFormDefault>
-     <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" /><!-- SOAP 1.1-->
-     <xsd:import namespace="http://www.w3.org/2003/05/soap-encoding" /><!-- SOAP 1.2 - 2003-05 -->
-     <xsd:import namespace="http://xml.apache.org/xml-soap" />
-     <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
       $schema
     </schema>
     </types>
