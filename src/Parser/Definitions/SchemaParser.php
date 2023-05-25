@@ -8,6 +8,7 @@ use GoetasWebservices\XML\XSDReader\SchemaReader;
 use Soap\WsdlReader\Parser\Context\ParserContext;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
+use function VeeWee\Xml\Dom\Locator\document_element;
 
 final class SchemaParser
 {
@@ -27,12 +28,20 @@ final class SchemaParser
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
         $reader = new SchemaReader();
 
+        // Make sure to register the known schema locations and to import them globally.
+        // This way, they can be used without expecting an explicit import from within the XSD.
+        // Since WSDLs don't require the soap specific schema's to be imported.
+        $globalSchema = $reader->getGlobalSchema();
         foreach ($context->knownSchemas as $namespace => $location) {
             $reader->addKnownNamespaceSchemaLocation($namespace, $location);
+            $globalSchema->addSchema(
+                $reader->readNode(Document::fromXmlFile($location)->locate(document_element()), $namespace)
+            );
         }
 
         return $reader->readNodes(
-            [...$xpath->query('/wsdl:definitions/wsdl:types/schema:schema')]
+            [...$xpath->query('/wsdl:definitions/wsdl:types/schema:schema')],
+            $wsdl->toUnsafeDocument()->documentURI
         );
     }
 }
