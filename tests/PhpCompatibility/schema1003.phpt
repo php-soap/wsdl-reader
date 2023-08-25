@@ -1,5 +1,5 @@
 --TEST--
-SOAP XML Schema 18: union with list
+SOAP XML Schema 1002: nested elements within complex types
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";
