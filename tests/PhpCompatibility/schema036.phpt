@@ -28,3 +28,6 @@ Types:
     int $int
     testType2 $testType2
   }
+  > http://test-uri/:testType2 {
+    int $int
+  }

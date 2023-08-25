@@ -22,7 +22,10 @@ final class SchemaToTypesConverter
         return $context->visit($schema, function () use ($schema, $context): TypeCollection {
             return new TypeCollection(
                 ...filter_nulls([
-                    ...map($schema->getTypes(), static fn (Type $type): SoapType => (new TypeVisitor())($type, $context)),
+                    ...flat_map(
+                        $schema->getTypes(),
+                        static fn (Type $type): TypeCollection => (new TypeVisitor())($type, $context)
+                    ),
                     ...map($schema->getElements(), static fn (ElementDef $element): ?SoapType => (new ElementVisitor())($element, $context)),
                     ...flat_map(
                         $schema->getSchemas(),
