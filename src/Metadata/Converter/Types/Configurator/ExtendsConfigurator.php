@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
+use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type as XsdType;
 use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
@@ -28,6 +29,7 @@ final class ExtendsConfigurator
                 static fn (TypeMeta $meta): TypeMeta => $meta->withExtends([
                     'type' => $name,
                     'namespace' => $base?->getSchema()->getTargetNamespace() ?? '',
+                    'isSimple' => $base instanceof SimpleType,
                 ])
             );
 
