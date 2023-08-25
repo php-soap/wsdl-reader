@@ -22,6 +22,7 @@ final class AttributeConfigurator
             static fn (EngineType $engineType): EngineType => (new DocsConfigurator())($engineType, $xsdType, $context),
             static fn (EngineType $engineType): EngineType => (new AttributeSingleConfigurator())($engineType, $xsdType, $context),
             static fn (EngineType $engineType): EngineType => (new AbstractAttributeItemConfigurator())($engineType, $xsdType, $context),
+            static fn (EngineType $engineType): EngineType => (new AttributeBaseTypeConfigurator())($engineType, $xsdType, $context),
         )(
             $engineType
                 ->withMeta(
