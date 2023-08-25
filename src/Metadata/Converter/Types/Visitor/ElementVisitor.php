@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
-use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
+use GoetasWebservices\XML\XSDReader\Schema\Element\AbstractElementSingle;
 use Soap\Engine\Metadata\Model\Type as EngineType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
@@ -12,7 +12,7 @@ use function Psl\Fun\pipe;
 
 final class ElementVisitor
 {
-    public function __invoke(ElementDef $element, TypesConverterContext $context): ?EngineType
+    public function __invoke(AbstractElementSingle $element, TypesConverterContext $context): ?EngineType
     {
         // When there is no type set on the element, we cannot do anything with it here. There should always be one somehow.
         $xsdType = $element->getType();
