@@ -61,6 +61,8 @@ function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeForm
       echo implode(PHP_EOL, $metadata->getMethods()->map(fn(Method $method) => '  > ' . (new ShortMethodFormatter())($method)));
       echo PHP_EOL . PHP_EOL;
 
+      //var_dump($metadata->getTypes()->fetchFirstByName('SpecialEquipPrefs'));
+      //var_dump($metadata->getTypes()->fetchFirstByName('SpecialEquipPref'));
       echo "Types:" . PHP_EOL;
       echo implode(PHP_EOL, $metadata->getTypes()->map(fn(Type $type) => '  > ' . (new LongTypeFormatter())($type)));
       echo PHP_EOL . PHP_EOL;
