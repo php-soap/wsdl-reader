@@ -24,6 +24,7 @@ final class SimpleUnionsConfigurator
         $mapUnions = new UnionTypesMapper();
 
         return $metaType
+            ->withBaseType('mixed')
             ->withMemberTypes(
                 $mapUnions(
                     $unions,

@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Metadata\Converter\Types\Mapper;
+namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
 use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
-use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
-final class BaseTypeMapper
+final class SimpleBottomTypeConfigurator
 {
     public function __invoke(EngineType $engineType, ?Type $xsdType, TypesConverterContext $context): EngineType
     {
-        if (!$xsdType || $context->isBaseSchema($xsdType->getSchema())) {
-            return $engineType;
+        if (!$xsdType || !$xsdType instanceof SimpleType || $context->isBaseSchema($xsdType->getSchema())) {
+            return $engineType->withBaseType(
+                $engineType->getBaseType() ?: 'mixed'
+            );
         }
 
         do {
@@ -26,13 +27,15 @@ final class BaseTypeMapper
         return $engineType;
     }
 
-    private function detectBaseType(EngineType $engineType, ?Type $xsdType, TypesConverterContext $contex): ?EngineType
+    private function detectBaseType(EngineType $engineType, ?Type $xsdType, TypesConverterContext $context): ?EngineType
     {
         if (!$xsdType) {
-            return $engineType;
+            return $engineType->withBaseType(
+                $engineType->getBaseType() ?: 'mixed'
+            );
         }
 
-        if ($contex->isBaseSchema($xsdType->getSchema())) {
+        if ($context->isBaseSchema($xsdType->getSchema())) {
             return $engineType->withBaseType(
                 $xsdType->getName() ?: $engineType->getBaseType()
             );
@@ -40,16 +43,11 @@ final class BaseTypeMapper
 
         if ($xsdType instanceof SimpleType) {
             if ($xsdType->getList()) {
-                return $engineType
-                    ->withBaseType('array')
-                    ->withMeta(
-                        static fn (TypeMeta $meta): TypeMeta => $meta->withIsList(true)
-                    );
+                return (new SimpleListConfigurator())($engineType, $xsdType, $context);
             }
 
             if ($xsdType->getUnions()) {
-                return $engineType
-                    ->withBaseType('mixed');
+                return (new SimpleUnionsConfigurator())($engineType, $xsdType, $context);
             }
         }
 
