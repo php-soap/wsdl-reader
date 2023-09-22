@@ -1,5 +1,5 @@
 --TEST--
-SOAP XML Schema 18: union with list
+SOAP XML Schema 1002: nested elements within complex types
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";
@@ -29,6 +29,6 @@ Types:
   > http://test-uri/:SpecialEquipPrefs {
     array<int<1, 15>, SpecialEquipPref> $SpecialEquipPref
   }
-  > http://test-uri/:SpecialEquipPref extends array {
+  > http://test-uri/:SpecialEquipPref {
     @string $Action
   }

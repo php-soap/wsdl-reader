@@ -19,7 +19,7 @@ Methods:
   > test(testType $testParam): void
 
 Types:
-  > http://test-uri/:testType extends integer {
+  > http://test-uri/:testType extends int {
     int $_
     @int $int
   }

@@ -1,5 +1,5 @@
 --TEST--
-SOAP XML Schema 18: union with list
+SOAP XML Schema 1001: Enums
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";

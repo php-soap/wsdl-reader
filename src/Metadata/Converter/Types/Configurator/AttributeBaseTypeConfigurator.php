@@ -7,7 +7,6 @@ use GoetasWebservices\XML\XSDReader\Schema\Attribute\AbstractAttributeItem;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeItem;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeRef;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
-use Soap\WsdlReader\Metadata\Converter\Types\Mapper\BaseTypeMapper;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 
 final class AttributeBaseTypeConfigurator
@@ -24,6 +23,6 @@ final class AttributeBaseTypeConfigurator
             default => null,
         };
 
-        return (new BaseTypeMapper())($engineType, $baseType, $context);
+        return (new SimpleTypeConfigurator())($engineType, $baseType, $context);
     }
 }

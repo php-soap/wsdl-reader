@@ -16,7 +16,7 @@
         "php": "^8.1",
         "ext-dom": "*",
         "goetas-webservices/xsd-reader": "^0.4.1",
-        "php-soap/engine": "^2.3",
+        "php-soap/engine": "^2.4",
         "php-soap/wsdl": "^1.4",
         "veewee/xml": "^2.6",
         "azjezz/psl": "^2.4",
@@ -25,7 +25,7 @@
     "require-dev": {
         "veewee/composer-run-parallel": "^1.2",
         "symfony/var-dumper": "^6.1",
-        "php-soap/engine-integration-tests": "^1.4.2",
+        "php-soap/engine-integration-tests": "^1.5.0",
         "psalm/plugin-symfony": "^5.0",
         "php-standard-library/psalm-plugin": "^2.2",
         "vimeo/psalm": "^5.6"

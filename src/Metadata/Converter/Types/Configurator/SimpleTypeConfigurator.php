@@ -19,8 +19,7 @@ final class SimpleTypeConfigurator
 
         $configure = pipe(
             static fn (EngineType $engineType): EngineType => (new RestrictionsConfigurator())($engineType, $xsdType->getRestriction(), $context),
-            static fn (EngineType $engineType): EngineType => (new SimpleListConfigurator())($engineType, $xsdType, $context),
-            static fn (EngineType $engineType): EngineType => (new SimpleUnionsConfigurator())($engineType, $xsdType, $context),
+            static fn (EngineType $engineType): EngineType => (new SimpleBottomTypeConfigurator())($engineType, $xsdType, $context),
         );
 
         return $configure(

@@ -21,5 +21,5 @@ Methods:
   > test(testElement $testParam): void
 
 Types:
-  > http://test-uri/:testType2 extends integer
+  > http://test-uri/:testType2 extends int
   > http://test-uri/:testElement extends testType2

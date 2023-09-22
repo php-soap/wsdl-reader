@@ -13,9 +13,14 @@ final class LongTypeFormatter
     public function __invoke(Type $type): string
     {
         $hasProps = (bool) $type->getProperties()->count();
+        $meta = $type->getXsdType()->getMeta();
+        $extension = $meta->extends()->map(
+            static fn ($extends): string => $extends['type']
+        )->unwrapOr(null);
+
         $declaration = [
             $type->getXsdType()->getXmlNamespace() . ':'.$type->getName(),
-            $type->getXsdType()->getBaseType() ? ' extends '.$type->getXsdType()->getBaseType() : '',
+            $extension ? ' extends '.$extension : '',
             (new EnumFormatter())($type->getXsdType()),
             (new UnionFormatter())($type->getXsdType()),
             $hasProps ? ' {' : '',
