@@ -4,11 +4,6 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Metadata\Converter\Types\Mapper;
 
 use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
-use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
-use Soap\Engine\Metadata\Model\XsdType as EngineType;
-use Soap\WsdlReader\Metadata\Converter\Types\Configurator\SimpleListConfigurator;
-use Soap\WsdlReader\Metadata\Converter\Types\Configurator\SimpleUnionsConfigurator;
-use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Vec\filter_nulls;
 use function Psl\Vec\map;
 

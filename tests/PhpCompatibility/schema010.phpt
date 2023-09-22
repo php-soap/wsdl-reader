@@ -15,4 +15,4 @@ Methods:
   > test(testType $testParam): void
 
 Types:
-  > http://test-uri/:testType extends array = (list<token>)
+  > http://test-uri/:testType = (list<token>)

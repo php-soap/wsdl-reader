@@ -21,4 +21,4 @@ Methods:
   > test(testType $testParam): void
 
 Types:
-  > http://test-uri/:testType extends array = (list<int|float|string>)
+  > http://test-uri/:testType = (list<int|float|string>)

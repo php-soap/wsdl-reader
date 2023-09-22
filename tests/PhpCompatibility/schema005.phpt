@@ -20,4 +20,4 @@ Methods:
 
 Types:
   > http://test-uri/:testType extends testType2
-  > http://test-uri/:testType2 extends integer
+  > http://test-uri/:testType2 extends int

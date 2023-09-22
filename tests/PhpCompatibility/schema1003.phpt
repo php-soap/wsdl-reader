@@ -29,6 +29,6 @@ Types:
   > http://test-uri/:SpecialEquipPrefs {
     array<int<1, 15>, SpecialEquipPref> $SpecialEquipPref
   }
-  > http://test-uri/:SpecialEquipPref extends array {
+  > http://test-uri/:SpecialEquipPref {
     @string $Action
   }
