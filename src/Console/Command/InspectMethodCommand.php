@@ -16,8 +16,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Psl\Iter\contains;
+use function Psl\Str\Byte\lowercase;
 use function Psl\Type\non_empty_string;
 use function Psl\Vec\filter;
+use function Psl\Vec\map;
 
 final class InspectMethodCommand extends Command
 {
@@ -33,7 +36,7 @@ final class InspectMethodCommand extends Command
     {
         $this->setDescription('Inspects a method of a WSDL file.');
         $this->addArgument('wsdl', InputArgument::REQUIRED, 'Provide the URI of the WSDL you want to validate');
-        $this->addArgument('method', InputArgument::REQUIRED, 'What WSDL method do you want to inspect?');
+        $this->addArgument('methods', InputArgument::IS_ARRAY, 'What WSDL method do you want to inspect?');
         $this->addOption('loader', 'l', InputOption::VALUE_REQUIRED, 'Customize the WSDL loader file that will be used');
     }
 
@@ -42,7 +45,9 @@ final class InspectMethodCommand extends Command
         $style = new SymfonyStyle($input, $output);
         $loader = ConfiguredLoader::createFromConfig($input->getOption('loader'));
         $wsdl = non_empty_string()->assert($input->getArgument('wsdl'));
-        $method = $input->getArgument('method');
+        $methods = $input->getArgument('methods');
+        $normalize = lowercase(...);
+        $normalizedMethods = map($methods, static fn (string $method) => $normalize($method));
 
         $style->info('Loading "'.$wsdl.'"...');
 
@@ -50,9 +55,13 @@ final class InspectMethodCommand extends Command
         $metadataProvider = new Wsdl1MetadataProvider($wsdl);
         $metadata = $metadataProvider->getMetadata();
 
-        $detectedMethods = filter($metadata->getMethods(), static fn (Method $methodInfo): bool => $methodInfo->getName() === $method);
+        $detectedMethods = filter(
+            $metadata->getMethods(),
+            static fn (Method $methodInfo): bool => contains($normalizedMethods, $normalize($methodInfo->getName()))
+        );
+
         if (!$detectedMethods) {
-            $style->error('Unable to find method '.$method);
+            $style->error('Unable to find methods '.join(', ', $methods));
             return self::FAILURE;
         }
 
