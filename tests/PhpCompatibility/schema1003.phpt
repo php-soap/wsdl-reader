@@ -30,5 +30,5 @@ Types:
     array<int<1, 15>, SpecialEquipPref> $SpecialEquipPref
   }
   > http://test-uri/:SpecialEquipPref {
-    @string $Action
+    @?string $Action
   }

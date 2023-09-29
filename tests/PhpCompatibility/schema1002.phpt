@@ -25,9 +25,9 @@ Methods:
 Types:
   > http://test-uri/:VoluntaryChangesType {
     ?Penalty $Penalty
-    @boolean $VolChangeInd
+    @?boolean $VolChangeInd
   }
   > http://test-uri/:Penalty {
-    @string $PenaltyType
-    @string $DepartureStatus
+    @?string $PenaltyType
+    @?string $DepartureStatus
   }

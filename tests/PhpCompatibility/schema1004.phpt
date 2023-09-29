@@ -34,7 +34,7 @@ Types:
   > http://test-uri/:StringLength1to128 extends string
   > http://test-uri/:EmailType extends StringLength1to128 {
     StringLength1to128 $_
-    @string $EmailType
+    @?string $EmailType
   }
   > http://test-uri/:VerificationType {
     ?EmailType $Email
