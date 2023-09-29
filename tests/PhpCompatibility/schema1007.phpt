@@ -36,7 +36,7 @@ Methods:
 Types:
   > http://test-uri/:LocationType extends string {
     string $_
-    @string $LocationCode
+    @?string $LocationCode
   }
   > http://test-uri/:VerificationType {
     ?string $Email
@@ -44,6 +44,6 @@ Types:
   }
   > http://test-uri/:StartLocation extends LocationType {
     string $_
-    @string $LocationCode
-    @dateTime $AssociatedDateTime
+    @?string $LocationCode
+    @?dateTime $AssociatedDateTime
   }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Formatter;
 
 use Soap\Engine\Metadata\Model\XsdType;
+use Soap\WsdlReader\Metadata\Predicate\IsConsideredNullableType;
 
 final class XsdTypeFormatter
 {
@@ -11,7 +12,7 @@ final class XsdTypeFormatter
     {
         $meta = $xsdType->getMeta();
         $isList = $meta->isList()->unwrapOr(false) && !$meta->isAlias()->unwrapOr(false);
-        $isNullable = $meta->isNullable()->unwrapOr(false);
+        $isNullable = (new IsConsideredNullableType())($meta);
         $min = $meta->minOccurs()->unwrapOr(1);
         $max = $meta->maxOccurs()->unwrapOr(1);
 

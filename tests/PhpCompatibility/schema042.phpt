@@ -21,5 +21,5 @@ Methods:
 Types:
   > http://test-uri/:testType extends int {
     int $_
-    @int $int
+    @?int $int
   }
