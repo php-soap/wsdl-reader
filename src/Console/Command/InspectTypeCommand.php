@@ -16,7 +16,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Psl\Iter\contains;
+use function Psl\Str\Byte\lowercase;
 use function Psl\Type\non_empty_string;
+use function Psl\Vec\map;
 
 final class InspectTypeCommand extends Command
 {
@@ -32,7 +35,7 @@ final class InspectTypeCommand extends Command
     {
         $this->setDescription('Inspects types from WSDL file.');
         $this->addArgument('wsdl', InputArgument::REQUIRED, 'Provide the URI of the WSDL you want to validate');
-        $this->addArgument('type', InputArgument::REQUIRED, 'What WSDL type do you want to inspect?');
+        $this->addArgument('types', InputArgument::IS_ARRAY, 'What WSDL type do you want to inspect?');
         $this->addOption('loader', 'l', InputOption::VALUE_REQUIRED, 'Customize the WSDL loader file that will be used');
     }
 
@@ -41,7 +44,9 @@ final class InspectTypeCommand extends Command
         $style = new SymfonyStyle($input, $output);
         $loader = ConfiguredLoader::createFromConfig($input->getOption('loader'));
         $wsdl = non_empty_string()->assert($input->getArgument('wsdl'));
-        $typeName = $input->getArgument('type');
+        $typeNames = $input->getArgument('types');
+        $normalize = lowercase(...);
+        $normalizedTypeNames = map($typeNames, static fn (string $type) => $normalize($type));
 
         $style->info('Loading "'.$wsdl.'"...');
 
@@ -49,9 +54,11 @@ final class InspectTypeCommand extends Command
         $metadataProvider = new Wsdl1MetadataProvider($wsdl);
         $metadata = $metadataProvider->getMetadata();
 
-        $detectedTypes = $metadata->getTypes()->filter(static fn (Type $type): bool => $type->getName() === $typeName);
+        $detectedTypes = $metadata->getTypes()->filter(
+            static fn (Type $type): bool => contains($normalizedTypeNames, $normalize($type->getName()))
+        );
         if (!$detectedTypes->count()) {
-            $style->error('Unable to find type '.$typeName);
+            $style->error('Unable to find types '.join(', ', $typeNames));
             return self::FAILURE;
         }
 
