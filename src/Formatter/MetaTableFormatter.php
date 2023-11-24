@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use function Psl\Vec\filter_nulls;
 use function Psl\Vec\map;
 
@@ -59,7 +60,7 @@ final class MetaTableFormatter
                 is_scalar($value) => (string)$value,
                 default => null,
             };
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
     }
