@@ -20,7 +20,7 @@
         "php-soap/wsdl": "^1.4",
         "veewee/xml": "^2.6",
         "azjezz/psl": "^2.4",
-        "symfony/console": "^6.2 || ^7.0"
+        "symfony/console": "^5.4 || ^6.0 || ^7.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.1",
