@@ -8,7 +8,6 @@ use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeItem;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
-use RuntimeException;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\TypeMeta;
@@ -16,10 +15,10 @@ use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
-use function Psl\Iter\first;
 use function Psl\Result\wrap;
 use function Psl\Type\instance_of;
 use function Psl\Vec\flat_map;
+use function Psl\Vec\map;
 
 final class AttributeContainerVisitor
 {
@@ -33,31 +32,26 @@ final class AttributeContainerVisitor
 
     private function parseElementType(AttributeContainer $container, TypesConverterContext $context): PropertyCollection
     {
-        $element = wrap(static function () use ($container, $context) : Property {
+        $elements = wrap(static function () use ($container, $context) : PropertyCollection {
             $type = instance_of(Type::class)->assert($container);
-            $properties = [...(new ComplexBaseTypeVisitor())($type, $context)];
 
-            if (count($properties) !== 1) {
-                throw new RuntimeException('Expected only 1 element to be available as the attribute containers base.');
-            }
-
-            return first($properties);
-        });
-
-        return $element->proceed(
-            static fn (Property $detected): PropertyCollection => new PropertyCollection(
-                new Property(
-                    $detected->getType()->getMeta()->isElement()->mapOrElse(
-                        static fn (): string => $detected->getName(),
-                        static fn (): string => '_'
-                    )->unwrap(),
-                    $detected->getType()->withMeta(
-                        static fn (TypeMeta $meta): TypeMeta => $meta->withIsElementValue(true)
+            return new PropertyCollection(
+                ...map(
+                    (new ComplexBaseTypeVisitor())($type, $context),
+                    static fn (Property $property): Property => new Property(
+                        $property->getType()->getMeta()->isElement()->mapOrElse(
+                            static fn (): string => $property->getName(),
+                            static fn (): string => '_'
+                        )->unwrap(),
+                        $property->getType()->withMeta(
+                            static fn (TypeMeta $meta): TypeMeta => $meta->withIsElementValue(true)
+                        )
                     )
                 )
-            ),
-            static fn (): PropertyCollection => new PropertyCollection(),
-        );
+            );
+        });
+
+        return $elements->catch(static fn () => new PropertyCollection())->getResult();
     }
 
     private function parseAttributes(AttributeContainer $container, TypesConverterContext $context): PropertyCollection
