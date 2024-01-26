@@ -16,4 +16,12 @@
         <pluginClass class="Psl\Psalm\Plugin"/>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
     </plugins>
+    <issueHandlers>
+        <!-- Using implicit casting quite often here. For now lets disable the rule 'til someone finds time to fix this. -->
+        <RiskyTruthyFalsyComparison>
+            <errorLevel type="suppress">
+                <directory name="src/Metadata/" />
+            </errorLevel>
+        </RiskyTruthyFalsyComparison>
+    </issueHandlers>
 </psalm>

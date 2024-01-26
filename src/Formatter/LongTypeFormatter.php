@@ -19,8 +19,8 @@ final class LongTypeFormatter
         )->unwrapOr(null);
 
         $declaration = [
-            $type->getXsdType()->getXmlNamespace() . ':'.$type->getName(),
-            $extension ? ' extends '.$extension : '',
+            $type->getXsdType()->getXmlTargetNamespace() . ':'.$type->getName(),
+            $extension !== null ? ' extends '.$extension : '',
             (new EnumFormatter())($type->getXsdType()),
             (new UnionFormatter())($type->getXsdType()),
             $hasProps ? ' {' : '',

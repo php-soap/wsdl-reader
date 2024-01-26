@@ -24,7 +24,7 @@ final class ElementConfigurator
                 static fn (TypeMeta $meta): TypeMeta => $meta->withIsElement(true)
             ),
             static fn (EngineType $engineType): EngineType => (new TypeConfigurator())($engineType, $xsdType, $context),
-            static fn (EngineType $engineType): EngineType => (new NamespaceConfigurator())($engineType, $element, $context),
+            static fn (EngineType $engineType): EngineType => (new XmlTypeInfoConfigurator())($engineType, $element, $context),
             static fn (EngineType $engineType): EngineType => (new DocsConfigurator())($engineType, $element, $context),
             static fn (EngineType $engineType): EngineType => (new DefaultConfigurator())($engineType, $element, $context),
             static fn (EngineType $engineType): EngineType => (new FixedConfigurator())($engineType, $element, $context),
