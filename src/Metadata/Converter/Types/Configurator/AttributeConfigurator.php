@@ -18,7 +18,7 @@ final class AttributeConfigurator
         }
 
         return pipe(
-            static fn (EngineType $engineType): EngineType => (new NamespaceConfigurator())($engineType, $xsdType, $context),
+            static fn (EngineType $engineType): EngineType => (new XmlTypeInfoConfigurator())($engineType, $xsdType, $context),
             static fn (EngineType $engineType): EngineType => (new DocsConfigurator())($engineType, $xsdType, $context),
             static fn (EngineType $engineType): EngineType => (new AttributeSingleConfigurator())($engineType, $xsdType, $context),
             static fn (EngineType $engineType): EngineType => (new AbstractAttributeItemConfigurator())($engineType, $xsdType, $context),

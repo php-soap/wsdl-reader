@@ -17,7 +17,7 @@ final class TypeConfigurator
         }
 
         return pipe(
-            static fn (MetaType $metaType): MetaType => (new NamespaceConfigurator())($metaType, $xsdType, $context),
+            static fn (MetaType $metaType): MetaType => (new XmlTypeInfoConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new DocsConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new RestrictionsConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new AbstractConfigurator())($metaType, $xsdType, $context),
