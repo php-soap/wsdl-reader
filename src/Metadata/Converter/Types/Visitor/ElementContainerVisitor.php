@@ -8,6 +8,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementItem;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Group;
+use GoetasWebservices\XML\XSDReader\Schema\Element\Sequence;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
@@ -30,7 +31,7 @@ final class ElementContainerVisitor
 
     private function parseElementItem(ElementItem $element, TypesConverterContext $context): PropertyCollection
     {
-        if ($element instanceof Group || $element instanceof Choice) {
+        if ($element instanceof Group || $element instanceof Choice || $element instanceof Sequence) {
             return $this->__invoke($element, $context);
         }
 
