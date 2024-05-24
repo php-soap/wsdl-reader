@@ -23,9 +23,14 @@ final class BindingOperationConfigurator
             fn (MethodMeta $meta): MethodMeta => $meta
             ->withSoapVersion($implementation->version->value)
             ->withAction($implementation->action)
+            ->withOperationName($operation->name)
             ->withBindingStyle($implementation->style->value)
             ->withInputBindingUsage($this->collectBindingUsageForMessage($operation->input))
+            ->withInputNamespace($this->collectMessageNamespace($operation->input))
+            ->withInputEncodingStyle($this->collectMessageEncodingStyle($operation->input))
             ->withOutputBindingUsage($this->collectBindingUsageForMessage($operation->output))
+            ->withOutputNamespace($this->collectMessageNamespace($operation->input))
+            ->withOutputEncodingStyle($this->collectMessageEncodingStyle($operation->output))
         );
     }
 
@@ -37,5 +42,25 @@ final class BindingOperationConfigurator
         }
 
         return $implementation->bindingUse->value;
+    }
+
+    private function collectMessageNamespace(?BindingOperationMessage $message): ?string
+    {
+        $implementation = $message?->implementation;
+        if (!$implementation instanceof SoapMessage) {
+            return null;
+        }
+
+        return $implementation->namespace?->value();
+    }
+
+    private function collectMessageEncodingStyle(?BindingOperationMessage $message): ?string
+    {
+        $implementation = $message?->implementation;
+        if (!$implementation instanceof SoapMessage) {
+            return null;
+        }
+
+        return $implementation->encodingStyle?->value;
     }
 }
