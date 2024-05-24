@@ -24,10 +24,18 @@ final class MessageParser
                 ...$xpath->query('./wsdl:part', $message)
                     ->expectAllOfType(DOMElement::class)
                     ->map(
-                        static fn (DOMElement $part) => new Part(
-                            name: $part->getAttribute('name'),
-                            element: QNamed::parse($part->getAttribute('element') ?: $part->getAttribute('type'))
-                        )
+                        static function (DOMElement $part) {
+                            $element = match (true) {
+                                $part->hasAttribute('element') => QNamed::parse($part->getAttribute('element')),
+                                $part->hasAttribute('type') => QNamed::parse($part->getAttribute('type')),
+                                default => null
+                            };
+
+                            return new Part(
+                                name: $part->getAttribute('name'),
+                                element: $element,
+                            );
+                        }
                     )
             )
         );

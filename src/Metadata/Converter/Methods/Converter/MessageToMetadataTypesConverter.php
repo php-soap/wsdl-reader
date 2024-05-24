@@ -12,6 +12,7 @@ use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\Namespaces;
 use Soap\WsdlReader\Model\Definitions\Part;
 use Soap\WsdlReader\Model\Definitions\QNamed;
+use Soap\Xml\Xmlns;
 use function Psl\Dict\pull;
 
 final class MessageToMetadataTypesConverter
@@ -29,13 +30,17 @@ final class MessageToMetadataTypesConverter
     {
         return pull(
             $message->parts->items,
-            fn (Part $part): XsdType => $this->findXsdType($part->element),
+            fn (Part $part): XsdType => $this->findXsdType($part->element)->withXmlTargetNodeName($part->name),
             static fn (Part $message): string => $message->name
         );
     }
 
-    private function findXsdType(QNamed $type): XsdType
+    private function findXsdType(?QNamed $type): XsdType
     {
+        if ($type === null) {
+            return $this->createAnyType();
+        }
+
         $namespace = $this->namespaces->lookupNamespaceByQname($type);
 
         try {
@@ -44,14 +49,38 @@ final class MessageToMetadataTypesConverter
                 fn (): EngineType => $this->knownTypes->fetchFirstByName($type->localName),
             )->unwrap()->getXsdType();
         } catch (MetadataException $e) {
-            // Proxy to simple/base type ...
-            return XsdType::guess($type->localName)
-                ->withXmlNamespaceName($type->prefix)
-                ->withXmlNamespace($namespace->unwrapOr(''))
-                ->withXmlTypeName($type->localName)
-                ->withMeta(
-                    static fn (TypeMeta $meta): TypeMeta => $meta->withIsSimple(true)
-                );
+            return $this->createSimpleTypeByQNamed($type);
         }
+    }
+
+    private function createSimpleTypeByQNamed(QNamed $type): XsdType
+    {
+        $namespace = $this->namespaces->lookupNamespaceByQname($type);
+
+        return XsdType::guess($type->localName)
+            ->withXmlNamespaceName($type->prefix)
+            ->withXmlNamespace($namespace->unwrapOr(''))
+            ->withXmlTypeName($type->localName)
+            ->withMeta(
+                static fn (TypeMeta $meta): TypeMeta => $meta
+                    ->withIsSimple(true)
+                    ->withIsElement(true)
+            );
+    }
+
+    private function createAnyType(): XsdType
+    {
+        $namespace = Xmlns::xsd()->value();
+
+        return XsdType::guess('anyType')
+            ->withXmlTypeName('anyType')
+            ->withXmlNamespaceName($this->namespaces->lookupNameFromNamespace($namespace)->unwrapOr(''))
+            ->withXmlNamespace($namespace)
+            ->withXmlTypeName('anyType')
+            ->withMeta(
+                static fn (TypeMeta $meta): TypeMeta => $meta
+                    ->withIsSimple(true)
+                    ->withIsElement(true)
+            );
     }
 }
