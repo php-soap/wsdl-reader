@@ -48,6 +48,7 @@ final class MessageToMetadataTypesConverter
             return XsdType::guess($type->localName)
                 ->withXmlNamespaceName($type->prefix)
                 ->withXmlNamespace($namespace->unwrapOr(''))
+                ->withXmlTypeName($type->localName)
                 ->withMeta(
                     static fn (TypeMeta $meta): TypeMeta => $meta->withIsSimple(true)
                 );

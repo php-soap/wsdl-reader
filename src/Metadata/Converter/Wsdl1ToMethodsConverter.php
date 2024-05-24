@@ -7,6 +7,7 @@ use Soap\Engine\Metadata\Collection\MethodCollection;
 use Soap\Engine\Metadata\Collection\ParameterCollection;
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
+use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Locator\Wsdl1SelectedServiceLocator;
 use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\BindingOperationConfigurator;
@@ -50,7 +51,13 @@ final class Wsdl1ToMethodsConverter
         $parameters = $inputMessage->map($convertMessageToTypesDict)->mapOr(
             static fn (array $types) => map_with_key(
                 $types,
-                static fn (string $name, XsdType $type) => new Parameter($name, $type)
+                static fn (string $name, XsdType $type) => new Parameter(
+                    $name,
+                    // Make sure the target type encodes into an **element** that is **named like the parameter part**.
+                    $type
+                        ->withXmlTargetNodeName($name)
+                        ->withMeta(static fn (TypeMeta $meta): TypeMeta => $meta->withIsElement(true))
+                )
             ),
             []
         );
