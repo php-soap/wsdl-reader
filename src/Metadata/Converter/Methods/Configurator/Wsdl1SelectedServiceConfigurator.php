@@ -14,6 +14,7 @@ final class Wsdl1SelectedServiceConfigurator
         return pipe(
             static fn (Method $method) => (new BindingConfigurator())($method, $service->binding),
             static fn (Method $method) => (new PortConfigurator())($method, $service->port),
+            static fn (Method $method) => (new Wsdl1Configurator())($method, $service->wsdl),
         )($method);
     }
 }

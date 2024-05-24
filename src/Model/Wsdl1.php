@@ -9,6 +9,7 @@ use Soap\WsdlReader\Model\Definitions\Messages;
 use Soap\WsdlReader\Model\Definitions\Namespaces;
 use Soap\WsdlReader\Model\Definitions\PortTypes;
 use Soap\WsdlReader\Model\Definitions\Services;
+use VeeWee\Xml\Xmlns\Xmlns;
 
 final class Wsdl1
 {
@@ -19,6 +20,7 @@ final class Wsdl1
         public readonly Services $services,
         public readonly Schema $schema,
         public readonly Namespaces $namespaces,
+        public readonly ?Xmlns $targetNamespace,
     ) {
     }
 }

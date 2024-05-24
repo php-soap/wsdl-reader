@@ -16,7 +16,7 @@
         "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "ext-dom": "*",
         "goetas-webservices/xsd-reader": "^0.4.1",
-        "php-soap/engine": "^2.7",
+        "php-soap/engine": "^2.8",
         "php-soap/wsdl": "^1.4",
         "veewee/xml": "^2.6 || ^3.0",
         "azjezz/psl": "^2.4",

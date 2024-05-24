@@ -7,4 +7,9 @@ enum BindingUse: string
 {
     case LITERAL = 'literal';
     case ENCODED = 'encoded';
+
+    public static function tryFromCaseInsensitive(string $value): ?self
+    {
+        return self::tryFrom(mb_strtolower($value));
+    }
 }

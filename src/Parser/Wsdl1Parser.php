@@ -11,6 +11,7 @@ use Soap\WsdlReader\Parser\Definitions\NamespacesParser;
 use Soap\WsdlReader\Parser\Definitions\PortTypeParser;
 use Soap\WsdlReader\Parser\Definitions\SchemaParser;
 use Soap\WsdlReader\Parser\Definitions\ServiceParser;
+use Soap\WsdlReader\Parser\Definitions\TargetNamespaceParser;
 use VeeWee\Xml\Dom\Document;
 
 final class Wsdl1Parser
@@ -24,6 +25,7 @@ final class Wsdl1Parser
             services: ServiceParser::tryParse($wsdl),
             schema: SchemaParser::tryParse($wsdl, $context),
             namespaces: NamespacesParser::tryParse($wsdl),
+            targetNamespace: TargetNamespaceParser::tryParse($wsdl)
         );
     }
 }

@@ -28,6 +28,7 @@ final class Wsdl1SelectedServiceLocator
 
             if ($portType->isSome()) {
                 return new Wsdl1SelectedService(
+                    wsdl: $wsdl,
                     service: $service,
                     port: $port->unwrap(),
                     binding: $binding->unwrap(),
