@@ -18,6 +18,7 @@
         "goetas-webservices/xsd-reader": "^0.4.1",
         "php-soap/engine": "^2.8",
         "php-soap/wsdl": "^1.4",
+        "php-soap/xml": "^1.6.0",
         "veewee/xml": "^2.6 || ^3.0",
         "azjezz/psl": "^2.4",
         "symfony/console": "^5.4 || ^6.0 || ^7.0"
