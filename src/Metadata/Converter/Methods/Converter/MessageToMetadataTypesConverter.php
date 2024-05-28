@@ -8,6 +8,7 @@ use Soap\Engine\Metadata\Collection\TypeCollection;
 use Soap\Engine\Metadata\Model\Type as EngineType;
 use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType;
+use Soap\WsdlReader\Metadata\Detector;
 use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\Namespaces;
 use Soap\WsdlReader\Model\Definitions\Part;
@@ -30,7 +31,12 @@ final class MessageToMetadataTypesConverter
     {
         return pull(
             $message->parts->items,
-            fn (Part $part): XsdType => $this->findXsdType($part->element)->withXmlTargetNodeName($part->name),
+            fn (Part $part): XsdType => $this->findXsdType($part->element)
+                ->withXmlTargetNodeName($part->name)
+                ->withMeta(
+                    static fn (TypeMeta $meta): TypeMeta => $meta
+                        ->withIsElement(true)
+                ),
             static fn (Part $message): string => $message->name
         );
     }
@@ -55,32 +61,34 @@ final class MessageToMetadataTypesConverter
 
     private function createSimpleTypeByQNamed(QNamed $type): XsdType
     {
-        $namespace = $this->namespaces->lookupNamespaceByQname($type);
+        $namespace = $this->namespaces->lookupNamespaceByQname($type)->unwrapOr('');
 
         return XsdType::guess($type->localName)
             ->withXmlNamespaceName($type->prefix)
-            ->withXmlNamespace($namespace->unwrapOr(''))
+            ->withXmlNamespace($namespace)
             ->withXmlTypeName($type->localName)
             ->withMeta(
-                static fn (TypeMeta $meta): TypeMeta => $meta
-                    ->withIsSimple(true)
-                    ->withIsElement(true)
+                fn (TypeMeta $meta): TypeMeta => $meta
+                    ->withIsSimple($this->guessIfQnamedIsSimple($namespace, $type))
             );
+    }
+
+    private function guessIfQNamedIsSimple(string $namespace, QNamed $type): bool
+    {
+        return !(
+            Detector\Soap11ArrayDetector::detect($namespace, $type->localName)
+            || Detector\Soap12ArrayDetector::detect($namespace, $type->localName)
+            || Detector\Soap11StructDetector::detect($namespace, $type->localName)
+            || Detector\Soap12StructDetector::detect($namespace, $type->localName)
+            || Detector\ApacheMapDetector::detect($namespace, $type->localName)
+        );
     }
 
     private function createAnyType(): XsdType
     {
         $namespace = Xmlns::xsd()->value();
 
-        return XsdType::guess('anyType')
-            ->withXmlTypeName('anyType')
-            ->withXmlNamespaceName($this->namespaces->lookupNameFromNamespace($namespace)->unwrapOr(''))
-            ->withXmlNamespace($namespace)
-            ->withXmlTypeName('anyType')
-            ->withMeta(
-                static fn (TypeMeta $meta): TypeMeta => $meta
-                    ->withIsSimple(true)
-                    ->withIsElement(true)
-            );
+        return XsdType::any()
+            ->withXmlNamespaceName($this->namespaces->lookupNameFromNamespace($namespace)->unwrapOr(''));
     }
 }

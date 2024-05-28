@@ -64,6 +64,10 @@ function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeForm
       echo "Types:" . PHP_EOL;
       echo implode(PHP_EOL, $metadata->getTypes()->map(fn(Type $type) => '  > ' . (new LongTypeFormatter())($type)));
       echo PHP_EOL . PHP_EOL;
+
+
+      //var_dump($metadata->getTypes()->fetchFirstByName('testType')->getXsdType());
+
   } catch (\Exception $exception) {
       echo "FATAL (".get_class($exception).'):'. $exception->getMessage();
   }

@@ -31,4 +31,6 @@ Types:
     int $int
     int $int2
   }
-  > http://test-uri/:testType extends testType2
+  > http://test-uri/:testType extends testType2 {
+    int $int2
+  }
