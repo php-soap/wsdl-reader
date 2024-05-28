@@ -8,8 +8,9 @@ jobs:
             matrix:
                 operating-system: [ubuntu-latest]
                 php-versions: ['8.1', '8.2', '8.3']
+                dependency-preference: ['current', 'lowest', 'stable']
             fail-fast: false
-        name: PHP ${{ matrix.php-versions }} @ ${{ matrix.operating-system }}
+        name: PHP ${{ matrix.php-versions }} ${{ matrix.dependency-preference }} deps @ ${{ matrix.operating-system }}
         steps:
             - name: Checkout
               uses: actions/checkout@master
@@ -20,6 +21,6 @@ jobs:
                   tools: 'composer:v2'
                   extensions: pcov, mbstring, posix, dom, soap
             - name: Install dependencies
-              run: composer update --prefer-dist --no-progress --no-suggest
+              run: composer update --prefer-dist --no-progress --no-suggest ${{ matrix.dependency-preference == 'lowest' && '--prefer-lowest' || '' }} ${{ matrix.dependency-preference == 'stable' && '--prefer-stable' || '' }}
             - name: Run the tests
               run: ./vendor/bin/phpunit
