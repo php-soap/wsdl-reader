@@ -5,6 +5,7 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type as XsdType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
+use Soap\WsdlReader\Metadata\Converter\Types\Configurator\SoapEnc\SoapEncConfigurator;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
 
@@ -23,6 +24,7 @@ final class TypeConfigurator
             static fn (MetaType $metaType): MetaType => (new AbstractConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new ExtendsConfigurator())($metaType, $xsdType, $context),
             static fn (MetaType $metaType): MetaType => (new SimpleTypeConfigurator())($metaType, $xsdType, $context),
+            static fn (MetaType $metaType): MetaType => (new SoapEncConfigurator())($metaType, $xsdType, $context),
         )($metaType);
     }
 }

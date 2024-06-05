@@ -29,6 +29,7 @@ final class OccurrencesConfigurator
                     ->withMaxOccurs($max)
                     ->withIsNullable($isNullable)
                     ->withIsList($isList)
+                    ->withIsRepeatingElement($isList)
             );
     }
 }
