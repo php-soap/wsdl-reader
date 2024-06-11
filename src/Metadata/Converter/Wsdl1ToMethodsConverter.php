@@ -55,14 +55,13 @@ final class Wsdl1ToMethodsConverter
             []
         );
 
-        $void = XsdType::guess('void');
         $returnType = $outputMessage->map($convertMessageToTypesDict)->mapOr(
             static fn (array $types): XsdType => match (count($types)) {
-                0 => $void,
+                0 => XsdType::void(),
                 1 => first($types),
                 default => XsdType::guess('array')
             },
-            $void
+            XsdType::void()
         );
 
         $configure = pipe(
