@@ -27,7 +27,7 @@ final class XmlTypeInfoConfigurator
 
         return $engineType
             ->withXmlTargetNodeName($itemName ?: $typeName)
-            ->withXmlTypeName($typeName)
+            ->withXmlTypeName($typeName ?: $itemName ?: '')
             ->withXmlNamespace($typeNamespace)
             ->withXmlNamespaceName(
                 $context->knownNamespaces->lookupNameFromNamespace($typeNamespace)->unwrapOr(
