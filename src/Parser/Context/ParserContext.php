@@ -8,7 +8,7 @@ use Soap\WsdlReader\Parser\Definitions\SchemaParser;
 final class ParserContext
 {
     /**
-     * @param array<string, string> $knownSchemas - A dictionary of the xml namespace and a known XSD file.
+     * @param array<string, string> $knownSchemas - A dictionary of the xml namespace and a locally known XSD file.
      */
     public function __construct(
         public array $knownSchemas,

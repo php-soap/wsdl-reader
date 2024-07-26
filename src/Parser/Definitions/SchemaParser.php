@@ -33,7 +33,7 @@ final class SchemaParser
         // Since WSDLs don't require the soap specific schema's to be imported.
         $globalSchema = $reader->getGlobalSchema();
         foreach ($context->knownSchemas as $namespace => $location) {
-            $reader->addKnownNamespaceSchemaLocation($namespace, $location);
+            $reader->addKnownNamespaceSchemaLocation($namespace, 'file://'.$location);
             $globalSchema->addSchema(
                 $reader->readNode(Document::fromXmlFile($location)->locate(document_element()), $namespace)
             );
