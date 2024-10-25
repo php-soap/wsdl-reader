@@ -43,7 +43,6 @@ final class NamedAttributesDetector
             $current->getAttributes(),
             /**
              * @param list<AttributeItem> $carry
-             * @param AttributeItem $attribute
              *
              * @return list<AttributeItem>
              */
