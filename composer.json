@@ -25,7 +25,7 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "symfony/var-dumper": "^6.1",
+        "symfony/var-dumper": "^6.1 || ^7.0",
         "php-soap/engine-integration-tests": "^1.5.0",
         "psalm/plugin-symfony": "^5.0",
         "php-standard-library/psalm-plugin": "^2.2",
