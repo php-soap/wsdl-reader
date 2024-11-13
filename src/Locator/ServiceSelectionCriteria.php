@@ -9,11 +9,15 @@ final class ServiceSelectionCriteria
 {
     public ?SoapVersion $preferredSoapVersion;
     public bool $allowHttpPorts;
+    public ?string $serviceName = null;
+    public ?string $portName = null;
 
     public function __construct()
     {
         $this->preferredSoapVersion = null;
         $this->allowHttpPorts = true;
+        $this->serviceName = null;
+        $this->portName = null;
     }
 
     public static function defaults(): self
@@ -33,6 +37,22 @@ final class ServiceSelectionCriteria
     {
         $new = clone $this;
         $new->preferredSoapVersion = $preferredSoapVersion;
+
+        return $new;
+    }
+
+    public function withServiceName(?string $serviceName = null): self
+    {
+        $new = clone $this;
+        $new->serviceName = $serviceName;
+
+        return $new;
+    }
+
+    public function withPortName(?string $portName = null): self
+    {
+        $new = clone $this;
+        $new->portName = $portName;
 
         return $new;
     }
