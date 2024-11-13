@@ -18,6 +18,10 @@ final class Wsdl1SelectedServiceLocator
     public function __invoke(Wsdl1 $wsdl, ServiceSelectionCriteria $criteria): Wsdl1SelectedService
     {
         foreach ($wsdl->services->items as $service) {
+            if ($criteria->serviceName !== null && $service->name !== $criteria->serviceName) {
+                continue;
+            }
+
             $port = $service->ports->lookupByLookupServiceCriteria($criteria);
             $binding = $port->andThen(
                 static fn (Port $port): Option => $wsdl->bindings->lookupByName($port->binding->localName)

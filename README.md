@@ -87,8 +87,9 @@ This service will be converted into metadata you, as a human, can understand.
 You can apply additional service selection criteria that will be used to find the SOAP service you prefer. By default,
 
 * The selection criteria allows any SOAP service. You can disable e.g. the HTTP-based SOAP services.
-* no SOAP version is preferred. The first SOAP service the system detects, will be selected. But you can specify a specific soap version as well.
-
+* No SOAP version is preferred. The first SOAP service the system detects, will be selected. But you can specify a specific soap version as well.
+* You can specify a specific service name. If you don't, the first service will be selected.
+* You can specify a specific port name. If you don't, the first port will be selected.
 
 ### WSDL2
 

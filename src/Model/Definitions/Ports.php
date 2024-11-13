@@ -34,6 +34,7 @@ final class Ports
     {
         $preferredVersion = $criteria->preferredSoapVersion;
         $allowHttp = $criteria->allowHttpPorts;
+        $portName = $criteria->portName;
 
         foreach ($this->items as $port) {
             if (!$allowHttp && $port->address->type->isHttp()) {
@@ -41,6 +42,10 @@ final class Ports
             }
 
             if ($preferredVersion && $port->address->type->soapVersion() !== $preferredVersion) {
+                continue;
+            }
+
+            if ($portName !== null && $port->name !== $criteria->portName) {
                 continue;
             }
 
