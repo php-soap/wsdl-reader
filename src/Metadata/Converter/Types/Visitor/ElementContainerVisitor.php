@@ -39,6 +39,7 @@ final class ElementContainerVisitor
         $typeName = $type?->getName() ?: $element->getName();
         $configure = pipe(
             static fn (EngineType $engineType): EngineType => (new Configurator\ElementConfigurator())($engineType, $element, $context),
+            static fn (EngineType $engineType): EngineType => (new Configurator\AnyElementConfigurator())($engineType, $element, $context),
         );
 
         return new PropertyCollection(
