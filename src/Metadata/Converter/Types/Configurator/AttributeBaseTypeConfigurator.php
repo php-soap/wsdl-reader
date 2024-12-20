@@ -23,6 +23,14 @@ final class AttributeBaseTypeConfigurator
             default => null,
         };
 
+        // Attributes can have inline types. Mark the attribute as a local type in that case.
+        $isConsideredAnInlineType = $baseType && $baseType->getName() === null;
+        if ($isConsideredAnInlineType) {
+            $engineType = $engineType->withMeta(
+                static fn ($meta) => $meta->withIsLocal(true)
+            );
+        }
+
         return (new SimpleTypeConfigurator())($engineType, $baseType, $context);
     }
 }

@@ -16,11 +16,19 @@ final class ElementSingleConfigurator
             return $engineType;
         }
 
+        // Elements can have inline types. Mark the attribute as a local type in that case.
+        $innerType = $xsdType->getType();
+        $isConsideredAnInlineType = $innerType && $innerType->getName() === null;
+        if ($isConsideredAnInlineType) {
+            $engineType = $engineType->withMeta(
+                static fn ($meta) => $meta->withIsLocal(true)
+            );
+        }
+
         return $engineType
             ->withMeta(
                 static fn (TypeMeta $meta): TypeMeta => $meta
                     ->withIsQualified($xsdType->isQualified())
-                    ->withIsLocal($xsdType->isLocal())
                     ->withIsNil($xsdType->isNil())
                     ->withIsNullable($meta->isNullable()->unwrapOr(false) || $xsdType->isNil())
             );
