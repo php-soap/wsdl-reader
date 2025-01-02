@@ -8,7 +8,6 @@ use GoetasWebservices\XML\XSDReader\Schema\Item;
 use GoetasWebservices\XML\XSDReader\Schema\SchemaItem;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Psl\Option\Option;
-use Soap\WsdlReader\Metadata\Converter\Types\ParentContext;
 use function Psl\Option\none;
 use function Psl\Option\some;
 
@@ -49,19 +48,5 @@ final class AttributeDeclaringParentTypeDetector
         }
 
         return none();
-    }
-
-
-    /**
-     * @param Option<ParentContext> $parentContext
-     * @return Option<Type>
-     */
-    public static function detectWithParentContext(AttributeItem $item, Option $parentContext): Option
-    {
-        /** @var self $calculate */
-        static $calculate = new self();
-
-        return $parentContext
-            ->andThen(static fn (ParentContext $context) => $calculate($item, $context->currentParent()));
     }
 }

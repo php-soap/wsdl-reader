@@ -5,19 +5,16 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeItem;
-use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
-use Psl\Option\Option;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
-use Soap\WsdlReader\Metadata\Converter\Types\Detector\AttributeDeclaringParentTypeDetector;
+use Soap\WsdlReader\Metadata\Converter\Types\Detector\AttributeTypeNameDetector;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
-use function Psl\Option\from_nullable;
 use function Psl\Result\wrap;
 use function Psl\Type\instance_of;
 use function Psl\Vec\flat_map;
@@ -91,27 +88,7 @@ final class AttributeContainerVisitor
             return $this->parseAttributes($attribute, $context);
         }
 
-        // Detecting the type-name for an attribute is complex.
-        // We first try to use the type name,
-        // Next up is the base type of the restriction if there aren't any restriction checks configured.
-        // Finally there is a fallback to the attribute name
-        $attributeType = $attribute instanceof AttributeSingle ? $attribute->getType() : null;
-        $attributeRestriction = $attributeType?->getRestriction();
-        $attributeTypeName = $attributeType?->getName();
-        $attributeRestrictionName = ($attributeRestriction && !$attributeRestriction->getChecks()) ? $attributeRestriction->getBase()?->getName() : null;
-
-        $typeName = $attributeTypeName ?: ($attributeRestrictionName ?: $attribute->getName());
-        $engineType = EngineType::guess($typeName);
-
-        // If a name cannot be determined from the type, we fallback to the attribute name:
-        // Prefix the attribute name with the parent element name resulting in a more unique type-name.
-        if (!$attributeTypeName && !$attributeRestrictionName) {
-            $engineType = AttributeDeclaringParentTypeDetector::detectWithParentContext($attribute, $context->parent())
-                ->andThen(static fn (Type $parent): Option => from_nullable($parent->getName()))
-                ->map(static fn (string $parentName): EngineType => $engineType->copy($parentName . ucfirst($typeName)))
-                ->unwrapOr($engineType);
-        }
-
+        $typeName = (new AttributeTypeNameDetector())($attribute, $context->parent()->unwrap());
         $configure = pipe(
             static fn (EngineType $engineType): EngineType => (new Configurator\AttributeConfigurator())($engineType, $attribute, $context),
         );
@@ -119,7 +96,7 @@ final class AttributeContainerVisitor
         return new PropertyCollection(
             new Property(
                 $attribute->getName(),
-                $configure($engineType)
+                $configure(EngineType::guess($typeName))
             )
         );
     }
