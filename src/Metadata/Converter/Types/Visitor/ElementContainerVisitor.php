@@ -6,13 +6,13 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Choice;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementItem;
-use GoetasWebservices\XML\XSDReader\Schema\Element\ElementSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Sequence;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
 use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
+use Soap\WsdlReader\Metadata\Converter\Types\Detector\ElementTypeNameDetector;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
 use function Psl\Vec\flat_map;
@@ -35,8 +35,7 @@ final class ElementContainerVisitor
             return $this->__invoke($element, $context);
         }
 
-        $type = $element instanceof ElementSingle ? $element->getType() : null;
-        $typeName = $type?->getName() ?: $element->getName();
+        $typeName = (new ElementTypeNameDetector())($element, $context->parent()->unwrap());
         $configure = pipe(
             static fn (EngineType $engineType): EngineType => (new Configurator\ElementConfigurator())($engineType, $element, $context),
             static fn (EngineType $engineType): EngineType => (new Configurator\AnyElementConfigurator())($engineType, $element, $context),

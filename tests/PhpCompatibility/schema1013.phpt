@@ -1,5 +1,5 @@
 --TEST--
-SOAP XML Schema 1001: Prepend element name before attribute type names for more unique type-names.
+SOAP XML Schema 1001: Prepend parent type name before attribute type names for more unique type-names.
 --FILE--
 <?php
 include __DIR__."/test_schema.inc";
