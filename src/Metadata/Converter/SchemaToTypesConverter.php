@@ -7,6 +7,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
 use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\Engine\Metadata\Collection\TypeCollection;
+use Soap\WsdlReader\Metadata\Converter\Types\ParentContext;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use Soap\WsdlReader\Metadata\Converter\Types\Visitor\ElementVisitor;
 use Soap\WsdlReader\Metadata\Converter\Types\Visitor\TypeVisitor;
@@ -22,15 +23,24 @@ final class SchemaToTypesConverter
                 ...filter_nulls([
                     ...flat_map(
                         $schema->getTypes(),
-                        static fn (Type $type): TypeCollection => (new TypeVisitor())($type, $context)
+                        static fn (Type $type): TypeCollection => (new TypeVisitor())(
+                            $type,
+                            $context->onParent(ParentContext::create($type))
+                        )
                     ),
                     ...flat_map(
                         $schema->getElements(),
-                        static fn (ElementDef $element): TypeCollection => (new ElementVisitor())($element, $context)
+                        static fn (ElementDef $element): TypeCollection => (new ElementVisitor())(
+                            $element,
+                            $context->onParent(ParentContext::create($element))
+                        )
                     ),
                     ...flat_map(
                         $schema->getSchemas(),
-                        fn (Schema $childSchema): TypeCollection => $this->__invoke($childSchema, $context)
+                        fn (Schema $childSchema): TypeCollection => $this->__invoke(
+                            $childSchema,
+                            $context->onParent(null)
+                        )
                     )
                 ])
             );

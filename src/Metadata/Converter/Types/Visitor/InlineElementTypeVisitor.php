@@ -62,6 +62,8 @@ final class InlineElementTypeVisitor
             return new TypeCollection();
         }
 
-        return $elementVisitor($element, $context);
+        return $elementVisitor($element, $context->onParent(
+            $context->parent()->unwrap()->withNextParent($element)
+        ));
     }
 }

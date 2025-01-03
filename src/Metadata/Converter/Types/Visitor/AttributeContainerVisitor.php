@@ -5,7 +5,6 @@ namespace Soap\WsdlReader\Metadata\Converter\Types\Visitor;
 
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeItem;
-use GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeSingle;
 use GoetasWebservices\XML\XSDReader\Schema\Attribute\Group;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\Engine\Metadata\Collection\PropertyCollection;
@@ -13,6 +12,7 @@ use Soap\Engine\Metadata\Model\Property;
 use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
+use Soap\WsdlReader\Metadata\Converter\Types\Detector\AttributeTypeNameDetector;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
 use function Psl\Result\wrap;
@@ -88,9 +88,7 @@ final class AttributeContainerVisitor
             return $this->parseAttributes($attribute, $context);
         }
 
-        $attributeType = $attribute instanceof AttributeSingle ? $attribute->getType() : null;
-        $typeName = $attributeType?->getName() ?: $attribute->getName();
-
+        $typeName = (new AttributeTypeNameDetector())($attribute, $context->parent()->unwrap());
         $configure = pipe(
             static fn (EngineType $engineType): EngineType => (new Configurator\AttributeConfigurator())($engineType, $attribute, $context),
         );
