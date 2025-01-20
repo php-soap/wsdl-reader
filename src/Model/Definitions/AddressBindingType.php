@@ -9,7 +9,7 @@ enum AddressBindingType : string
     case SOAP_12 = 'http://schemas.xmlsoap.org/wsdl/soap12/';
     case RPC = 'http://www.w3.org/2003/05/soap-rpc"';
     case HTTP_11 = 'http://schemas.xmlsoap.org/wsdl/http/';
-    case HTTP_12 = 'http://www.w3.org/2003/05/soap/bindings/HTTP/"';
+    case HTTP_12 = 'http://www.w3.org/2003/05/soap/bindings/HTTP/';
 
     public function isSoap(): bool
     {

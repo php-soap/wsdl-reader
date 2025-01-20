@@ -13,4 +13,13 @@ enum TransportType: string
     {
         return $this === self::HTTP || $this === self::W3_HTTP;
     }
+
+    public function guessSoapVersion(): ?SoapVersion
+    {
+        return match ($this) {
+            self::HTTP, self::SMTP => SoapVersion::SOAP_11,
+            self::W3_HTTP => SoapVersion::SOAP_12,
+            default => null,
+        };
+    }
 }

@@ -11,9 +11,13 @@ final class Wsdl1Configurator
 {
     public function __invoke(Method $method, Wsdl1 $wsdl): Method
     {
+        $targetNamespace = $wsdl->targetNamespace?->value();
+
         return $method->withMeta(
             static fn (MethodMeta $meta): MethodMeta => $meta
-                ->withTargetNamespace($wsdl->targetNamespace?->value())
+                ->withTargetNamespace($targetNamespace)
+                ->withInputNamespace($targetNamespace)
+                ->withOutputNamespace($targetNamespace)
         );
     }
 }

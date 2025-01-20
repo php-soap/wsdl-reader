@@ -9,7 +9,7 @@ use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\Parameter;
 use Soap\Engine\Metadata\Model\XsdType;
 use Soap\WsdlReader\Locator\Wsdl1SelectedServiceLocator;
-use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\BindingOperationConfigurator;
+use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\Operation\OperationConfigurator;
 use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\PortTypeOperationConfigurator;
 use Soap\WsdlReader\Metadata\Converter\Methods\Configurator\Wsdl1SelectedServiceConfigurator;
 use Soap\WsdlReader\Metadata\Converter\Methods\Converter\MessageToMetadataTypesConverter;
@@ -66,7 +66,7 @@ final class Wsdl1ToMethodsConverter
 
         $configure = pipe(
             static fn (Method $method) => (new Wsdl1SelectedServiceConfigurator())($method, $service),
-            static fn (Method $method) => (new BindingOperationConfigurator())($method, $bindingOperation),
+            static fn (Method $method) => (new OperationConfigurator())($method, $bindingOperation),
             static fn (Method $method) => (new PortTypeOperationConfigurator())($method, $portTypeOperation),
         );
 
