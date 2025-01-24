@@ -10,15 +10,4 @@ final class HttpMessage implements MessageImplementation
         public readonly ?string $part,
     ) {
     }
-
-    public function isConsideredSoapContentType(): bool
-    {
-        return match(mb_strtolower($this->contentType)) {
-            'application/xml' => true,
-            'application/text' => true,
-            'application/soap+xml' => true,
-            'multipart/related' => true,
-            default => false,
-        };
-    }
 }

@@ -31,7 +31,6 @@ final class HttpStrategy implements StrategyInterface
     {
         return new HttpOperation(
             location: $operation->getAttribute('location'),
-            transport: TransportType::tryFrom((string) $operation->namespaceURI) ?? TransportType::HTTP,
         );
     }
 
