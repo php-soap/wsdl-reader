@@ -26,7 +26,8 @@ final class SoapStrategy implements StrategyInterface
     {
         return new SoapBinding(
             version: $this->parseVersionFromNode($wsdl, $binding),
-            transport: TransportType::from($binding->getAttribute('transport'))
+            transport: TransportType::from($binding->getAttribute('transport')),
+            style: BindingStyle::tryFromCaseInsensitive($binding->getAttribute('style')),
         );
     }
 
@@ -35,7 +36,7 @@ final class SoapStrategy implements StrategyInterface
         return new SoapOperation(
             version: $this->parseVersionFromNode($wsdl, $operation),
             action: $operation->getAttribute('soapAction'),
-            style: BindingStyle::tryFromCaseInsensitive($operation->getAttribute('style')) ?? BindingStyle::DOCUMENT,
+            style: BindingStyle::tryFromCaseInsensitive($operation->getAttribute('style')),
         );
     }
 
