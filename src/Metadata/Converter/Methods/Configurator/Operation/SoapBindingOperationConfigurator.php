@@ -24,7 +24,7 @@ final class SoapBindingOperationConfigurator
             ->withSoapVersion($implementation->version->value)
             ->withAction($implementation->action)
             ->withOperationName($operation->name)
-            ->withBindingStyle($implementation->style->value)
+            ->withBindingStyle($implementation->style?->value ?? $meta->bindingStyle()->unwrapOr(null))
             ->withInputBindingUsage($this->collectBindingUsageForMessage($operation->input))
             ->withInputNamespace($this->collectMessageNamespace($operation->input))
             ->withInputEncodingStyle($this->collectMessageEncodingStyle($operation->input))

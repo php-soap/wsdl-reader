@@ -11,7 +11,7 @@ final class SoapOperation implements OperationImplementation
     public function __construct(
         public readonly SoapVersion $version,
         public readonly string $action,
-        public readonly BindingStyle $style,
+        public readonly ?BindingStyle $style,
     ) {
     }
 }

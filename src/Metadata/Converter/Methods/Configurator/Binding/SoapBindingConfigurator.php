@@ -20,6 +20,7 @@ final class SoapBindingConfigurator
         return $method->withMeta(
             static fn (MethodMeta $meta): MethodMeta => $meta
                 ->withTransport($implementation->transport->value)
+                ->withBindingStyle($implementation->style?->value ?? $meta->bindingStyle()->unwrapOr(null))
         );
     }
 }
