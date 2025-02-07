@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Formatter;
 
+use Psl\Option\Option;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Console\Helper\Table;
@@ -58,6 +59,7 @@ final class MetaTableFormatter
                 is_array($value) => json_encode($value, JSON_PRETTY_PRINT),
                 is_bool($value) => $value ? 'true' : 'false',
                 is_scalar($value) => (string)$value,
+                $value instanceof Option => $value->map($this->tryStringifyValue(...))->unwrapOr(null),
                 default => null,
             };
         } catch (Throwable) {

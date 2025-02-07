@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Soap\WsdlReader\Metadata\Converter\Methods\Configurator;
+namespace Soap\WsdlReader\Metadata\Converter\Methods\Configurator\Operation;
 
 use Soap\Engine\Metadata\Model\Method;
 use Soap\Engine\Metadata\Model\MethodMeta;
@@ -10,7 +10,7 @@ use Soap\WsdlReader\Model\Definitions\BindingOperationMessage;
 use Soap\WsdlReader\Model\Definitions\Implementation\Message\SoapMessage;
 use Soap\WsdlReader\Model\Definitions\Implementation\Operation\SoapOperation;
 
-final class BindingOperationConfigurator
+final class SoapBindingOperationConfigurator
 {
     public function __invoke(Method $method, BindingOperation $operation): Method
     {
