@@ -110,6 +110,7 @@ Available commands:
   inspect         Inspects WSDL file.
   inspect:method  Inspects a method of a WSDL file.
   inspect:type    Inspects types from WSDL file.
+  inspect:ui      Inspects WSDL file through a user interface.  
 ```
 
 ### Listing all contents
@@ -128,6 +129,15 @@ Available commands:
 
 ```shell
 ./vendor/bin/wsdl inspect:type your.wsdl SomeType
+```
+
+### UI
+
+Sometimes, you want to inspect multiple types and methods at once.
+This package provides a TUI that allows you to inspect all types and methods in a WSDL file through a single command:
+
+```shell
+./vendor/bin/wsdl inspect:ui your.wsdl
 ```
 
 ### Custom WSDL Loader
