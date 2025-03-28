@@ -12,6 +12,7 @@ final class WsdlReaderConfigurator implements Configurator
     {
         $application->addCommands([
             new Command\InspectCommand(),
+            new Command\InspectUICommand(),
             new Command\InspectMethodCommand(),
             new Command\InspectTypeCommand(),
         ]);
