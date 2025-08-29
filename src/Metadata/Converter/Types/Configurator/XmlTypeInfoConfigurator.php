@@ -27,7 +27,10 @@ final class XmlTypeInfoConfigurator
         $itemName = $item?->getName() ?: $type?->getName();
         $typeName = $type?->getName() ?? '';
         $targetNamespace = $xsdType->getSchema()->getTargetNamespace() ?? '';
-        $typeNamespace = $type?->getSchema()->getTargetNamespace() ?: $targetNamespace;
+        $typeNamespace = match (true) {
+            $item instanceof ElementItem => $targetNamespace,
+            default => $type?->getSchema()->getTargetNamespace() ?: $targetNamespace,
+        };
 
         $parentContext = $context->parent()->unwrapOr(null);
         $xmlTypeName = match(true) {
