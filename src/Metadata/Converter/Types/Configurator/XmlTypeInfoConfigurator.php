@@ -24,13 +24,19 @@ final class XmlTypeInfoConfigurator
         $item = $xsdType instanceof Item ? $xsdType : null;
         $type = $xsdType instanceof Type ? $xsdType : $item?->getType();
 
+        $parentContext = $context->parent()->unwrapOr(null);
+        $itemIsSchemaRootElement = $item instanceof ElementItem && $parentContext?->currentParent() === $xsdType;
+
         $itemName = $item?->getName() ?: $type?->getName();
         $typeName = $type?->getName() ?? '';
         $targetNamespace = $xsdType->getSchema()->getTargetNamespace() ?? '';
-        $typeNamespace = $type?->getSchema()->getTargetNamespace() ?: $targetNamespace;
+        $typeNamespace = match (true) {
+            $itemIsSchemaRootElement => $targetNamespace,
+            default => $type?->getSchema()->getTargetNamespace() ?: $targetNamespace,
+        };
 
-        $parentContext = $context->parent()->unwrapOr(null);
         $xmlTypeName = match(true) {
+            $itemIsSchemaRootElement && $item => $item->getName(),
             $parentContext && $item instanceof ElementItem => (new ElementTypeNameDetector())($item, $parentContext),
             $parentContext && $item instanceof AttributeItem => (new AttributeTypeNameDetector())($item, $parentContext),
             default => $typeName,
