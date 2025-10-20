@@ -4,15 +4,13 @@ declare(strict_types=1);
 namespace Soap\WsdlReader\Test\Unit\Metadata\Coverter\Types\SoapEnc;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Soap\WsdlReader\Metadata\Converter\Types\SoapEnc\ArrayTypeInfo;
 
 final class ArrayTypeInfoTest extends TestCase
 {
-    /**
-     *
-     * @dataProvider provideSoap11ArrayTypes
-     */
+    #[DataProvider('provideSoap11ArrayTypes')]
     public function test_it_can_parse_array_type_information_from_soap_11_information(
         string $raw,
         string $expectedPrefix,
@@ -33,10 +31,7 @@ final class ArrayTypeInfoTest extends TestCase
         static::assertSame($raw, $info->toString());
     }
 
-    /**
-     *
-     * @dataProvider provideSoap12ArrayTypes
-     */
+    #[DataProvider('provideSoap12ArrayTypes')]
     public function test_it_can_parse_array_type_information_from_soap_12_information(
         string $itemType,
         string $arraySize,

@@ -9,6 +9,7 @@ use ReflectionProperty;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use function Psl\Json\encode;
 use function Psl\Vec\filter_nulls;
 use function Psl\Vec\map;
 
@@ -56,7 +57,7 @@ final class MetaTableFormatter
     {
         try {
             return match (true) {
-                is_array($value) => json_encode($value, JSON_PRETTY_PRINT),
+                is_array($value) => encode($value, pretty: true),
                 is_bool($value) => $value ? 'true' : 'false',
                 is_scalar($value) => (string)$value,
                 $value instanceof Option => $value->map($this->tryStringifyValue(...))->unwrapOr(null),
