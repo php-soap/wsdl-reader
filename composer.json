@@ -31,7 +31,7 @@
         "psalm/plugin-symfony": "^5.0",
         "php-standard-library/psalm-plugin": "^2.2",
         "vimeo/psalm": "~6.13.0",
-        "phpunit/phpunit": "~12.3.0",
+        "phpunit/phpunit": "~12.4.0",
         "php-cs-fixer/shim": "~3.88.0"
     },
     "license": "MIT",

@@ -15,6 +15,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use Throwable;
 use function Psl\Dict\filter_nulls;
+use function Psl\Json\encode;
 use function Psl\Vec\map;
 
 final readonly class MetaTable
@@ -71,7 +72,7 @@ final readonly class MetaTable
     {
         try {
             return match (true) {
-                is_array($value) => json_encode($value, JSON_UNESCAPED_SLASHES),
+                is_array($value) => encode($value, pretty: false, flags: JSON_UNESCAPED_SLASHES),
                 is_bool($value) => $value ? 'true' : 'false',
                 is_scalar($value) => (string)$value,
                 $value instanceof Option => $value->map(self::tryStringifyValue(...))->unwrapOr(null),

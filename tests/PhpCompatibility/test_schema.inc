@@ -8,7 +8,11 @@ use Soap\WsdlReader\Formatter\ShortMethodFormatter;
 use Soap\WsdlReader\Metadata\Wsdl1MetadataProvider;
 use Soap\WsdlReader\Wsdl1Reader;
 
+// Avoid deprecated warnings to be displayed during the test output for the loaded dependencies.
+// This is causing issues on lower dependencies.
+$previousReporting = error_reporting(E_ALL ^ E_DEPRECATED);
 require_once __DIR__.'/../bootstrap.php';
+error_reporting($previousReporting);
 
 function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeFormDefault='')
 {

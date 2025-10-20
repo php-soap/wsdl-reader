@@ -25,4 +25,3 @@ jobs:
               run: composer update --prefer-dist --no-progress --no-suggest ${{ matrix.dependency-preference == 'lowest' && '--prefer-lowest' || '' }} ${{ matrix.dependency-preference == 'stable' && '--prefer-stable' || '' }} ${{ matrix.composer-options }}
             - name: Run the tests
               run: ./vendor/bin/phpunit
-              continue-on-error: ${{ matrix.php-versions == '8.5'}}

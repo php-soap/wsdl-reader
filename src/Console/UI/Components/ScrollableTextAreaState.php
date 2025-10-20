@@ -6,7 +6,7 @@ use PhpTui\Term\Event;
 use PhpTui\Term\MouseEventKind;
 use Soap\WsdlReader\Console\UI\EventHandler;
 
-use function json_encode;
+use function Psl\Json\encode;
 use function Psl\Math\max;
 use function Psl\Math\min;
 
@@ -21,7 +21,7 @@ final class ScrollableTextAreaState implements EventHandler
     public static function json(mixed $data, string $fallback): self
     {
         return new self(
-            $data !== null ? json_encode($data, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES) : $fallback,
+            $data !== null ? encode($data, pretty: true, flags: JSON_UNESCAPED_SLASHES) : $fallback,
         );
     }
 
