@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Test\Unit\Metadata\Predicate;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType;
@@ -11,10 +12,7 @@ use Soap\WsdlReader\Metadata\Predicate\IsOfType;
 final class IsOfTypeTest extends TestCase
 {
 
-    /**
-     * @dataProvider provideTests
-     *
-     */
+    #[DataProvider('provideTests')]
     public function test_it_knows_if_a_type_is_considered_nullable(
         string $namespace,
         string $name,

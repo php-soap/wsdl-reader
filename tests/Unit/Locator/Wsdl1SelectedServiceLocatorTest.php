@@ -3,6 +3,7 @@
 namespace Soap\WsdlReader\Test\Unit\Locator;
 
 use Closure;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Soap\Wsdl\Loader\StreamWrapperLoader;
 use Soap\WsdlReader\Exception\ServiceException;
@@ -14,9 +15,7 @@ use Soap\WsdlReader\Wsdl1Reader;
 
 final class Wsdl1SelectedServiceLocatorTest extends TestCase
 {
-    /**
-     * @dataProvider provideServiceLocations
-     */
+    #[DataProvider('provideServiceLocations')]
     public function test_it_can_locate_service(
         string $wsdl,
         ServiceSelectionCriteria $criteria,
@@ -30,9 +29,7 @@ final class Wsdl1SelectedServiceLocatorTest extends TestCase
         $assert($service);
     }
 
-    /**
-     * @dataProvider provideNotLocatableServices
-     */
+    #[DataProvider('provideNotLocatableServices')]
     public function test_it_can_not_locate_service(
         string $wsdl,
         ServiceSelectionCriteria $criteria,

@@ -13,25 +13,26 @@
         }
     },
     "require": {
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
         "ext-dom": "*",
         "goetas-webservices/xsd-reader": "^0.4.11",
-        "php-soap/engine": "^2.13",
-        "php-soap/wsdl": "^1.10",
-        "php-soap/xml": "^1.8.0",
+        "php-soap/engine": "^2.16",
+        "php-soap/wsdl": "^1.14",
+        "php-soap/xml": "^1.9.0",
         "veewee/xml": "^3.0",
-        "azjezz/psl": "^3.0",
+        "azjezz/psl": "^3.0 || ^4.0",
         "symfony/console": "^5.4 || ^6.0 || ^7.0",
         "webmozart/assert": "^1.11",
         "php-tui/php-tui": "^0.2.1"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.1 || ^7.0",
-        "php-soap/engine-integration-tests": "^1.5.0",
+        "php-soap/engine-integration-tests": "^1.10.0",
         "psalm/plugin-symfony": "^5.0",
         "php-standard-library/psalm-plugin": "^2.2",
-        "vimeo/psalm": "^5.26",
-        "phpunit/phpunit": "^10.1"
+        "vimeo/psalm": "~6.13.0",
+        "phpunit/phpunit": "~12.3.0",
+        "php-cs-fixer/shim": "~3.88.0"
     },
     "license": "MIT",
     "authors": [
