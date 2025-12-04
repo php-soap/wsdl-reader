@@ -2,9 +2,10 @@
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Detector;
 
+use GoetasWebservices\XML\XSDReader\Schema\Element\Any\Any;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementItem;
+use GoetasWebservices\XML\XSDReader\Schema\Element\ElementRef;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementSingle;
-use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use Soap\WsdlReader\Metadata\Converter\Types\ParentContext;
 
@@ -14,18 +15,31 @@ final class ElementTypeNameDetector
     {
         $type = $element instanceof ElementSingle ? $element->getType() : null;
         $typeName = $calculatedTypeName ?? ($type?->getName() ?: $element->getName());
+        $rootParent = $parentContext->rootParent();
 
-        // For inline simple types, we prefix the name of the element with the name of the parent type.
-        if ($type instanceof SimpleType && !$type->getName()) {
-            $parent = $parentContext->currentParent();
-
-            if ($parent instanceof Type || $parent instanceof ElementItem) {
-                if ($parentName = $parent->getName()) {
-                    $typeName = $parentName . ucfirst($typeName);
-                }
-            }
+        // Add some conditions to validate if the element type name should be modified:
+        if (
+            $rootParent === $element // Dont enhance yourself
+            || $element instanceof Any // Any types are just objects. 'any' is a proper name here.
+            || $element instanceof ElementRef // Refs already have a proper name
+            || $type?->getName() // Named types already have a proper name
+        ) {
+            return $typeName;
         }
 
-        return $typeName;
+        // Make sure the root parent has a name:
+        if (
+            !$rootParent instanceof Type
+            && !$rootParent instanceof ElementItem
+        ) {
+            return $typeName;
+        }
+
+        $rootParentName = $rootParent->getName();
+        if (!$rootParentName) {
+            return $typeName;
+        }
+
+        return $rootParentName . ucfirst($typeName);
     }
 }

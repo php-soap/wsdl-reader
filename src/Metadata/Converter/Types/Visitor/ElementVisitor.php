@@ -8,6 +8,7 @@ use Soap\Engine\Metadata\Collection\TypeCollection;
 use Soap\Engine\Metadata\Model\Type as EngineType;
 use Soap\Engine\Metadata\Model\XsdType as MetaType;
 use Soap\WsdlReader\Metadata\Converter\Types\Configurator;
+use Soap\WsdlReader\Metadata\Converter\Types\Detector\ElementTypeNameDetector;
 use Soap\WsdlReader\Metadata\Converter\Types\TypesConverterContext;
 use function Psl\Fun\pipe;
 
@@ -35,9 +36,11 @@ final class ElementVisitor
             static fn (MetaType $metaType): MetaType => (new Configurator\ElementConfigurator())($metaType, $element, $context),
         );
 
+        $name = (new ElementTypeNameDetector())($element, $context->parent()->unwrap(), $element->getName());
+
         return new TypeCollection(
             new EngineType(
-                $configure(MetaType::guess($element->getName())),
+                $configure(MetaType::guess($name)),
                 (new PropertiesVisitor())($xsdType, $context)
             ),
             ...((new InlineElementTypeVisitor())($xsdType, $context))

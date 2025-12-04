@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Metadata\Converter\Types\Configurator;
 
+use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
+use GoetasWebservices\XML\XSDReader\Schema\Element\ElementRef;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementSingle;
 use Soap\Engine\Metadata\Model\TypeMeta;
 use Soap\Engine\Metadata\Model\XsdType as EngineType;
@@ -17,7 +19,11 @@ final class ElementSingleConfigurator
         }
 
         // Elements can have inline types. Mark the attribute as a local type in that case.
-        $innerType = $xsdType->getType();
+        $innerType = match (true) {
+            $xsdType instanceof ElementDef,
+            $xsdType instanceof ElementRef => null,
+            default => $xsdType->getType(),
+        };
         $isConsideredAnInlineType = $innerType && $innerType->getName() === null;
         if ($isConsideredAnInlineType) {
             $engineType = $engineType->withMeta(

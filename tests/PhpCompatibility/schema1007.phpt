@@ -40,9 +40,9 @@ Types:
   }
   > http://test-uri/:VerificationType {
     ?string $Email
-    ?StartLocation $StartLocation
+    ?VerificationTypeStartLocation $StartLocation
   }
-  > http://test-uri/:StartLocation extends LocationType {
+  > http://test-uri/:VerificationTypeStartLocation extends LocationType {
     string $_
     @?string $LocationCode
     @?dateTime $AssociatedDateTime

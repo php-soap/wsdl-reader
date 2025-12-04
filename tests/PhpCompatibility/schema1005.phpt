@@ -31,12 +31,12 @@ Methods:
 
 Types:
   > http://test-uri/:LoyaltyTravelInfoType {
-    ?HotelStayInfo $HotelStayInfo
-    ?AirFlightInfo $AirFlightInfo
+    ?LoyaltyTravelInfoTypeHotelStayInfo $HotelStayInfo
+    ?LoyaltyTravelInfoTypeAirFlightInfo $AirFlightInfo
   }
-  > http://test-uri/:HotelStayInfo {
+  > http://test-uri/:LoyaltyTravelInfoTypeHotelStayInfo {
     ?string $ReservationID
   }
-  > http://test-uri/:AirFlightInfo {
+  > http://test-uri/:LoyaltyTravelInfoTypeAirFlightInfo {
     ?string $FlightSegment
   }

@@ -26,8 +26,8 @@ Methods:
 Types:
   > http://test-uri/:testType {
     int $int
-    testType2 $testType2
+    testTypeTestType2 $testType2
   }
-  > http://test-uri/:testType2 {
+  > http://test-uri/:testTypeTestType2 {
     int $int
   }
