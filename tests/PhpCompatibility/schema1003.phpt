@@ -27,8 +27,8 @@ Methods:
 
 Types:
   > http://test-uri/:SpecialEquipPrefs {
-    array<int<1, 15>, SpecialEquipPref> $SpecialEquipPref
+    array<int<1, 15>, SpecialEquipPrefsSpecialEquipPref> $SpecialEquipPref
   }
-  > http://test-uri/:SpecialEquipPref {
+  > http://test-uri/:SpecialEquipPrefsSpecialEquipPref {
     @?string $Action
   }

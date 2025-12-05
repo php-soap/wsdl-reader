@@ -24,10 +24,10 @@ Methods:
 
 Types:
   > http://test-uri/:VoluntaryChangesType {
-    ?Penalty $Penalty
+    ?VoluntaryChangesTypePenalty $Penalty
     @?boolean $VolChangeInd
   }
-  > http://test-uri/:Penalty {
+  > http://test-uri/:VoluntaryChangesTypePenalty {
     @?string $PenaltyType
     @?string $DepartureStatus
   }
