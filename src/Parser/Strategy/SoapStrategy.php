@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Strategy;
 
-use DOMElement;
+use Dom\Element;
 use Soap\WsdlReader\Model\Definitions\BindingStyle;
 use Soap\WsdlReader\Model\Definitions\BindingUse;
 use Soap\WsdlReader\Model\Definitions\EncodingStyle;
@@ -18,31 +18,31 @@ use Soap\WsdlReader\Model\Definitions\TransportType;
 use Soap\WsdlReader\Parser\Definitions\SoapVersionParser;
 use VeeWee\Xml\Dom\Document;
 use VeeWee\Xml\Xmlns\Xmlns;
-use function VeeWee\Xml\Dom\Locator\Element\locate_by_tag_name;
+use function VeeWee\Xml\Dom\Locator\Element\locate_by_namespaced_tag_name;
 
 final class SoapStrategy implements StrategyInterface
 {
-    public function parseBindingImplementation(Document $wsdl, DOMElement $binding): BindingImplementation
+    public function parseBindingImplementation(Document $wsdl, Element $binding): BindingImplementation
     {
         return new SoapBinding(
             version: $this->parseVersionFromNode($wsdl, $binding),
-            transport: TransportType::from($binding->getAttribute('transport')),
-            style: BindingStyle::tryFromCaseInsensitive($binding->getAttribute('style')),
+            transport: TransportType::from($binding->getAttribute('transport') ?? ''),
+            style: BindingStyle::tryFromCaseInsensitive($binding->getAttribute('style') ?? ''),
         );
     }
 
-    public function parseOperationImplementation(Document $wsdl, DOMElement $operation): OperationImplementation
+    public function parseOperationImplementation(Document $wsdl, Element $operation): OperationImplementation
     {
         return new SoapOperation(
             version: $this->parseVersionFromNode($wsdl, $operation),
-            action: $operation->getAttribute('soapAction'),
-            style: BindingStyle::tryFromCaseInsensitive($operation->getAttribute('style')),
+            action: $operation->getAttribute('soapAction') ?? '',
+            style: BindingStyle::tryFromCaseInsensitive($operation->getAttribute('style') ?? ''),
         );
     }
 
-    public function parseMessageImplementation(Document $wsdl, DOMElement $message): MessageImplementation
+    public function parseMessageImplementation(Document $wsdl, Element $message): MessageImplementation
     {
-        $body = locate_by_tag_name($message, 'body')->item(0);
+        $body = locate_by_namespaced_tag_name($message, '*', 'body')->item(0);
         if (!$body) {
             return new SoapMessage(
                 bindingUse: BindingUse::LITERAL,
@@ -51,14 +51,16 @@ final class SoapStrategy implements StrategyInterface
             );
         }
 
+        $namespace = $body->getAttribute('namespace');
+
         return new SoapMessage(
-            bindingUse: BindingUse::tryFromCaseInsensitive($body->getAttribute('use')) ?? BindingUse::LITERAL,
-            namespace: $body->hasAttribute('namespace') ? Xmlns::load($body->getAttribute('namespace')) : null,
-            encodingStyle: EncodingStyle::tryFrom($body->getAttribute('encodingStyle')),
+            bindingUse: BindingUse::tryFromCaseInsensitive($body->getAttribute('use') ?? '') ?? BindingUse::LITERAL,
+            namespace: $namespace !== null ? Xmlns::load($namespace) : null,
+            encodingStyle: EncodingStyle::tryFrom($body->getAttribute('encodingStyle') ?? ''),
         );
     }
 
-    private function parseVersionFromNode(Document $wsdl, DOMElement $element): SoapVersion
+    private function parseVersionFromNode(Document $wsdl, Element $element): SoapVersion
     {
         return (new SoapVersionParser())($wsdl, $element);
     }

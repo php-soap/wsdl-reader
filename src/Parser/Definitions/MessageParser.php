@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
-use DOMElement;
+use Dom\Element;
 use Soap\WsdlReader\Model\Definitions\Message;
 use Soap\WsdlReader\Model\Definitions\Messages;
 use Soap\WsdlReader\Model\Definitions\Part;
@@ -14,25 +14,25 @@ use VeeWee\Xml\Dom\Document;
 
 final class MessageParser
 {
-    public function __invoke(Document $wsdl, DOMElement $message): Message
+    public function __invoke(Document $wsdl, Element $message): Message
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
         return new Message(
-            name: $message->getAttribute('name'),
+            name: $message->getAttribute('name') ?? '',
             parts: new Parts(
                 ...$xpath->query('./wsdl:part', $message)
-                    ->expectAllOfType(DOMElement::class)
+                    ->expectAllOfType(Element::class)
                     ->map(
-                        static function (DOMElement $part) {
+                        static function (Element $part) {
                             $element = match (true) {
-                                $part->hasAttribute('element') => QNamed::parse($part->getAttribute('element')),
-                                $part->hasAttribute('type') => QNamed::parse($part->getAttribute('type')),
+                                $part->hasAttribute('element') => QNamed::parse($part->getAttribute('element') ?? ''),
+                                $part->hasAttribute('type') => QNamed::parse($part->getAttribute('type') ?? ''),
                                 default => null
                             };
 
                             return new Part(
-                                name: $part->getAttribute('name'),
+                                name: $part->getAttribute('name') ?? '',
                                 element: $element,
                             );
                         }
@@ -48,9 +48,9 @@ final class MessageParser
 
         return new Messages(
             ...$xpath->query('/wsdl:definitions/wsdl:message')
-                ->expectAllOfType(DOMElement::class)
+                ->expectAllOfType(Element::class)
                 ->map(
-                    static fn (DOMElement $message) => $parse($wsdl, $message)
+                    static fn (Element $message) => $parse($wsdl, $message)
                 )
         );
     }

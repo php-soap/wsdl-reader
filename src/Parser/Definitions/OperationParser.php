@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
-use DOMElement;
+use Dom\Element;
 use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Operation;
 use Soap\Xml\Xpath\WsdlPreset;
@@ -11,7 +11,7 @@ use VeeWee\Xml\Dom\Document;
 
 final class OperationParser
 {
-    public function __invoke(Document $wsdl, DOMElement $operation): Operation
+    public function __invoke(Document $wsdl, Element $operation): Operation
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
@@ -21,7 +21,7 @@ final class OperationParser
             output: OperationParamParser::tryParseOptionally($wsdl, 'output', $operation),
             fault: OperationParamParser::tryParseList(
                 $wsdl,
-                $xpath->query('./wsdl:fault', $operation)->expectAllOfType(DOMElement::class)
+                $xpath->query('./wsdl:fault', $operation)->expectAllOfType(Element::class)
             ),
             documentation: $xpath->evaluate('string(./wsdl:documentation)', Type\string(), $operation),
         );

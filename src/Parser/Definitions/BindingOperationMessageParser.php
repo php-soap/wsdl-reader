@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
-use DOMElement;
+use Dom\Element;
 use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\BindingOperationMessage;
 use Soap\WsdlReader\Model\Definitions\BindingOperationMessages;
@@ -16,7 +16,7 @@ use function VeeWee\Xml\Dom\Assert\assert_element;
 
 final class BindingOperationMessageParser
 {
-    public function __invoke(Document $wsdl, DOMElement $message, StrategyInterface $strategy): BindingOperationMessage
+    public function __invoke(Document $wsdl, Element $message, StrategyInterface $strategy): BindingOperationMessage
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
@@ -28,29 +28,29 @@ final class BindingOperationMessageParser
 
     public static function tryParseFromOptionalSingleOperationMessage(
         Document $wsdl,
-        DOMElement $operation,
+        Element $operation,
         string $message,
         StrategyInterface $strategy
     ): ?BindingOperationMessage {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
         return wrap(
-            static fn (): DOMElement => assert_element($xpath->querySingle('./wsdl:'.$message, $operation))
+            static fn (): Element => assert_element($xpath->querySingle('./wsdl:'.$message, $operation))
         )->proceed(
-            static fn (DOMElement $messageElement): BindingOperationMessage =>
+            static fn (Element $messageElement): BindingOperationMessage =>
                 (new self())($wsdl, $messageElement, $strategy),
             static fn () => null
         );
     }
 
     /**
-     * @param NodeList<DOMElement> $list
+     * @param NodeList<Element> $list
      */
     public static function tryParseList(Document $wsdl, NodeList $list, StrategyInterface $strategy): BindingOperationMessages
     {
         return new BindingOperationMessages(
             ...$list->map(
-                static fn (DOMElement $message): BindingOperationMessage => (new self)($wsdl, $message, $strategy)
+                static fn (Element $message): BindingOperationMessage => (new self)($wsdl, $message, $strategy)
             )
         );
     }

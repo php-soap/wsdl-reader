@@ -4,10 +4,14 @@
         resolveFromConfigFile="true"
         findUnusedCode="false"
         ensureOverrideAttribute="false"
+        phpVersion="8.4"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
+    <stubs>
+        <file name="vendor/veewee/xml/stubs/DOM.phpstub" />
+    </stubs>
     <projectFiles>
         <directory name="src"/>
         <ignoreFiles>

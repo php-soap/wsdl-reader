@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Strategy;
 
-use DOMElement;
+use Dom\Element;
 use Soap\WsdlReader\Model\Definitions\Implementation\Binding\BindingImplementation;
 use Soap\WsdlReader\Model\Definitions\Implementation\Binding\HttpBinding;
 use Soap\WsdlReader\Model\Definitions\Implementation\Message\HttpMessage;
@@ -19,22 +19,22 @@ final class HttpStrategy implements StrategyInterface
     private const HTTP_NAMESPACE = 'http://schemas.xmlsoap.org/wsdl/http/';
     private const MIME_NAMESPACE = 'http://schemas.xmlsoap.org/wsdl/mime/';
 
-    public function parseBindingImplementation(Document $wsdl, DOMElement $binding): BindingImplementation
+    public function parseBindingImplementation(Document $wsdl, Element $binding): BindingImplementation
     {
         return new HttpBinding(
-            verb: $binding->getAttribute('verb'),
+            verb: $binding->getAttribute('verb') ?? '',
             transport: TransportType::tryFrom((string) $binding->namespaceURI) ?? TransportType::HTTP,
         );
     }
 
-    public function parseOperationImplementation(Document $wsdl, DOMElement $operation): OperationImplementation
+    public function parseOperationImplementation(Document $wsdl, Element $operation): OperationImplementation
     {
         return new HttpOperation(
-            location: $operation->getAttribute('location'),
+            location: $operation->getAttribute('location') ?? '',
         );
     }
 
-    public function parseMessageImplementation(Document $wsdl, DOMElement $message): MessageImplementation
+    public function parseMessageImplementation(Document $wsdl, Element $message): MessageImplementation
     {
         $info = children($message)->first();
         $fallbackImplementation = new HttpMessage(
@@ -53,7 +53,7 @@ final class HttpStrategy implements StrategyInterface
             ),
             self::MIME_NAMESPACE => new HttpMessage(
                 contentType: match($info->localName) {
-                    'content' => $info->hasAttribute('type') ? $info->getAttribute('type'): 'application/xml',
+                    'content' => $info->getAttribute('type') ?? 'application/xml',
                     'mimeXml' => 'application/xml',
                     'multipartRelated' => 'Multipart/Related',
                     default => 'application/xml'
