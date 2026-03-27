@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
-use DOMElement;
+use Dom\Element;
 use Psl\Type;
 use Soap\WsdlReader\Model\Definitions\Param;
 use Soap\WsdlReader\Model\Definitions\Params;
@@ -16,7 +16,7 @@ use function VeeWee\Xml\Dom\Assert\assert_element;
 
 final class OperationParamParser
 {
-    public function __invoke(Document $wsdl, DOMElement $operation): Param
+    public function __invoke(Document $wsdl, Element $operation): Param
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
 
@@ -26,25 +26,25 @@ final class OperationParamParser
         );
     }
 
-    public static function tryParseOptionally(Document $wsdl, string $message, DOMElement $operation): ?Param
+    public static function tryParseOptionally(Document $wsdl, string $message, Element $operation): ?Param
     {
         $xpath = $wsdl->xpath(new WsdlPreset($wsdl));
-        return wrap(static fn (): DOMElement => assert_element($xpath->querySingle('./wsdl:'.$message, $operation)))
+        return wrap(static fn (): Element => assert_element($xpath->querySingle('./wsdl:'.$message, $operation)))
             ->proceed(
-                static fn (DOMElement $messageElement): Param =>
+                static fn (Element $messageElement): Param =>
                     (new self())($wsdl, $messageElement),
                 static fn () => null
             );
     }
 
     /**
-     * @param NodeList<DOMElement> $params
+     * @param NodeList<Element> $params
      */
     public static function tryParseList(Document $wsdl, NodeList $params): Params
     {
         return new Params(
             ...$params->map(
-                static fn (DOMElement $param): Param => (new self)($wsdl, $param)
+                static fn (Element $param): Param => (new self)($wsdl, $param)
             )
         );
     }

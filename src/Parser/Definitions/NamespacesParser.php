@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
-use DOMNameSpaceNode;
+use Dom\NamespaceInfo;
 use Soap\WsdlReader\Model\Definitions\Namespaces;
 use VeeWee\Xml\Dom\Document;
 use function Psl\Dict\merge;
+use function Psl\Iter\reduce;
 use function VeeWee\Xml\Dom\Locator\document_element;
 use function VeeWee\Xml\Dom\Locator\Xmlns\recursive_linked_namespaces;
 
@@ -18,22 +19,24 @@ final class NamespacesParser
         $allNamespaces = recursive_linked_namespaces($root);
 
         return new Namespaces(
-            $allNamespaces->reduce(
+            reduce(
+                $allNamespaces,
                 /**
                  * @param array<string, string> $map
                  * @return array<string, string>
                  */
-                static fn (array $map, DOMNameSpaceNode $node): array
-                    => merge($map, [(string)$node->localName => (string)$node->namespaceURI]),
+                static fn (array $map, NamespaceInfo $node): array
+                    => merge($map, [(string)$node->prefix => (string)$node->namespaceURI]),
                 []
             ),
-            $allNamespaces->reduce(
+            reduce(
+                $allNamespaces,
                 /**
                  * @param array<string, string> $map
                  * @return array<string, string>
                  */
-                static fn (array $map, DOMNameSpaceNode $node): array
-                    => merge($map, [(string)$node->namespaceURI => (string)$node->localName]),
+                static fn (array $map, NamespaceInfo $node): array
+                    => merge($map, [(string)$node->namespaceURI => (string)$node->prefix]),
                 []
             )
         );

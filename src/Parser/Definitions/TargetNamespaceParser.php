@@ -12,8 +12,10 @@ final class TargetNamespaceParser
     {
         $definitions = $wsdl->locateDocumentElement();
 
-        return $definitions->hasAttribute('targetNamespace')
-            ? Xmlns::load($definitions->getAttribute('targetNamespace'))
+        $targetNamespace = $definitions->getAttribute('targetNamespace');
+
+        return $targetNamespace !== null
+            ? Xmlns::load($targetNamespace)
             : null;
     }
 }

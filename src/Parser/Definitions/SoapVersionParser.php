@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
-use DOMElement;
+use Dom\Element;
 use Soap\WsdlReader\Model\Definitions\SoapVersion;
 use Soap\Xml\Xmlns;
 use VeeWee\Xml\Dom\Document;
 
 final class SoapVersionParser
 {
-    public function __invoke(Document $wsdl, DOMElement $soapNamespacedElement): SoapVersion
+    public function __invoke(Document $wsdl, Element $soapNamespacedElement): SoapVersion
     {
         return match ($soapNamespacedElement->namespaceURI ?? '') {
             Xmlns::soap()->value() => SoapVersion::SOAP_11,

@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace Soap\WsdlReader\Parser\Definitions;
 
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
 use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\SchemaReader;
 use Soap\WsdlReader\Parser\Context\ParserContext;
 use Soap\Xml\Xpath\WsdlPreset;
 use VeeWee\Xml\Dom\Document;
-use function VeeWee\Xml\Dom\Locator\document_element;
+use function VeeWee\Xml\ErrorHandling\disallow_libxml_false_returns;
 
 final class SchemaParser
 {
@@ -35,13 +40,56 @@ final class SchemaParser
         foreach ($context->knownSchemas as $namespace => $location) {
             $reader->addKnownNamespaceSchemaLocation($namespace, 'file://'.$location);
             $globalSchema->addSchema(
-                $reader->readNode(Document::fromXmlFile($location)->locate(document_element()), $namespace)
+                $reader->readNode(self::legacyDocumentElement($location), $namespace)
             );
         }
 
         return $reader->readNodes(
-            [...$xpath->query('/wsdl:definitions/wsdl:types/schema:schema')],
+            self::legacySchemaNodes($wsdl),
             $wsdl->toUnsafeDocument()->documentURI
         );
+    }
+
+    /**
+     * TODO: Can be removed once goetas-webservices/xsd-reader supports Dom\Element.
+     *
+     * @return list<DOMElement>
+     */
+    private static function legacySchemaNodes(Document $wsdl): array
+    {
+        $legacyDoc = $wsdl->toUnsafeLegacyDocument();
+        $legacyXpath = new DOMXPath($legacyDoc);
+        $legacyXpath->registerNamespace('wsdl', 'http://schemas.xmlsoap.org/wsdl/');
+        $legacyXpath->registerNamespace('schema', 'http://www.w3.org/2001/XMLSchema');
+
+        /** @var DOMNodeList<DOMNode> $nodes */
+        $nodes = disallow_libxml_false_returns(
+            $legacyXpath->query('/wsdl:definitions/wsdl:types/schema:schema'),
+            'Unable to query schema nodes from legacy document'
+        );
+
+        $result = [];
+        foreach ($nodes as $node) {
+            assert($node instanceof DOMElement);
+            $result[] = $node;
+        }
+
+        return $result;
+    }
+
+    /**
+     * TODO: Can be removed once goetas-webservices/xsd-reader supports Dom\Element.
+     */
+    private static function legacyDocumentElement(string $location): DOMElement
+    {
+        $doc = new DOMDocument();
+        disallow_libxml_false_returns(
+            $doc->load($location),
+            'Unable to load XML file: '.$location
+        );
+
+        assert($doc->documentElement instanceof DOMElement);
+
+        return $doc->documentElement;
     }
 }
