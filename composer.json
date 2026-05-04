@@ -41,7 +41,7 @@
         "php-soap/engine-integration-tests": "^1.10.0",
         "psalm/plugin-symfony": "^5.0",
         "php-standard-library/psalm-plugin": "^2.2",
-        "vimeo/psalm": "~6.13.0",
+        "vimeo/psalm": "~6.13.0 || ~6.16.0",
         "phpunit/phpunit": "~12.4",
         "php-cs-fixer/shim": "~3.88.0"
     },
