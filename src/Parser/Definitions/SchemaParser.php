@@ -74,7 +74,43 @@ final class SchemaParser
             $result[] = $node;
         }
 
+        self::importSiblingSchemas($result);
+
         return $result;
+    }
+
+    /**
+     * WSDLs often contain multiple inline schemas that reference each other without an explicit import.
+     * ext-soap treats all inline schemas as one pool of types, whereas the XSD reader only resolves
+     * references through imports. Adding the missing imports makes the inline schemas visible to each other.
+     *
+     * @param list<DOMElement> $schemaNodes
+     */
+    private static function importSiblingSchemas(array $schemaNodes): void
+    {
+        $namespaces = array_unique(array_filter(
+            array_map(
+                static fn (DOMElement $schema): string => $schema->getAttribute('targetNamespace'),
+                $schemaNodes
+            )
+        ));
+
+        foreach ($schemaNodes as $schema) {
+            $imported = [$schema->getAttribute('targetNamespace')];
+            /** @var DOMNode $child */
+            foreach ($schema->childNodes as $child) {
+                if ($child instanceof DOMElement && $child->namespaceURI === SchemaReader::XSD_NS && $child->localName === 'import') {
+                    $imported[] = $child->getAttribute('namespace');
+                }
+            }
+
+            foreach (array_diff($namespaces, $imported) as $namespace) {
+                $import = $schema->ownerDocument->createElementNS(SchemaReader::XSD_NS, 'import');
+                assert($import instanceof DOMElement);
+                $import->setAttribute('namespace', $namespace);
+                $schema->insertBefore($import, $schema->firstChild);
+            }
+        }
     }
 
     /**
