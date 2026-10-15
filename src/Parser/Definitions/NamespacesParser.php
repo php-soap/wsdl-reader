@@ -27,7 +27,7 @@ final class NamespacesParser
                  */
                 static fn (array $map, NamespaceInfo $node): array
                     => merge($map, [(string)$node->prefix => (string)$node->namespaceURI]),
-                []
+                ['xml' => 'http://www.w3.org/XML/1998/namespace']
             ),
             reduce(
                 $allNamespaces,
@@ -37,7 +37,7 @@ final class NamespacesParser
                  */
                 static fn (array $map, NamespaceInfo $node): array
                     => merge($map, [(string)$node->namespaceURI => (string)$node->prefix]),
-                []
+                ['http://www.w3.org/XML/1998/namespace' => 'xml']
             )
         );
     }
