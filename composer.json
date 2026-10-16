@@ -37,7 +37,7 @@
         "php-tui/php-tui": "^0.2.1"
     },
     "require-dev": {
-        "symfony/var-dumper": "^6.1 || ^7.0",
+        "symfony/var-dumper": "^6.1 || ^7.0 || ^8.0",
         "php-soap/engine-integration-tests": "^1.10.0",
         "psalm/plugin-symfony": "^5.0",
         "php-standard-library/psalm-plugin": "^2.2",
