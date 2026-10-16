@@ -6,6 +6,7 @@ namespace Soap\WsdlReader\Parser\Definitions;
 use Dom\NamespaceInfo;
 use Soap\WsdlReader\Model\Definitions\Namespaces;
 use VeeWee\Xml\Dom\Document;
+use VeeWee\Xml\Xmlns\Xmlns;
 use function Psl\Dict\merge;
 use function Psl\Iter\reduce;
 use function VeeWee\Xml\Dom\Locator\document_element;
@@ -27,7 +28,7 @@ final class NamespacesParser
                  */
                 static fn (array $map, NamespaceInfo $node): array
                     => merge($map, [(string)$node->prefix => (string)$node->namespaceURI]),
-                []
+                ['xml' => Xmlns::xml()->value()]
             ),
             reduce(
                 $allNamespaces,
@@ -37,7 +38,7 @@ final class NamespacesParser
                  */
                 static fn (array $map, NamespaceInfo $node): array
                     => merge($map, [(string)$node->namespaceURI => (string)$node->prefix]),
-                []
+                [Xmlns::xml()->value() => 'xml']
             )
         );
     }
