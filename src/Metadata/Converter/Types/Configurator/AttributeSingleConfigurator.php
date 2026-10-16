@@ -18,9 +18,12 @@ final class AttributeSingleConfigurator
             return $engineType;
         }
 
-        // A ref points to a global attribute declaration, which is always qualified with the target namespace
-        // of the schema that declares it. The form and attributeFormDefault rules only apply to local declarations.
-        $isQualified = $xsdType instanceof AttributeRef || $xsdType->isQualified();
+        // A ref points to a global attribute declaration, which lives in the target namespace of the schema
+        // that declares it, or in no namespace (unqualified) when that schema has no targetNamespace.
+        // The form and attributeFormDefault rules only apply to local declarations.
+        $isQualified = $xsdType instanceof AttributeRef
+            ? '' !== (string) $xsdType->getReferencedAttribute()->getSchema()->getTargetNamespace()
+            : $xsdType->isQualified();
 
         $configure = pipe(
             static fn (EngineType $engineType): EngineType => (new RestrictionsConfigurator())($engineType, $xsdType->getType()?->getRestriction(), $context),

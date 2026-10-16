@@ -61,6 +61,49 @@ final class AttributeQualificationTest extends TestCase
         yield 'local declared on simpleContent extension' => ['Text', 'plain', false, self::TNS];
     }
 
+    public function test_it_does_not_qualify_a_ref_to_an_attribute_without_namespace(): void
+    {
+        // No default namespace is in scope, so ref="bare" resolves to no namespace. Resetting it with xmlns=""
+        // does not work: xsd-reader resolves that to '' and misses the schema's null target namespace.
+        $tns = self::TNS;
+        $wsdl = <<<EOXML
+        <wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                          xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                          xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                          xmlns:tns="{$tns}"
+                          targetNamespace="{$tns}">
+            <wsdl:types>
+                <xsd:schema>
+                    <xsd:attribute name="bare" type="xsd:string"/>
+                    <xsd:complexType name="NoNamespace">
+                        <xsd:attribute ref="bare"/>
+                    </xsd:complexType>
+                </xsd:schema>
+            </wsdl:types>
+            <wsdl:message name="m"><wsdl:part name="p" type="NoNamespace"/></wsdl:message>
+            <wsdl:portType name="pt"><wsdl:operation name="test"><wsdl:input message="tns:m"/></wsdl:operation></wsdl:portType>
+            <wsdl:binding name="b" type="tns:pt">
+                <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+                <wsdl:operation name="test">
+                    <soap:operation soapAction="#test"/>
+                    <wsdl:input><soap:body use="literal" namespace="{$tns}"/></wsdl:input>
+                </wsdl:operation>
+            </wsdl:binding>
+            <wsdl:service name="s"><wsdl:port name="p" binding="tns:b"><soap:address location="test://"/></wsdl:port></wsdl:service>
+        </wsdl:definitions>
+        EOXML;
+
+        $info = (new Wsdl1Reader(new CallbackLoader(static fn (): string => $wsdl)))('some.wsdl');
+        $type = (new Wsdl1MetadataProvider($info))->getMetadata()->getTypes()->fetchFirstByName('NoNamespace');
+        $properties = [...$type->getProperties()];
+
+        static::assertCount(1, $properties);
+        static::assertSame('bare', $properties[0]->getName());
+        $meta = $properties[0]->getType()->getMeta();
+        static::assertTrue($meta->isAttribute()->unwrapOr(false));
+        static::assertFalse($meta->isQualified()->unwrapOr(false));
+    }
+
     private static function findProperty(string $typeName, string $propertyName): Property
     {
         $type = self::metadata()->getTypes()->fetchFirstByName($typeName);
