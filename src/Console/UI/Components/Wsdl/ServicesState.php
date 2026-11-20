@@ -65,13 +65,13 @@ final class ServicesState implements EventHandler
 
     public function up(): void
     {
-        $this->currentService = (int) max([0, $this->currentService - 1]);
+        $this->currentService = max([0, $this->currentService - 1]);
         $this->trackTextAreaState();
     }
 
     public function down(): void
     {
-        $this->currentService = (int) min([count($this->services()) - 1, $this->currentService + 1]);
+        $this->currentService = min([count($this->services()) - 1, $this->currentService + 1]);
         $this->trackTextAreaState();
     }
 

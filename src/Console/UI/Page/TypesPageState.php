@@ -75,13 +75,13 @@ final class TypesPageState implements EventHandler
 
     public function up(): void
     {
-        $this->selectedType = (int) max([$this->selectedType-1, 0]);
+        $this->selectedType = max([$this->selectedType-1, 0]);
         $this->selectedTypeProp = 0;
     }
 
     public function down(): void
     {
-        $this->selectedType = (int) min([$this->selectedType + 1, count($this->types()) - 1]);
+        $this->selectedType = min([$this->selectedType + 1, count($this->types()) - 1]);
         $this->selectedTypeProp = 0;
     }
 
@@ -121,7 +121,7 @@ final class TypesPageState implements EventHandler
             return;
         }
 
-        $this->selectedTypeProp = (int) max([$this->selectedTypeProp - 1, 0]);
+        $this->selectedTypeProp = max([$this->selectedTypeProp - 1, 0]);
     }
 
     public function right(): void
@@ -131,7 +131,7 @@ final class TypesPageState implements EventHandler
             return;
         }
 
-        $this->selectedTypeProp = (int) min([$this->selectedTypeProp + 1, count($selectedType->getProperties()) - 1]);
+        $this->selectedTypeProp = min([$this->selectedTypeProp + 1, count($selectedType->getProperties()) - 1]);
     }
 
     public function toggleInformationType(): void

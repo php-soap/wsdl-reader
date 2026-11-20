@@ -65,13 +65,13 @@ final class BindingsState implements EventHandler
 
     public function up(): void
     {
-        $this->currentBinding = (int) max([0, $this->currentBinding - 1]);
+        $this->currentBinding = max([0, $this->currentBinding - 1]);
         $this->trackTextAreaState();
     }
 
     public function down(): void
     {
-        $this->currentBinding = (int) min([count($this->bindings()) - 1, $this->currentBinding + 1]);
+        $this->currentBinding = min([count($this->bindings()) - 1, $this->currentBinding + 1]);
         $this->trackTextAreaState();
     }
 

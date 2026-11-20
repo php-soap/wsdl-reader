@@ -62,7 +62,7 @@ final class MethodsPageState implements EventHandler
             return $selectedMethod->getReturnType();
         }
 
-        return $params[$this->selectedMethodParam]?->getType() ?? null;
+        return $params[$this->selectedMethodParam]->getType();
     }
 
     /**
@@ -93,13 +93,13 @@ final class MethodsPageState implements EventHandler
 
     public function up(): void
     {
-        $this->selectedMethod = (int) max([$this->selectedMethod-1, 0]);
+        $this->selectedMethod = max([$this->selectedMethod-1, 0]);
         $this->selectedMethodParam = 0;
     }
 
     public function down(): void
     {
-        $this->selectedMethod = (int) min([$this->selectedMethod + 1, count($this->methods()) - 1]);
+        $this->selectedMethod = min([$this->selectedMethod + 1, count($this->methods()) - 1]);
         $this->selectedMethodParam = 0;
     }
 
@@ -110,7 +110,7 @@ final class MethodsPageState implements EventHandler
             return;
         }
 
-        $this->selectedMethodParam = (int) max([$this->selectedMethodParam - 1, 0]);
+        $this->selectedMethodParam = max([$this->selectedMethodParam - 1, 0]);
     }
 
     public function right(): void
@@ -120,7 +120,7 @@ final class MethodsPageState implements EventHandler
             return;
         }
 
-        $this->selectedMethodParam = (int) min([$this->selectedMethodParam + 1, count($selectedType->getParameters())]);
+        $this->selectedMethodParam = min([$this->selectedMethodParam + 1, count($selectedType->getParameters())]);
     }
 
     public function searching(): bool
