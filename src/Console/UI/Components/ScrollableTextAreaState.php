@@ -27,12 +27,12 @@ final class ScrollableTextAreaState implements EventHandler
 
     public function scrollUp(): void
     {
-        $this->position = (int) max([0, $this->position - 1]);
+        $this->position = max([0, $this->position - 1]);
     }
 
     public function scrollDown(): void
     {
-        $this->position = (int) min([$this->position + 1, count(explode("\n", $this->value))]);
+        $this->position = min([$this->position + 1, count(explode("\n", $this->value))]);
     }
 
     public function handle(Event $event): void

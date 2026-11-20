@@ -52,12 +52,12 @@ final class NamespacesState implements EventHandler
 
     public function up(): void
     {
-        $this->currentNamespace = (int) max([0, $this->currentNamespace - 1]);
+        $this->currentNamespace = max([0, $this->currentNamespace - 1]);
     }
 
     public function down(): void
     {
-        $this->currentNamespace = (int) min([count($this->namespaces()) - 1, $this->currentNamespace + 1]);
+        $this->currentNamespace = min([count($this->namespaces()) - 1, $this->currentNamespace + 1]);
     }
 
     public function handle(Event $event): void

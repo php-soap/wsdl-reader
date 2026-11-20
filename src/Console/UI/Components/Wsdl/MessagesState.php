@@ -65,13 +65,13 @@ final class MessagesState implements EventHandler
 
     public function up(): void
     {
-        $this->currentMessage = (int) max([0, $this->currentMessage - 1]);
+        $this->currentMessage = max([0, $this->currentMessage - 1]);
         $this->trackTextAreaState();
     }
 
     public function down(): void
     {
-        $this->currentMessage = (int) min([count($this->messages()) - 1, $this->currentMessage + 1]);
+        $this->currentMessage = min([count($this->messages()) - 1, $this->currentMessage + 1]);
         $this->trackTextAreaState();
     }
 

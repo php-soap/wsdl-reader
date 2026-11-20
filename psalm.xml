@@ -20,7 +20,9 @@
     </projectFiles>
     <plugins>
         <pluginClass class="Psl\Psalm\Plugin"/>
-        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <symfonyMajorVersion>8</symfonyMajorVersion>
+        </pluginClass>
     </plugins>
     <issueHandlers>
         <!-- Using implicit casting quite often here. For now lets disable the rule 'til someone finds time to fix this. -->

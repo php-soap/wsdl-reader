@@ -65,13 +65,13 @@ final class PortTypesState implements EventHandler
 
     public function up(): void
     {
-        $this->currentPortType = (int) max([0, $this->currentPortType - 1]);
+        $this->currentPortType = max([0, $this->currentPortType - 1]);
         $this->trackTextAreaState();
     }
 
     public function down(): void
     {
-        $this->currentPortType = (int) min([count($this->portTypes()) - 1, $this->currentPortType + 1]);
+        $this->currentPortType = min([count($this->portTypes()) - 1, $this->currentPortType + 1]);
         $this->trackTextAreaState();
     }
 

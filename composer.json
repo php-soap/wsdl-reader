@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": "~8.4.0 || ~8.5.0",
+        "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
         "ext-dom": "*",
         "goetas-webservices/xsd-reader": "^0.4.11",
         "php-soap/engine": "^2.20",
@@ -43,11 +43,11 @@
     "require-dev": {
         "symfony/var-dumper": "^6.1 || ^7.0 || ^8.0",
         "php-soap/engine-integration-tests": "^1.10.0",
-        "psalm/plugin-symfony": "^5.0",
-        "php-standard-library/psalm-plugin": "^2.2",
-        "vimeo/psalm": "~6.13.0",
-        "phpunit/phpunit": "~12.4",
-        "php-cs-fixer/shim": "~3.88.0"
+        "psalm/plugin-symfony": "^5.12",
+        "php-standard-library/psalm-plugin": "^2.5",
+        "vimeo/psalm": "^7.12",
+        "phpunit/phpunit": "^12.4",
+        "php-cs-fixer/shim": "^3.88"
     },
     "license": "MIT",
     "authors": [
