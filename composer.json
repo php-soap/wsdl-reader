@@ -15,7 +15,7 @@
     "require": {
         "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
         "ext-dom": "*",
-        "goetas-webservices/xsd-reader": "^0.4.11",
+        "goetas-webservices/xsd-reader": "^0.4.12",
         "php-soap/engine": "^2.20",
         "php-soap/wsdl": "^1.19",
         "php-soap/xml": "^1.10",
