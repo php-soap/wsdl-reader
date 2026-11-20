@@ -19,7 +19,7 @@ final class TypesConverterContext
     ];
 
     /**
-     * @var array<string, true>
+     * @var array<int, true>
      */
     private array $visited = [];
 
@@ -57,12 +57,12 @@ final class TypesConverterContext
             return new TypeCollection();
         }
 
-        $schemaHash = spl_object_hash($schema);
-        if (array_key_exists($schemaHash, $this->visited)) {
+        $schemaId = spl_object_id($schema);
+        if (array_key_exists($schemaId, $this->visited)) {
             return new TypeCollection();
         }
 
-        $this->visited[$schemaHash] = true;
+        $this->visited[$schemaId] = true;
 
         return $visitor($schema);
     }
