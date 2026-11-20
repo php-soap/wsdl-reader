@@ -14,14 +14,6 @@ $previousReporting = error_reporting(E_ALL ^ E_DEPRECATED);
 require_once __DIR__.'/../bootstrap.php';
 error_reporting($previousReporting);
 
-// goetas-webservices/xsd-reader calls spl_object_hash(), which PHP 8.6 deprecates, and the notice would end up in
-// the expected output. Only its deprecations are swallowed: any other one still fails the test.
-// Remove once goetas-webservices/xsd-reader#96 is released.
-set_error_handler(
-    static fn (int $errno, string $errstr, string $errfile): bool => $errno === E_DEPRECATED
-        && str_contains($errfile, '/goetas-webservices/xsd-reader/'),
-);
-
 function test_schema($schema, $type, $style="rpc",$use="encoded", $attributeFormDefault='')
 {
   $wsdl = <<<EOF
